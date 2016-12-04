@@ -1,0 +1,43 @@
+{
+  "name": "wp-pot",
+  "version": "0.0.1",
+  "description": "Generate pot-files for WordPress localization",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test-cs && npm run test-mocha",
+    "test-cs": "eslint .",
+    "test-mocha": "mocha",
+    "cover": "istanbul cover _mocha"
+  },
+  "keywords": [
+    "pot",
+    "wordpress",
+    "translation"
+  ],
+  "repository": "rasmusbe/wp-pot",
+  "author": {
+    "name": "Rasmus Bengtsson",
+    "email": "wp-pot@rasmusbengtsson.se",
+    "url": "https://github.com/rasmusbe"
+  },
+  "engines": {
+    "node": ">=0.12.0"
+  },
+  "files": [
+    "index.js"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "get-line-from-pos": "^1.0.0",
+    "php-parser": "^0.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^3.11.1",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "glob": "^7.1.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0"
+  }
+}
