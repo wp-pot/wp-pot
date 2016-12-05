@@ -7,7 +7,7 @@
     "test": "npm run test-cs && npm run test-mocha",
     "test-cs": "eslint .",
     "test-mocha": "mocha",
-    "cover": "istanbul cover _mocha"
+    "cover": "istanbul cover --report clover --report lcov _mocha"
   },
   "keywords": [
     "pot",
