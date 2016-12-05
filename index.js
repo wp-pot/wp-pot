@@ -1,12 +1,12 @@
 /* eslint-env node */
 
-var engine = require('php-parser');
 var fs = require('fs');
 var getLineFromPos = require('get-line-from-pos');
-var path = require('path');
 var glob = require('glob');
+var parser = require('php-parser').create({});
+var path = require('path');
 
-var EOF = engine.lexer.EOF;
+var EOF = parser.lexer.EOF;
 var patternFunctionCalls = /(__|_e|esc_attr__|esc_attr_e|esc_html__|esc_html_e|_x|_ex|esc_attr_x|esc_html_x|_n|_n_noop|_nx|_nx_noop)/;
 
 var translations;
@@ -45,34 +45,34 @@ function parseFile (filecontent, filePath) {
     return;
   }
 
-  engine.lexer.setInput(filecontent);
+  parser.lexer.setInput(filecontent);
 
   var commentRegexp = new RegExp('^[\\s\\*\\/]+' + options.commentKeyword + '\\s*(.*)', 'im');
-  var names = engine.tokens.values;
+  var names = parser.tokens.values;
   var prevToken = null;
   var token;
   var translationCall = {};
   var translatorComment;
 
-  while ((token = engine.lexer.lex() || EOF) !== EOF) {
+  while ((token = parser.lexer.lex() || EOF) !== EOF) {
     // console.log(getLineFromPos(filecontent, engine.lexer.offset - 1), ':', names[ token ], '(', engine.lexer.yytext, ')', 'prev:', prevToken);
 
     // Detect function calls, ignore function defines and object calls
-    if (isEmptyObject(translationCall) && names[ token ] === 'T_STRING' && prevToken !== 'T_FUNCTION' && prevToken !== 'T_OBJECT_OPERATOR' && prevToken !== 'T_DOUBLE_COLON' && patternFunctionCalls.test(engine.lexer.yytext)) {
+    if (isEmptyObject(translationCall) && names[ token ] === 'T_STRING' && prevToken !== 'T_FUNCTION' && prevToken !== 'T_OBJECT_OPERATOR' && prevToken !== 'T_DOUBLE_COLON' && patternFunctionCalls.test(parser.lexer.yytext)) {
       translationCall.argumentCount = 0;
       translationCall.arguments = [];
       translationCall.file = path.relative(path.dirname(options.destFile || __filename), filePath).replace(/\\/g, '/');
       translationCall.inParantheses = 0;
-      translationCall.line = getLineFromPos(filecontent, engine.lexer.offset - 1);
-      translationCall.method = engine.lexer.yytext;
+      translationCall.line = getLineFromPos(filecontent, parser.lexer.offset - 1);
+      translationCall.method = parser.lexer.yytext;
     }
 
     if (!translationCall.method && names[ token ] === 'T_COMMENT') {
-      var commentmatch = commentRegexp.exec(engine.lexer.yytext);
+      var commentmatch = commentRegexp.exec(parser.lexer.yytext);
       if (commentmatch !== null) {
         translatorComment = {
           text: commentmatch[ 1 ],
-          line: getLineFromPos(filecontent, engine.lexer.offset - 1)
+          line: getLineFromPos(filecontent, parser.lexer.offset - 1)
         };
       }
     }
@@ -97,10 +97,10 @@ function parseFile (filecontent, filePath) {
     // Add arguments from translation function
     if (names[ token ] === 'T_CONSTANT_ENCAPSED_STRING') {
       // Strip quotes
-      var quote = engine.lexer.yytext.substr(0, 1);
-      translationCall.arguments[ translationCall.argumentCount ] += engine.lexer.yytext.substr(1, engine.lexer.yytext.length - 2).replace(new RegExp('\\\\' + quote, 'g'), quote).replace(new RegExp('\\\\n', 'g'), '\n');
+      var quote = parser.lexer.yytext.substr(0, 1);
+      translationCall.arguments[ translationCall.argumentCount ] += parser.lexer.yytext.substr(1, parser.lexer.yytext.length - 2).replace(new RegExp('\\\\' + quote, 'g'), quote).replace(new RegExp('\\\\n', 'g'), '\n');
     } else if (translationCall.argumentCount === getDomainPos(translationCall.method) && [ 'T_VARIABLE', 'T_STRING', 'T_OBJECT_OPERATOR', 'T_DOUBLE_COLON' ].indexOf(names[ token ]) !== -1) {
-      translationCall.arguments[ translationCall.argumentCount ] += engine.lexer.yytext;
+      translationCall.arguments[ translationCall.argumentCount ] += parser.lexer.yytext;
     }
 
     if (token === ',' && translationCall.inParantheses === 1) {
