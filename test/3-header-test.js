@@ -19,11 +19,10 @@ describe('Header tests', function () {
 
   it('should generate a pot file with custom headers from php file with headers set', function () {
     var potContents = wpPot({
-      bugReport: 'http://example.com',
-      lastTranslator: 'John Doe <mail@example.com>',
-      team: 'Team Team <mail@example.com>',
       headers: {
-        'Hello-World': 'This is a test'
+        'Report-Msgid-Bugs-To': 'http://example.com',
+        'Last-Translator': 'John Doe <mail@example.com>',
+        'Language-Team': 'Team Team <mail@example.com>'
       },
       src: 'test/fixures/empty-dir/*.php',
       destFile: false
@@ -33,7 +32,6 @@ describe('Header tests', function () {
     assert(potContents.indexOf('"Report-Msgid-Bugs-To: http://example.com\\n"\n') !== -1);
     assert(potContents.indexOf('"Last-Translator: John Doe <mail@example.com>\\n"\n') !== -1);
     assert(potContents.indexOf('"Language-Team: Team Team <mail@example.com>\\n"\n') !== -1);
-    assert(potContents.indexOf('"Hello-World: This is a test\\n"\n') !== -1);
   });
 
   it('should generate a pot file without default headers from php file with headers false', function () {

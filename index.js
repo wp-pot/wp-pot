@@ -1,16 +1,19 @@
 /* eslint-env node */
+'use strict';
 
-var fs = require('fs');
-var getLineFromPos = require('get-line-from-pos');
-var glob = require('glob');
-var parser = require('php-parser').create({});
-var path = require('path');
+const fs = require('fs');
+const getLineFromPos = require('get-line-from-pos');
+const glob = require('glob');
+const parser = require('php-parser').create({});
+const path = require('path');
 
-var EOF = parser.lexer.EOF;
-var patternFunctionCalls = /(__|_e|esc_attr__|esc_attr_e|esc_html__|esc_html_e|_x|_ex|esc_attr_x|esc_html_x|_n|_n_noop|_nx|_nx_noop)/;
+const EOF = parser.lexer.EOF;
+const names = parser.tokens.values;
+const patternFunctionCalls = /(__|_e|esc_attr__|esc_attr_e|esc_html__|esc_html_e|_x|_ex|esc_attr_x|esc_html_x|_n|_n_noop|_nx|_nx_noop)/;
 
-var translations;
-var options;
+let translations;
+let options;
+let commentRegexp;
 
 /**
  * Constructor
@@ -18,41 +21,48 @@ var options;
  * @return {string}
  */
 function wpPot (userOptions) {
+  // Reset states
   translations = {};
+
   // Set options
   options = userOptions;
   setDefaultOptions();
 
+  // Set comment regexp to find translator comments
+  commentRegexp = new RegExp('^[\\s\\*\\/]+' + options.commentKeyword + '\\s*(.*)', 'im');
+
   // Find files
-  var files = glob.sync(options.src);
+  const files = glob.sync(options.src);
 
   // Parse files
-  for (var i = 0; i < files.length; i++) {
-    var file = fs.readFileSync(files[ i ]);
-    var filecontent = file.toString();
+  for (let i = 0; i < files.length; i++) {
+    const filecontent = fs.readFileSync(files[ i ]).toString();
     parseFile(filecontent, files[ i ]);
   }
-  var potContents = generatePot();
+
+  const potContents = generatePot();
 
   if (options.destFile) {
     writePot(potContents);
   }
+
   return potContents;
 }
 
 function parseFile (filecontent, filePath) {
+  // Skip file if no translation functions is found
   if (!patternFunctionCalls.test(filecontent)) {
     return;
   }
 
-  parser.lexer.setInput(filecontent);
+  let translatorComment;
+  let token;
 
-  var commentRegexp = new RegExp('^[\\s\\*\\/]+' + options.commentKeyword + '\\s*(.*)', 'im');
-  var names = parser.tokens.values;
-  var prevToken = null;
-  var token;
-  var translationCall = {};
-  var translatorComment;
+  let prevToken = null;
+  let translationCall = {};
+  const filename = path.relative(path.dirname(options.destFile || __filename), filePath).replace(/\\/g, '/');
+
+  parser.lexer.setInput(filecontent);
 
   while ((token = parser.lexer.lex() || EOF) !== EOF) {
     // console.log(getLineFromPos(filecontent, engine.lexer.offset - 1), ':', names[ token ], '(', engine.lexer.yytext, ')', 'prev:', prevToken);
@@ -61,14 +71,15 @@ function parseFile (filecontent, filePath) {
     if (isEmptyObject(translationCall) && names[ token ] === 'T_STRING' && prevToken !== 'T_FUNCTION' && prevToken !== 'T_OBJECT_OPERATOR' && prevToken !== 'T_DOUBLE_COLON' && patternFunctionCalls.test(parser.lexer.yytext)) {
       translationCall.argumentCount = 0;
       translationCall.arguments = [];
-      translationCall.file = path.relative(path.dirname(options.destFile || __filename), filePath).replace(/\\/g, '/');
+      translationCall.file = filename;
       translationCall.inParantheses = 0;
       translationCall.line = getLineFromPos(filecontent, parser.lexer.offset - 1);
       translationCall.method = parser.lexer.yytext;
     }
 
     if (!translationCall.method && names[ token ] === 'T_COMMENT') {
-      var commentmatch = commentRegexp.exec(parser.lexer.yytext);
+      const commentmatch = commentRegexp.exec(parser.lexer.yytext);
+
       if (commentmatch !== null) {
         translatorComment = {
           text: commentmatch[ 1 ],
@@ -97,7 +108,7 @@ function parseFile (filecontent, filePath) {
     // Add arguments from translation function
     if (names[ token ] === 'T_CONSTANT_ENCAPSED_STRING') {
       // Strip quotes
-      var quote = parser.lexer.yytext.substr(0, 1);
+      const quote = parser.lexer.yytext.substr(0, 1);
       translationCall.arguments[ translationCall.argumentCount ] += parser.lexer.yytext.substr(1, parser.lexer.yytext.length - 2).replace(new RegExp('\\\\' + quote, 'g'), quote).replace(new RegExp('\\\\n', 'g'), '\n');
     } else if (translationCall.argumentCount === getDomainPos(translationCall.method) && [ 'T_VARIABLE', 'T_STRING', 'T_OBJECT_OPERATOR', 'T_DOUBLE_COLON' ].indexOf(names[ token ]) !== -1) {
       translationCall.arguments[ translationCall.argumentCount ] += parser.lexer.yytext;
@@ -115,16 +126,16 @@ function parseFile (filecontent, filePath) {
     // End of translation function.
     // Add it to the list or append it to duplicate translation
     if (token === ')' && translationCall.inParantheses === 0) {
-      var textDomainPos = getDomainPos(translationCall.method);
+      const textDomainPos = getDomainPos(translationCall.method);
 
       if (translationCall.arguments && (!options.domain || options.domain === translationCall.arguments[ textDomainPos ])) {
         if (translatorComment && (translationCall.line - translatorComment.line <= 1)) {
           translationCall.comment = translatorComment.text;
         }
 
-        var translationObject = generateTranslationObject(translationCall);
+        const translationObject = generateTranslationObject(translationCall);
 
-        var translationKey = generateTranslationKey(translationObject);
+        const translationKey = generateTranslationKey(translationObject);
         if (!translations[ translationKey ]) {
           translations[ translationKey ] = translationObject;
         } else {
@@ -142,9 +153,9 @@ function parseFile (filecontent, filePath) {
 }
 
 function extend (target) {
-  var sources = [].slice.call(arguments, 1);
+  const sources = [].slice.call(arguments, 1);
   sources.forEach(function (source) {
-    for (var prop in source) {
+    for (let prop in source) {
       if (source.hasOwnProperty(prop)) {
         target[ prop ] = source[ prop ];
       }
@@ -154,7 +165,7 @@ function extend (target) {
 }
 
 function setDefaultOptions () {
-  var defaultOptions = {
+  const defaultOptions = {
     src: '**/*.php',
     destFile: 'translations.pot',
     commentKeyword: 'translators: ',
@@ -230,13 +241,30 @@ function getDomainPos (method) {
   return textDomainPos;
 }
 
+function getContextPos (method) {
+  // Default position
+  let contextPos = 1;
+
+  // Plural has two more arguments before context
+  if (isPlural(method)) {
+    contextPos += 2;
+  }
+
+  // Noop-functions has one less argument before context
+  if (isNoop(method)) {
+    contextPos -= 1;
+  }
+
+  return contextPos;
+}
+
 function generateTranslationKey (translationObject) {
   return translationObject.msgid + (translationObject.msgctxt || '');
 }
 
 function generateTranslationObject (translationCall) {
-  var translationObject = {
-    info: translationCall.file + ':' + translationCall.line,
+  const translationObject = {
+    info: `${translationCall.file}:${translationCall.line}`,
     msgid: translationCall.arguments[ 0 ]
   };
 
@@ -249,19 +277,7 @@ function generateTranslationObject (translationCall) {
   }
 
   if (hasContext(translationCall.method)) {
-    // Default context position
-    var contextKey = 1;
-
-    // Plural has two more arguments before context
-    if (isPlural(translationCall.method)) {
-      contextKey += 2;
-    }
-
-    // Noop-functions has one less argument before context
-    if (isNoop(translationCall.method)) {
-      contextKey -= 1;
-    }
-
+    const contextKey = getContextPos(translationCall.method);
     translationObject.msgctxt = translationCall.arguments[ contextKey ];
   }
 
@@ -275,39 +291,39 @@ function generateTranslationObject (translationCall) {
  */
 function translationToPot () {
   // Write translation rows.
-  var output = [];
+  let output = [];
 
   if (translations) {
-    for (var el in translations) {
-      if (translations.hasOwnProperty(el)) {
-        if (translations[ el ].comment) {
-          output.push('#. ' + translations[ el ].comment);
+    for (let translationElement in translations) {
+      if (translations.hasOwnProperty(translationElement)) {
+        if (translations[ translationElement ].comment) {
+          output.push(`#. ${translations[ translationElement ].comment}`);
         }
 
         // Unify paths for Unix and Windows
-        output.push('#: ' + translations[ el ].info.replace(/\\/g, '/'));
+        output.push(`#: ${translations[ translationElement ].info.replace(/\\/g, '/')}`);
 
-        if (translations[ el ].msgctxt) {
-          output.push('msgctxt "' + translations[ el ].msgctxt + '"');
+        if (translations[ translationElement ].msgctxt) {
+          output.push(`msgctxt "${translations[ translationElement ].msgctxt}"`);
         }
 
-        if (/\n/.test(translations[ el ].msgid)) {
+        if (/\n/.test(translations[ translationElement ].msgid)) {
           output.push('msgid ""');
-          var rows = translations[ el ].msgid.split(/\n/);
+          var rows = translations[ translationElement ].msgid.split(/\n/);
 
           for (var rowId = 0; rowId < rows.length; rowId++) {
             var lineBreak = rowId === (rows.length - 1) ? '' : '\\n';
 
-            output.push('"' + rows[ rowId ] + lineBreak + '"');
+            output.push(`"${rows[ rowId ] + lineBreak}"`);
           }
         } else {
-          output.push('msgid "' + translations[ el ].msgid + '"');
+          output.push(`msgid "${translations[ translationElement ].msgid}"`);
         }
 
-        if (!translations[ el ].msgid_plural) {
+        if (!translations[ translationElement ].msgid_plural) {
           output.push('msgstr ""\n');
         } else {
-          output.push('msgid_plural "' + translations[ el ].msgid_plural + '"');
+          output.push(`msgid_plural "${translations[ translationElement ].msgid_plural}"`);
           output.push('msgstr[0] ""');
           output.push('msgstr[1] ""\n');
         }
@@ -321,34 +337,20 @@ function translationToPot () {
 function generatePot () {
   var year = new Date().getFullYear();
 
-  var contents = '# Copyright (C) ' + year + ' ' + options.package + '\n';
-
-  contents += '# This file is distributed under the same license as the ' + options.package + ' package.\n';
-  contents += 'msgid ""\n';
-  contents += 'msgstr ""\n';
-  contents += '"Project-Id-Version: ' + options.package + '\\n"\n';
-
-  if (options[ 'bugReport' ]) {
-    contents += '"Report-Msgid-Bugs-To: ' + options[ 'bugReport' ] + '\\n"\n';
-  }
-
-  contents += '"MIME-Version: 1.0\\n"\n';
-  contents += '"Content-Type: text/plain; charset=UTF-8\\n"\n';
-  contents += '"Content-Transfer-Encoding: 8bit\\n"\n';
-  contents += '"PO-Revision-Date: ' + year + '-MO-DA HO:MI+ZONE\\n"\n';
-
-  if (options[ 'lastTranslator' ]) {
-    contents += '"Last-Translator: ' + options[ 'lastTranslator' ] + '\\n"\n';
-  }
-
-  if (options[ 'team' ]) {
-    contents += '"Language-Team: ' + options[ 'team' ] + '\\n"\n';
-  }
+  var contents = (
+    `# Copyright (C) ${year} ${options.package}
+# This file is distributed under the same license as the ${options.package} package.
+msgid ""
+msgstr ""
+"Project-Id-Version: ${options.package}\\n"
+"MIME-Version: 1.0\\n"
+"Content-Type: text/plain; charset=UTF-8\\n"
+"Content-Transfer-Encoding: 8bit\\n"\n`);
 
   if (options.headers) {
     for (var key in options.headers) {
       if (options.headers.hasOwnProperty(key)) {
-        contents += '"' + key + ': ' + options.headers[ key ] + '\\n"\n';
+        contents += `"${key}: ${options.headers[ key ]}\\n"\n`;
       }
     }
   }
