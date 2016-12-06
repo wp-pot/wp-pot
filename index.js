@@ -284,6 +284,35 @@ function generateTranslationObject (translationCall) {
   return translationObject;
 }
 
+function getPotMsgId (msgid, plural) {
+  const output = [];
+  const idKey = (plural ? 'msgid_plural' : 'msgid');
+
+  if (!msgid) {
+    return [];
+  } else if (/\n/.test(msgid)) {
+    output.push(`${idKey} ""`);
+    var rows = msgid.split(/\n/);
+
+    for (var rowId = 0; rowId < rows.length; rowId++) {
+      var lineBreak = rowId === (rows.length - 1) ? '' : '\\n';
+
+      output.push(`"${rows[ rowId ] + lineBreak}"`);
+    }
+  } else {
+    output.push(`${idKey} "${msgid}"`);
+  }
+  return output;
+}
+
+function getPotMsgStr (plural) {
+  if (!plural) {
+    return [ 'msgstr ""\n' ];
+  } else {
+    return [ 'msgstr[0] ""', 'msgstr[1] ""\n' ];
+  }
+}
+
 /**
  * Write translation to array with pot format.
  *
@@ -307,26 +336,11 @@ function translationToPot () {
           output.push(`msgctxt "${translations[ translationElement ].msgctxt}"`);
         }
 
-        if (/\n/.test(translations[ translationElement ].msgid)) {
-          output.push('msgid ""');
-          var rows = translations[ translationElement ].msgid.split(/\n/);
+        output = output.concat(getPotMsgId(translations[ translationElement ].msgid));
 
-          for (var rowId = 0; rowId < rows.length; rowId++) {
-            var lineBreak = rowId === (rows.length - 1) ? '' : '\\n';
+        output = output.concat(getPotMsgId(translations[ translationElement ].msgid_plural, true));
 
-            output.push(`"${rows[ rowId ] + lineBreak}"`);
-          }
-        } else {
-          output.push(`msgid "${translations[ translationElement ].msgid}"`);
-        }
-
-        if (!translations[ translationElement ].msgid_plural) {
-          output.push('msgstr ""\n');
-        } else {
-          output.push(`msgid_plural "${translations[ translationElement ].msgid_plural}"`);
-          output.push('msgstr[0] ""');
-          output.push('msgstr[1] ""\n');
-        }
+        output = output.concat(getPotMsgStr(Boolean(translations[ translationElement ].msgid_plural)));
       }
     }
   }
