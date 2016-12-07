@@ -49,105 +49,126 @@ function wpPot (userOptions) {
   return potContents;
 }
 
+function parseComment (lexer, filecontent) {
+  const commentmatch = commentRegexp.exec(lexer.yytext);
+  let comment = {};
+
+  if (commentmatch !== null) {
+    comment = {
+      text: commentmatch[ 1 ],
+      line: getLineFromPos(filecontent, lexer.offset - 1)
+    };
+  }
+
+  return comment;
+}
+
+function parseFunctionCall (lexer, filename, filecontent) {
+  let translationCall = {};
+
+  if (patternFunctionCalls.test(lexer.yytext)) {
+    translationCall = {
+      argumentCount: 0,
+      arguments: [],
+      file: filename,
+      inParantheses: 0,
+      line: getLineFromPos(filecontent, lexer.offset - 1),
+      method: lexer.yytext
+    };
+  }
+
+  return translationCall;
+}
+
+function addArgument (translationCall, tokenName, lexer) {
+  if (tokenName === 'T_CONSTANT_ENCAPSED_STRING') {
+    // Strip quotes
+    const quote = lexer.yytext.substr(0, 1);
+    const text = lexer.yytext.substr(1, lexer.yytext.length - 2).replace(new RegExp('\\\\' + quote, 'g'), quote).replace(new RegExp('\\\\n', 'g'), '\n');
+    translationCall.arguments[ translationCall.argumentCount ] += text;
+  } else {
+    translationCall.arguments[ translationCall.argumentCount ] += lexer.yytext;
+  }
+
+  return translationCall;
+}
+
+function addTranslation (translationCall, lastComment) {
+  const textDomainPos = getDomainPos(translationCall.method);
+
+  if (translationCall.arguments && (!options.domain || options.domain === translationCall.arguments[ textDomainPos ])) {
+    if (lastComment && (translationCall.line - lastComment.line === 1)) {
+      translationCall.comment = lastComment.text;
+    }
+
+    const translationObject = generateTranslationObject(translationCall);
+
+    const translationKey = generateTranslationKey(translationObject);
+    if (!translations[ translationKey ]) {
+      translations[ translationKey ] = translationObject;
+    } else {
+      translations[ translationKey ].info += ', ' + translationObject.info;
+
+      if (translationObject.msgid_plural) {
+        translations[ translationKey ].msgid_plural = translationObject.msgid_plural;
+      }
+    }
+  }
+}
+
+function validArgument (tokenName) {
+  return [ 'T_CONSTANT_ENCAPSED_STRING', 'T_VARIABLE', 'T_STRING', 'T_OBJECT_OPERATOR', 'T_DOUBLE_COLON' ].indexOf(tokenName) !== -1;
+}
+
 function parseFile (filecontent, filePath) {
   // Skip file if no translation functions is found
   if (!patternFunctionCalls.test(filecontent)) {
     return;
   }
-
-  let translatorComment;
-  let token;
+  const filename = path.relative(path.dirname(options.destFile || __filename), filePath).replace(/\\/g, '/');
 
   let prevToken = null;
   let translationCall = {};
-  const filename = path.relative(path.dirname(options.destFile || __filename), filePath).replace(/\\/g, '/');
+  let lastComment = {};
+  let token;
 
   parser.lexer.setInput(filecontent);
 
   while ((token = parser.lexer.lex() || EOF) !== EOF) {
-    // console.log(getLineFromPos(filecontent, engine.lexer.offset - 1), ':', names[ token ], '(', engine.lexer.yytext, ')', 'prev:', prevToken);
+    // console.log(getLineFromPos(filecontent, parser.lexer.offset - 1), ':', names[ token ], '(', parser.lexer.yytext, ')', 'prev:', prevToken);
+    if (isEmptyObject(translationCall)) {
+      // Detect function calls, ignore function defines and object calls
+      if (names[ token ] === 'T_STRING' && [ 'T_FUNCTION', 'T_OBJECT_OPERATOR', 'T_DOUBLE_COLON' ].indexOf(prevToken) === -1) {
+        translationCall = parseFunctionCall(parser.lexer, filename, filecontent);
+      } else if (names[ token ] === 'T_COMMENT') {
+        lastComment = parseComment(parser.lexer, filecontent) || lastComment;
+      }
+    } else {
+      if (!translationCall.arguments[ translationCall.argumentCount ]) {
+        translationCall.arguments[ translationCall.argumentCount ] = '';
+      }
 
-    // Detect function calls, ignore function defines and object calls
-    if (isEmptyObject(translationCall) && names[ token ] === 'T_STRING' && prevToken !== 'T_FUNCTION' && prevToken !== 'T_OBJECT_OPERATOR' && prevToken !== 'T_DOUBLE_COLON' && patternFunctionCalls.test(parser.lexer.yytext)) {
-      translationCall.argumentCount = 0;
-      translationCall.arguments = [];
-      translationCall.file = filename;
-      translationCall.inParantheses = 0;
-      translationCall.line = getLineFromPos(filecontent, parser.lexer.offset - 1);
-      translationCall.method = parser.lexer.yytext;
-    }
+      if (token === '(') {
+        translationCall.inParantheses++;
+      } else if (token === ')') {
+        translationCall.inParantheses--;
+      } else if (token === ',' && translationCall.inParantheses === 1) {
+        translationCall.argumentCount++;
+      } else if (validArgument(names[ token ])) {
+        translationCall = addArgument(translationCall, names[ token ], parser.lexer);
+      }
 
-    if (!translationCall.method && names[ token ] === 'T_COMMENT') {
-      const commentmatch = commentRegexp.exec(parser.lexer.yytext);
-
-      if (commentmatch !== null) {
-        translatorComment = {
-          text: commentmatch[ 1 ],
-          line: getLineFromPos(filecontent, parser.lexer.offset - 1)
-        };
+      // End of translation function.
+      // Add it to the list or append it to duplicate translation
+      if (translationCall.inParantheses === 0) {
+        addTranslation(translationCall, lastComment);
+        translationCall = {};
       }
     }
+
     // Ignore whitespace as previous token
     if (names[ token ] !== 'T_WHITESPACE') {
       prevToken = names[ token ] || token;
-    }
-
-    // If not in a translation method we can ignore the rest
-    if (isEmptyObject(translationCall)) {
-      continue;
-    }
-
-    if (!translationCall.arguments[ translationCall.argumentCount ]) {
-      translationCall.arguments[ translationCall.argumentCount ] = '';
-    }
-
-    if (token === '(') {
-      translationCall.inParantheses++;
-    }
-
-    // Add arguments from translation function
-    if (names[ token ] === 'T_CONSTANT_ENCAPSED_STRING') {
-      // Strip quotes
-      const quote = parser.lexer.yytext.substr(0, 1);
-      translationCall.arguments[ translationCall.argumentCount ] += parser.lexer.yytext.substr(1, parser.lexer.yytext.length - 2).replace(new RegExp('\\\\' + quote, 'g'), quote).replace(new RegExp('\\\\n', 'g'), '\n');
-    } else if (translationCall.argumentCount === getDomainPos(translationCall.method) && [ 'T_VARIABLE', 'T_STRING', 'T_OBJECT_OPERATOR', 'T_DOUBLE_COLON' ].indexOf(names[ token ]) !== -1) {
-      translationCall.arguments[ translationCall.argumentCount ] += parser.lexer.yytext;
-    }
-
-    if (token === ',' && translationCall.inParantheses === 1) {
-      translationCall.argumentCount++;
-    }
-
-    // End of paranthese
-    if (token === ')') {
-      translationCall.inParantheses--;
-    }
-
-    // End of translation function.
-    // Add it to the list or append it to duplicate translation
-    if (token === ')' && translationCall.inParantheses === 0) {
-      const textDomainPos = getDomainPos(translationCall.method);
-
-      if (translationCall.arguments && (!options.domain || options.domain === translationCall.arguments[ textDomainPos ])) {
-        if (translatorComment && (translationCall.line - translatorComment.line <= 1)) {
-          translationCall.comment = translatorComment.text;
-        }
-
-        const translationObject = generateTranslationObject(translationCall);
-
-        const translationKey = generateTranslationKey(translationObject);
-        if (!translations[ translationKey ]) {
-          translations[ translationKey ] = translationObject;
-        } else {
-          translations[ translationKey ].info += ', ' + translationObject.info;
-
-          if (translationObject.msgid_plural) {
-            translations[ translationKey ].msgid_plural = translationObject.msgid_plural;
-          }
-        }
-      }
-
-      translationCall = {};
     }
   }
 }
