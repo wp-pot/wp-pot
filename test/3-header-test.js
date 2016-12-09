@@ -11,7 +11,7 @@ describe('Header tests', function () {
   it('should generate a pot file with default headers when no headers is set', function () {
     var potContents = wpPot({
       src: 'test/fixures/empty-dir/*.php',
-      destFile: false
+      writeFile: false
     });
 
     assert(potContents.indexOf(defaultHeaders) !== -1);
@@ -25,7 +25,7 @@ describe('Header tests', function () {
         'Language-Team': 'Team Team <mail@example.com>'
       },
       src: 'test/fixures/empty-dir/*.php',
-      destFile: false
+      writeFile: false
     });
 
     assert(potContents.indexOf(defaultHeaders) === -1);
@@ -37,7 +37,7 @@ describe('Header tests', function () {
   it('should generate a pot file without default headers from php file with headers false', function () {
     var potContents = wpPot({
       src: 'test/fixures/empty-dir/*.php',
-      destFile: false,
+      writeFile: false,
       headers: false
     });
 

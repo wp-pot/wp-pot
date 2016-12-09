@@ -3,9 +3,9 @@
 
 const fs = require('fs');
 const getLineFromPos = require('get-line-from-pos');
-const glob = require('glob');
 const parser = require('php-parser').create({});
 const path = require('path');
+const globby = require('globby');
 
 const EOF = parser.lexer.EOF;
 const names = parser.tokens.values;
@@ -32,7 +32,7 @@ function wpPot (userOptions) {
   commentRegexp = new RegExp('^[\\s\\*\\/]+' + options.commentKeyword + '\\s*(.*)', 'im');
 
   // Find files
-  const files = glob.sync(options.src);
+  const files = globby.sync(options.src);
 
   // Parse files
   for (let i = 0; i < files.length; i++) {
@@ -42,7 +42,7 @@ function wpPot (userOptions) {
 
   const potContents = generatePot();
 
-  if (options.destFile) {
+  if (options.writeFile) {
     writePot(potContents);
   }
 
@@ -189,14 +189,15 @@ function setDefaultOptions () {
   const defaultOptions = {
     src: '**/*.php',
     destFile: 'translations.pot',
-    commentKeyword: 'translators: ',
+    commentKeyword: 'translators:',
     headers: {
       'X-Poedit-Basepath': '..',
       'X-Poedit-SourceCharset': 'UTF-8',
       'X-Poedit-KeywordsList': '__;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2',
       'X-Poedit-SearchPath-0': '.',
       'X-Poedit-SearchPathExcluded-0': '*.js'
-    }
+    },
+    writeFile: true
   };
 
   options = extend({}, defaultOptions, options);

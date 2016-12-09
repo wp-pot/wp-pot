@@ -11,7 +11,7 @@ describe('Function tests', function () {
 
     var potContents = wpPot({
       src: fixturePath,
-      destFile: false
+      writeFile: false
     });
 
     testHelper.testValidFunctions(potContents, fixturePath);
@@ -23,7 +23,7 @@ describe('Function tests', function () {
     var potContents = wpPot({
       src: fixturePath,
       domain: 'testdomain',
-      destFile: false
+      writeFile: false
     });
 
     testHelper.testValidFunctions(potContents, fixturePath);
@@ -35,7 +35,7 @@ describe('Function tests', function () {
     var potContents = wpPot({
       src: fixturePath,
       domain: 'other-domain',
-      destFile: false
+      writeFile: false
     });
 
     testHelper.testValidFunctions(potContents, fixturePath, true);
@@ -46,7 +46,7 @@ describe('Function tests', function () {
 
     var potContents = wpPot({
       src: fixturePath,
-      destFile: false,
+      writeFile: false,
       domain: 'testdomain'
     });
 

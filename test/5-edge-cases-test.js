@@ -13,7 +13,7 @@ describe('Edge cases function tests', function () {
   before(function () {
     potContents = wpPot({
       src: fixturePath,
-      destFile: false,
+      writeFile: false,
       domain: 'testdomain'
     });
   });
@@ -53,7 +53,7 @@ describe('Edge cases domain tests', function () {
   it('should handle strings with domain set as variable', function () {
     var potContents = wpPot({
       src: fixturePath,
-      destFile: false,
+      writeFile: false,
       domain: '$test'
     });
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':16', 'Domain is a variable', false, false));
@@ -62,7 +62,7 @@ describe('Edge cases domain tests', function () {
   it('should handle strings with domain set as a constant', function () {
     var potContents = wpPot({
       src: fixturePath,
-      destFile: false,
+      writeFile: false,
       domain: '$this->test'
     });
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':17', 'Domain is a object variable', false, false));
@@ -71,7 +71,7 @@ describe('Edge cases domain tests', function () {
   it('should handle strings with domain set as a constant', function () {
     var potContents = wpPot({
       src: fixturePath,
-      destFile: false,
+      writeFile: false,
       domain: '$this::test'
     });
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':18', 'Domain is a static class variable', false, false));
@@ -80,7 +80,7 @@ describe('Edge cases domain tests', function () {
   it('should handle strings with domain set as a constant', function () {
     var potContents = wpPot({
       src: fixturePath,
-      destFile: false,
+      writeFile: false,
       domain: 'TEST'
     });
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':19', 'Domain is a constant', false, false));
@@ -89,7 +89,7 @@ describe('Edge cases domain tests', function () {
   it('should not include methods without domain when domain is set', function () {
     var potContents = wpPot({
       src: fixturePath,
-      destFile: false,
+      writeFile: false,
       domain: 'TEST'
     });
     assert(!testHelper.verifyLanguageBlock(potContents, false, false, 'Missing domain', false, false));

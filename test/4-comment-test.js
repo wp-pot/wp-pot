@@ -11,7 +11,7 @@ describe('Comment tests', function () {
 
     var potContents = wpPot({
       src: fixturePath,
-      destFile: false
+      writeFile: false
     });
 
     assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test', fixturePath + ':3', 'Single line comment', false, false));
@@ -25,7 +25,7 @@ describe('Comment tests', function () {
 
     var potContents = wpPot({
       src: fixturePath,
-      destFile: false,
+      writeFile: false,
       commentKeyword: 'Other keyword: '
     });
 

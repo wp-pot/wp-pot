@@ -29,8 +29,8 @@
   "license": "MIT",
   "dependencies": {
     "get-line-from-pos": "^1.0.0",
-    "php-parser": "^0.1.3",
-    "glob": "^7.1.1"
+    "globby": "^6.1.0",
+    "php-parser": "^0.1.3"
   },
   "devDependencies": {
     "eslint": "^3.11.1",
