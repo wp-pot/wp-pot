@@ -1,15 +1,16 @@
 /* eslint-env node, mocha */
 /* global before, after, describe, it */
+'use strict';
 
-var assert = require('assert');
-var wpPot = require('../');
-var fs = require('fs');
+const assert = require('assert');
+const wpPot = require('../');
+const fs = require('fs');
 
-var defaultHeaders = fs.readFileSync('test/fixtures/default-headers.txt').toString();
+const defaultHeaders = fs.readFileSync('test/fixtures/default-headers.txt').toString();
 
 describe('Header tests', function () {
   it('should generate a pot file with default headers when no headers is set', function () {
-    var potContents = wpPot({
+    const potContents = wpPot({
       src: 'test/fixures/empty-dir/*.php',
       writeFile: false
     });
@@ -18,7 +19,7 @@ describe('Header tests', function () {
   });
 
   it('should generate a pot file with custom headers from php file with headers set', function () {
-    var potContents = wpPot({
+    const potContents = wpPot({
       headers: {
         'Report-Msgid-Bugs-To': 'http://example.com',
         'Last-Translator': 'John Doe <mail@example.com>',
@@ -35,7 +36,7 @@ describe('Header tests', function () {
   });
 
   it('should generate a pot file without default headers from php file with headers false', function () {
-    var potContents = wpPot({
+    const potContents = wpPot({
       src: 'test/fixures/empty-dir/*.php',
       writeFile: false,
       headers: false

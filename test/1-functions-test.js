@@ -1,15 +1,16 @@
 /* eslint-env node, mocha */
 /* global before, after, describe, it */
+'use strict';
 
-var assert = require('assert');
-var wpPot = require('../');
-var testHelper = require('./test-helper');
+const assert = require('assert');
+const wpPot = require('../');
+const testHelper = require('./test-helper');
 
 describe('Function tests', function () {
   it('Can read all valid functions without domain check', function () {
-    var fixturePath = 'test/fixtures/valid-functions.php';
+    const fixturePath = 'test/fixtures/valid-functions.php';
 
-    var potContents = wpPot({
+    const potContents = wpPot({
       src: fixturePath,
       writeFile: false
     });
@@ -18,9 +19,9 @@ describe('Function tests', function () {
   });
 
   it('Can read all valid functions with domain check', function () {
-    var fixturePath = 'test/fixtures/valid-functions.php';
+    const fixturePath = 'test/fixtures/valid-functions.php';
 
-    var potContents = wpPot({
+    const potContents = wpPot({
       src: fixturePath,
       domain: 'testdomain',
       writeFile: false
@@ -30,9 +31,9 @@ describe('Function tests', function () {
   });
 
   it('Can not find any functions with domain check if invalid domain', function () {
-    var fixturePath = 'test/fixtures/valid-functions.php';
+    const fixturePath = 'test/fixtures/valid-functions.php';
 
-    var potContents = wpPot({
+    const potContents = wpPot({
       src: fixturePath,
       domain: 'other-domain',
       writeFile: false
@@ -42,9 +43,9 @@ describe('Function tests', function () {
   });
 
   it('Can merge duplicate strings and separate with context', function () {
-    var fixturePath = 'test/fixtures/duplicated-strings.php';
+    const fixturePath = 'test/fixtures/duplicated-strings.php';
 
-    var potContents = wpPot({
+    const potContents = wpPot({
       src: fixturePath,
       writeFile: false,
       domain: 'testdomain'

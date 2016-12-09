@@ -245,7 +245,7 @@ function isNoop (method) {
 }
 
 function getDomainPos (method) {
-  var textDomainPos = 1;
+  let textDomainPos = 1;
 
   if (isPlural(method)) {
     textDomainPos += 2;
@@ -314,10 +314,10 @@ function getPotMsgId (msgid, plural) {
     return [];
   } else if (/\n/.test(msgid)) {
     output.push(`${idKey} ""`);
-    var rows = msgid.split(/\n/);
+    const rows = msgid.split(/\n/);
 
-    for (var rowId = 0; rowId < rows.length; rowId++) {
-      var lineBreak = rowId === (rows.length - 1) ? '' : '\\n';
+    for (let rowId = 0; rowId < rows.length; rowId++) {
+      const lineBreak = rowId === (rows.length - 1) ? '' : '\\n';
 
       output.push(`"${rows[ rowId ] + lineBreak}"`);
     }
@@ -371,9 +371,9 @@ function translationToPot () {
 }
 
 function generatePot () {
-  var year = new Date().getFullYear();
+  const year = new Date().getFullYear();
 
-  var contents = (
+  let contents = (
     `# Copyright (C) ${year} ${options.package}
 # This file is distributed under the same license as the ${options.package} package.
 msgid ""
@@ -384,7 +384,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\\n"\n`);
 
   if (options.headers) {
-    for (var key in options.headers) {
+    for (let key in options.headers) {
       if (options.headers.hasOwnProperty(key)) {
         contents += `"${key}: ${options.headers[ key ]}\\n"\n`;
       }
@@ -394,7 +394,7 @@ msgstr ""
   contents += '"Plural-Forms: nplurals=2; plural=(n != 1);\\n"\n';
   contents += '\n';
 
-  var translationLines = translationToPot();
+  const translationLines = translationToPot();
   contents += translationLines.join('\n');
 
   return contents;

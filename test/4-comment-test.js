@@ -1,15 +1,16 @@
 /* eslint-env node, mocha */
 /* global before, after, describe, it */
+'use strict';
 
-var assert = require('assert');
-var wpPot = require('../');
-var testHelper = require('./test-helper');
+const assert = require('assert');
+const wpPot = require('../');
+const testHelper = require('./test-helper');
 
 describe('Comment tests', function () {
   it('Can read different type of comments', function () {
-    var fixturePath = 'test/fixtures/comments.php';
+    const fixturePath = 'test/fixtures/comments.php';
 
-    var potContents = wpPot({
+    const potContents = wpPot({
       src: fixturePath,
       writeFile: false
     });
@@ -21,9 +22,9 @@ describe('Comment tests', function () {
   });
 
   it('Can read comments with other trigger', function () {
-    var fixturePath = 'test/fixtures/comments.php';
+    const fixturePath = 'test/fixtures/comments.php';
 
-    var potContents = wpPot({
+    const potContents = wpPot({
       src: fixturePath,
       writeFile: false,
       commentKeyword: 'Other keyword: '

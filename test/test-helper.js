@@ -1,5 +1,7 @@
 /* eslint-env node */
-var assert = require('assert');
+'use strict';
+
+const assert = require('assert');
 
 /**
  * Verify a language block, divided by two new lines
@@ -13,10 +15,10 @@ var assert = require('assert');
  * @return {boolean}
  */
 function verifyLanguageBlock (potContents, comment, fileinfo, msgid, plural, context) {
-  var blocks = potContents.split('\n\n');
-  for (var i = 1; i < blocks.length; i++) {
-    var blocklines = blocks[ i ].split('\n');
-    var fileinfoLine = 0;
+  const blocks = potContents.split('\n\n');
+  for (let i = 1; i < blocks.length; i++) {
+    const blocklines = blocks[ i ].split('\n');
+    let fileinfoLine = 0;
 
     if (comment && blocks[ i ].indexOf('#. ' + comment) === -1) {
       continue;

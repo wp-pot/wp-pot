@@ -1,14 +1,15 @@
 /* eslint-env node, mocha */
 /* global describe, it */
+'use strict';
 
-var assert = require('assert');
-var wpPot = require('../');
-var fs = require('fs');
-var os = require('os');
+const assert = require('assert');
+const wpPot = require('../');
+const fs = require('fs');
+const os = require('os');
 
 describe('File write tests', function () {
   it('should write a file named translations.pot when no destination is given', function () {
-    var currentDir = process.cwd();
+    const currentDir = process.cwd();
     process.chdir(os.tmpdir()); // Set temporary directory for file creation
     fs.unlink('translations.pot', function () {}); // Remove file if existing
     wpPot({
@@ -20,7 +21,7 @@ describe('File write tests', function () {
   });
 
   it('should write a file to the correct destination when given', function () {
-    var tempPot = os.tmpdir() + '/file-write-test.pot'; // Set temporary directory for file creation
+    const tempPot = os.tmpdir() + '/file-write-test.pot'; // Set temporary directory for file creation
     fs.unlink(tempPot, function () {}); // Remove file if existing
     wpPot({
       src: 'test/fixures/empty-dir/*.php',

@@ -1,14 +1,14 @@
 /* eslint-env node, mocha */
 /* global before, after, describe, it */
 
-var assert = require('assert');
-var wpPot = require('../');
-var testHelper = require('./test-helper');
+const assert = require('assert');
+const wpPot = require('../');
+const testHelper = require('./test-helper');
 
-var fixturePath = 'test/fixtures/edge-cases.php';
+const fixturePath = 'test/fixtures/edge-cases.php';
 
 describe('Edge cases function tests', function () {
-  var potContents;
+  let potContents;
 
   before(function () {
     potContents = wpPot({
@@ -51,7 +51,7 @@ describe('Edge cases function tests', function () {
 
 describe('Edge cases domain tests', function () {
   it('should handle strings with domain set as variable', function () {
-    var potContents = wpPot({
+    const potContents = wpPot({
       src: fixturePath,
       writeFile: false,
       domain: '$test'
@@ -60,7 +60,7 @@ describe('Edge cases domain tests', function () {
   });
 
   it('should handle strings with domain set as a constant', function () {
-    var potContents = wpPot({
+    const potContents = wpPot({
       src: fixturePath,
       writeFile: false,
       domain: '$this->test'
@@ -69,7 +69,7 @@ describe('Edge cases domain tests', function () {
   });
 
   it('should handle strings with domain set as a constant', function () {
-    var potContents = wpPot({
+    const potContents = wpPot({
       src: fixturePath,
       writeFile: false,
       domain: '$this::test'
@@ -78,7 +78,7 @@ describe('Edge cases domain tests', function () {
   });
 
   it('should handle strings with domain set as a constant', function () {
-    var potContents = wpPot({
+    const potContents = wpPot({
       src: fixturePath,
       writeFile: false,
       domain: 'TEST'
@@ -87,7 +87,7 @@ describe('Edge cases domain tests', function () {
   });
 
   it('should not include methods without domain when domain is set', function () {
-    var potContents = wpPot({
+    const potContents = wpPot({
       src: fixturePath,
       writeFile: false,
       domain: 'TEST'

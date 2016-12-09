@@ -20,7 +20,7 @@ $ npm install --save-dev wp-pot
 ## Example usage
 
 ```js
-var wpPot = require('wp-pot');
+const wpPot = require('wp-pot');
 
 wpPot({
   destFile: 'file.pot',
