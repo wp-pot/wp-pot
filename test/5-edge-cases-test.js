@@ -1,5 +1,6 @@
 /* eslint-env node, mocha */
 /* global before, after, describe, it */
+'use strict';
 
 const assert = require('assert');
 const wpPot = require('../');
