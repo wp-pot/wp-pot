@@ -84,8 +84,7 @@ function addArgument (translationCall, tokenName, lexer) {
   if (tokenName === 'T_CONSTANT_ENCAPSED_STRING') {
     // Strip quotes
     const quote = lexer.yytext.substr(0, 1);
-    const text = lexer.yytext.substr(1, lexer.yytext.length - 2).replace(new RegExp('\\\\' + quote, 'g'), quote).replace(new RegExp('\\\\n', 'g'), '\n');
-    translationCall.arguments[ translationCall.argumentCount ] += text;
+    translationCall.arguments[ translationCall.argumentCount ] += lexer.yytext.substr(1, lexer.yytext.length - 2).replace(new RegExp('\\\\' + quote, 'g'), quote).replace(new RegExp('\\\\n', 'g'), '\n');
   } else {
     translationCall.arguments[ translationCall.argumentCount ] += lexer.yytext;
   }
