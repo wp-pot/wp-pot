@@ -29,7 +29,7 @@ function wpPot (userOptions) {
   setDefaultOptions();
 
   // Set comment regexp to find translator comments
-  commentRegexp = new RegExp('^[\\s\\*\\/]+' + options.commentKeyword + '\\s*(.*)', 'im');
+  commentRegexp = new RegExp('^[\\s\\*\\/]+' + options.commentKeyword + '(.*)', 'im');
 
   // Find files
   const files = globby.sync(options.src);
