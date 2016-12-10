@@ -9,6 +9,9 @@
     "test-mocha": "mocha",
     "cover": "istanbul cover --report clover --report lcov _mocha"
   },
+  "bin": {
+    "wp-pot": "cli.js"
+  },
   "keywords": [
     "pot",
     "wordpress",
@@ -30,7 +33,8 @@
   "dependencies": {
     "get-line-from-pos": "^1.0.0",
     "globby": "^6.1.0",
-    "php-parser": "^0.1.3"
+    "php-parser": "^0.1.3",
+    "meow": "^3.7.0"
   },
   "devDependencies": {
     "eslint": "^3.11.1",
