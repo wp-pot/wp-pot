@@ -24,13 +24,13 @@ const cli = meow(`
 // Bail if source file is undefined.
 if (cli.flags.src === undefined) {
   console.log('Source flag is empty');
-  return;
+  process.exit(1);
 }
 
 // Destination file cannot be empty if write file is true.
 if (!cli.flags.destFile && cli.flags.writeFile) {
   console.log('Destination file flag is empty');
-  return;
+  process.exit(1);
 }
 
 let content = wpPot({
