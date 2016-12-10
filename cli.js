@@ -14,11 +14,11 @@ const cli = meow(`
     Examples
       $ wp-pot --src 'src/*.php'
 `, {
-    alias: {
-        s: 'src',
-        d: 'dest-file',
-        w: 'write-file'
-    }
+  alias: {
+    s: 'src',
+    d: 'dest-file',
+    w: 'write-file'
+  }
 });
 
 // Bail if source file is undefined.
