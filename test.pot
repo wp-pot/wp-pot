@@ -1,0 +1,167 @@
+# Copyright (C) 2016 unnamed project
+# This file is distributed under the same license as the unnamed project package.
+msgid ""
+msgstr ""
+"Project-Id-Version: unnamed project\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. translators: This is a test
+#: test/fixtures/comments.php:3
+msgid "Single line comment"
+msgstr ""
+
+#. translators: This is also a test
+#: test/fixtures/comments.php:8
+msgid "Multiline comment, one line"
+msgstr ""
+
+#. translators: This is test number three
+#: test/fixtures/comments.php:15
+msgid "Multiline comment, multi line"
+msgstr ""
+
+#: test/fixtures/comments.php:19
+msgid "Comment too far away from function"
+msgstr ""
+
+#: test/fixtures/comments.php:22
+msgid "Comment with other keyword"
+msgstr ""
+
+#: test/fixtures/duplicated-strings.php:2, test/fixtures/duplicated-strings.php:3, test/fixtures/duplicated-strings.php:9
+msgid "Simple string"
+msgstr ""
+
+#: test/fixtures/duplicated-strings.php:4, test/fixtures/duplicated-strings.php:5
+msgctxt "with context"
+msgid "Simple string"
+msgstr ""
+
+#: test/fixtures/duplicated-strings.php:6, test/fixtures/duplicated-strings.php:7
+msgid "Single and plural string"
+msgid_plural "Plural string"
+msgstr[0] ""
+msgstr[1] ""
+
+#: test/fixtures/duplicated-strings.php:8
+msgctxt "with context"
+msgid "Single and plural string"
+msgid_plural "Plural string"
+msgstr[0] ""
+msgstr[1] ""
+
+#: test/fixtures/edge-cases.php:2, test/fixtures/edge-cases.php:3
+msgid "It's escaped"
+msgstr ""
+
+#: test/fixtures/edge-cases.php:4, test/fixtures/edge-cases.php:5
+msgid "This is "escaped""
+msgstr ""
+
+#: test/fixtures/edge-cases.php:6, test/fixtures/edge-cases.php:8
+msgid ""
+"New\n"
+"Line"
+msgstr ""
+
+#: test/fixtures/edge-cases.php:9
+msgid "Hello World"
+msgstr ""
+
+#: test/fixtures/edge-cases.php:13, test/fixtures/edge-cases.php:14, test/fixtures/edge-cases.php:15, test/fixtures/valid-functions.php:12
+msgid "Singular string"
+msgid_plural "Plural string"
+msgstr[0] ""
+msgstr[1] ""
+
+#: test/fixtures/edge-cases.php:16
+msgid "Domain is a variable"
+msgstr ""
+
+#: test/fixtures/edge-cases.php:17
+msgid "Domain is a object variable"
+msgstr ""
+
+#: test/fixtures/edge-cases.php:18
+msgid "Domain is a static class variable"
+msgstr ""
+
+#: test/fixtures/edge-cases.php:19
+msgid "Domain is a constant"
+msgstr ""
+
+#: test/fixtures/edge-cases.php:20
+msgid "Missing domain"
+msgstr ""
+
+#: test/fixtures/valid-functions.php:2
+msgid "Return string"
+msgstr ""
+
+#: test/fixtures/valid-functions.php:3
+msgid "Print string"
+msgstr ""
+
+#: test/fixtures/valid-functions.php:4
+msgid "Escape for attribute and return string"
+msgstr ""
+
+#: test/fixtures/valid-functions.php:5
+msgid "Escape for attribute and print string"
+msgstr ""
+
+#: test/fixtures/valid-functions.php:6
+msgid "Escape for html and return string"
+msgstr ""
+
+#: test/fixtures/valid-functions.php:7
+msgid "Escape for html and print string"
+msgstr ""
+
+#: test/fixtures/valid-functions.php:8
+msgctxt "Some context"
+msgid "Return string with context"
+msgstr ""
+
+#: test/fixtures/valid-functions.php:9
+msgctxt "Some context"
+msgid "Print string with context"
+msgstr ""
+
+#: test/fixtures/valid-functions.php:10
+msgctxt "Some context"
+msgid "Escape string with context for attribute"
+msgstr ""
+
+#: test/fixtures/valid-functions.php:11
+msgctxt "Some context"
+msgid "Escape string with context for html"
+msgstr ""
+
+#: test/fixtures/valid-functions.php:13
+msgid "Singular string with noop"
+msgid_plural "Plural string with noop"
+msgstr[0] ""
+msgstr[1] ""
+
+#: test/fixtures/valid-functions.php:14
+msgctxt "Some context"
+msgid "Singular string with context"
+msgid_plural "Plural string with context"
+msgstr[0] ""
+msgstr[1] ""
+
+#: test/fixtures/valid-functions.php:15
+msgctxt "Some context"
+msgid "Singular string with noop and context"
+msgid_plural "Plural string with noop and context"
+msgstr[0] ""
+msgstr[1] ""
