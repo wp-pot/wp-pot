@@ -9,7 +9,8 @@ const globby = require('globby');
 
 const EOF = parser.lexer.EOF;
 const names = parser.tokens.values;
-const patternFunctionCalls = /(__|_e|esc_attr__|esc_attr_e|esc_html__|esc_html_e|_x|_ex|esc_attr_x|esc_html_x|_n|_n_noop|_nx|_nx_noop)/;
+const validFunctionCalls = /^(__|_e|esc_attr__|esc_attr_e|esc_html__|esc_html_e|_x|_ex|esc_attr_x|esc_html_x|_n|_n_noop|_nx|_nx_noop)$/;
+const validFunctionsInFile = new RegExp(validFunctionCalls.source.substr(1, validFunctionCalls.source.length - 2));
 
 let translations;
 let options;
@@ -86,7 +87,7 @@ function parseComment (lexer, filecontent) {
 function parseFunctionCall (lexer, filename, filecontent) {
   let translationCall = {};
 
-  if (patternFunctionCalls.test(lexer.yytext)) {
+  if (validFunctionCalls.test(lexer.yytext)) {
     translationCall = {
       argumentCount: 0,
       arguments: [],
@@ -102,9 +103,17 @@ function parseFunctionCall (lexer, filename, filecontent) {
 
 function addArgument (translationCall, tokenName, lexer) {
   if (tokenName === 'T_CONSTANT_ENCAPSED_STRING') {
+    let text = lexer.yytext;
     // Strip quotes
     const quote = lexer.yytext.substr(0, 1);
-    translationCall.arguments[ translationCall.argumentCount ] += lexer.yytext.substr(1, lexer.yytext.length - 2).replace(new RegExp('\\\\' + quote, 'g'), quote).replace(new RegExp('\\\\n', 'g'), '\n');
+    text = text.substr(1, lexer.yytext.length - 2);
+
+    // Remove escapes
+    text = text.replace(new RegExp('\\\\' + quote, 'g'), quote).replace(new RegExp('\\\\n', 'g'), '\n');
+
+    // Add quotes to "
+    text = text.replace(/\\([\s\S])|(")/g, '\\$1$2');
+    translationCall.arguments[ translationCall.argumentCount ] += text;
   } else {
     translationCall.arguments[ translationCall.argumentCount ] += lexer.yytext;
   }
@@ -141,7 +150,7 @@ function validArgument (tokenName) {
 
 function parseFile (filecontent, filePath) {
   // Skip file if no translation functions is found
-  if (!patternFunctionCalls.test(filecontent)) {
+  if (!validFunctionsInFile.test(filecontent)) {
     return;
   }
   const filename = path.relative(path.dirname(options.destFile || __filename), filePath).replace(/\\/g, '/');
