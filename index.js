@@ -40,6 +40,8 @@ function wpPot (userOptions) {
     parseFile(filecontent, files[ i ]);
   }
 
+  setHeaders();
+
   const potContents = generatePot();
 
   if (options.writeFile) {
@@ -47,6 +49,24 @@ function wpPot (userOptions) {
   }
 
   return potContents;
+}
+
+function setHeaders () {
+  if (!options.headers) {
+    options.headers = {};
+  }
+
+  if (options.bugReport) {
+    options.headers['Report-Msgid-Bugs-To'] = options.bugReport;
+  }
+
+  if (options.lastTranslator) {
+    options.headers['Last-Translator'] = options.lastTranslator;
+  }
+
+  if (options.team) {
+    options.headers['Language-Team'] = options.team;
+  }
 }
 
 function parseComment (lexer, filecontent) {
@@ -382,7 +402,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\\n"
 "Content-Transfer-Encoding: 8bit\\n"\n`);
 
-  if (options.headers) {
+  if (options.headers && !isEmptyObject(options.headers)) {
     for (let key in options.headers) {
       if (options.headers.hasOwnProperty(key)) {
         contents += `"${key}: ${options.headers[ key ]}\\n"\n`;

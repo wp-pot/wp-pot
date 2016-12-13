@@ -28,11 +28,11 @@ describe('Edge cases function tests', function () {
   });
 
   it('should handle strings with escaped double quotes', function () {
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':4', 'This is "escaped"', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':4', 'This is \\"escaped\\"', false, false));
   });
 
-  it('should handle strings with line breaks in function argument', function () {
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':5', 'This is "escaped"', false, false));
+  it('should handle strings with double quotes', function () {
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':5', 'This is \\"escaped\\"', false, false));
   });
 
   it('should handle strings with line breaks in function call', function () {

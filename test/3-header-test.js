@@ -18,6 +18,21 @@ describe('Header tests', function () {
     assert(potContents.indexOf(defaultHeaders) !== -1);
   });
 
+  it('should generate a pot file with team, translator or bug report options set', function () {
+    const potContents = wpPot({
+      bugReport: 'http://example.com',
+      lastTranslator: 'John Doe <mail@example.com>',
+      team: 'Team Team <mail@example.com>',
+      src: 'test/fixures/empty-dir/*.php',
+      writeFile: false
+    });
+
+    assert(potContents.indexOf(defaultHeaders) !== -1);
+    assert(potContents.indexOf('"Report-Msgid-Bugs-To: http://example.com\\n"\n') !== -1);
+    assert(potContents.indexOf('"Last-Translator: John Doe <mail@example.com>\\n"\n') !== -1);
+    assert(potContents.indexOf('"Language-Team: Team Team <mail@example.com>\\n"\n') !== -1);
+  });
+
   it('should generate a pot file with custom headers from php file with headers set', function () {
     const potContents = wpPot({
       headers: {
