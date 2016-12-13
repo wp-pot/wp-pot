@@ -33,6 +33,12 @@ wpPot({
 
 ## Options
 
+*All options is optional*
+
+- `bugReport`  
+  Description: Header with URL for reporting translation bugs  
+  Type: `string`  
+  Default: undefined
 - `commentKeyword`  
   Description: Keyword to trigger translator comment.  
   Type: `string`  
@@ -49,6 +55,10 @@ wpPot({
   Description: Object containing extra POT-file headers. Set to false to not generate the default extra headers for Poedit.  
   Type: `object|bool`  
   Default: Headers used by Poedit
+- `lastTranslator`  
+  Description: Name and email address of the last translator (ex: `John Doe <me@example.com>`)  
+  Type: `string`    
+  Default: undefined
 - `package`  
   Description: Package name
   Type: `string`  
@@ -57,6 +67,10 @@ wpPot({
   Description: Glob or globs to match files (see [Globbing Patterns](https://github.com/sindresorhus/globby#globbing-patterns))  
   Type: `string|array`  
   Default: `**/*.php`
+- `team`  
+  Description: Name and email address of the translation team (ex: `Team <team@example.com> `)  
+  Type: `string`    
+  Default: undefined
 - `writeFile`  
   Description: Write pot-file to disk. The function always returns the contents as well.  
   Type: `boolean`  
