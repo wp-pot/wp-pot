@@ -75,7 +75,7 @@ function testValidFunctions (potContents, fixturePath, invert) {
 
   if (invert) {
     test = function (value, message) {
-      assert(!value, message);
+      assert.equal(value, false, message);
     };
   }
 

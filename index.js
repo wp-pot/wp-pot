@@ -153,7 +153,7 @@ function parseFile (filecontent, filePath) {
   if (!validFunctionsInFile.test(filecontent)) {
     return;
   }
-  const filename = path.relative(path.dirname(options.destFile || __filename), filePath).replace(/\\/g, '/');
+  const filename = path.relative(options.relativeTo || path.dirname(options.destFile || __filename), filePath).replace(/\\/g, '/');
 
   let prevToken = null;
   let translationCall = {};

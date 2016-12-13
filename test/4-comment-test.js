@@ -33,3 +33,42 @@ describe('Comment tests', function () {
     assert(testHelper.verifyLanguageBlock(potContents, 'Other keyword: This is a comment to the translator', fixturePath + ':22', 'Comment with other keyword', false, false));
   });
 });
+
+describe('File comment tests', function () {
+  it('Sets paths relative to option if set', function () {
+    const fixturePath = 'test/fixtures/comments.php';
+
+    const potContents = wpPot({
+      src: fixturePath,
+      relativeTo: 'test',
+      writeFile: false
+    });
+
+    assert.equal(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test', fixturePath + ':3', 'Single line comment', false, false), false);
+    assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test', 'fixtures/comments.php:3', 'Single line comment', false, false));
+  });
+
+  it('Sets paths relative to pot if no option is set', function () {
+    const fixturePath = 'test/fixtures/comments.php';
+
+    const potContents = wpPot({
+      src: fixturePath,
+      destFile: 'test/test.pot',
+      writeFile: false
+    });
+
+    assert.equal(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test', fixturePath + ':3', 'Single line comment', false, false), false);
+    assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test', 'fixtures/comments.php:3', 'Single line comment', false, false));
+  });
+
+  it('Sets paths relative to script if no option or destFile is set', function () {
+    const fixturePath = 'test/fixtures/comments.php';
+
+    const potContents = wpPot({
+      src: fixturePath,
+      writeFile: false
+    });
+
+    assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test', fixturePath + ':3', 'Single line comment', false, false));
+  });
+});

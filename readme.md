@@ -63,6 +63,10 @@ wpPot({
   Description: Package name
   Type: `string`  
   Default: `domain` or `unnamed project` if domain is undefined
+- `relativeTo`  
+  Description: Path to folder that file comments should be relative to
+  Type: `string`  
+  Default: `destFile` location or current working directory if `destFile` is undefined
 - `src`  
   Description: Glob or globs to match files (see [Globbing Patterns](https://github.com/sindresorhus/globby#globbing-patterns))  
   Type: `string|array`  
