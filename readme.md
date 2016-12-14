@@ -80,10 +80,8 @@ wpPot({
 
 
 ## Related
-
-[gulp-wp-pot](https://github.com/rasmusbe/gulp-wp-pot) - Run wp-pot via gulp
-
-[wp-pot-cli](https://github.com/rasmusbe/wp-pot-cli) - Run wp-pot via cli command
+- [gulp-wp-pot](https://github.com/rasmusbe/gulp-wp-pot) - Run wp-pot via gulp  
+- [wp-pot-cli](https://github.com/rasmusbe/wp-pot-cli) - Run wp-pot via cli command
 
 
 ## License
