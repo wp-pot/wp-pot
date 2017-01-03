@@ -30,7 +30,7 @@
   "dependencies": {
     "get-line-from-pos": "^1.0.0",
     "globby": "^6.1.0",
-    "php-parser": "^0.1.4"
+    "php-parser": "^1.0.0"
   },
   "devDependencies": {
     "eslint": "^3.12.1",
