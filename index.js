@@ -7,6 +7,8 @@ const parser = require('php-parser').create({});
 const path = require('path');
 const globby = require('globby');
 
+const extend = require('./extend');
+
 const EOF = parser.lexer.EOF;
 const names = parser.tokens.values;
 const validFunctionCalls = /^(__|_e|esc_attr__|esc_attr_e|esc_html__|esc_html_e|_x|_ex|esc_attr_x|esc_html_x|_n|_n_noop|_nx|_nx_noop)$/;
@@ -15,203 +17,6 @@ const validFunctionsInFile = new RegExp(validFunctionCalls.source.substr(1, vali
 let translations;
 let options;
 let commentRegexp;
-
-/**
- * Constructor
- * @param userOptions
- * @return {string}
- */
-function wpPot (userOptions) {
-  // Reset states
-  translations = {};
-
-  // Set options
-  options = userOptions;
-  setDefaultOptions();
-
-  // Set comment regexp to find translator comments
-  commentRegexp = new RegExp(`^[\\s\\*\\/]+${options.commentKeyword}(.*)`, 'im');
-
-  // Find files
-  const files = globby.sync(options.src);
-
-  // Parse files
-  for (const file of files) {
-    const filecontent = fs.readFileSync(file).toString();
-    parseFile(filecontent, file);
-  }
-
-  setHeaders();
-
-  const potContents = generatePot();
-
-  if (options.writeFile) {
-    writePot(potContents);
-  }
-
-  return potContents;
-}
-
-function setHeaders () {
-  if (!options.headers) {
-    options.headers = {};
-  }
-
-  if (options.bugReport) {
-    options.headers[ 'Report-Msgid-Bugs-To' ] = options.bugReport;
-  }
-
-  if (options.lastTranslator) {
-    options.headers[ 'Last-Translator' ] = options.lastTranslator;
-  }
-
-  if (options.team) {
-    options.headers[ 'Language-Team' ] = options.team;
-  }
-}
-
-function parseComment (lexer, filecontent) {
-  const commentmatch = commentRegexp.exec(lexer.yytext);
-  let comment = {};
-
-  if (commentmatch !== null) {
-    comment = {
-      text: commentmatch[ 1 ],
-      line: getLineFromPos(filecontent, lexer.offset - 1)
-    };
-  }
-
-  return comment;
-}
-
-function parseFunctionCall (lexer, filename, filecontent) {
-  let translationCall = {};
-
-  if (validFunctionCalls.test(lexer.yytext)) {
-    translationCall = {
-      argumentCount: 0,
-      arguments: [],
-      file: filename,
-      inParantheses: 0,
-      line: getLineFromPos(filecontent, lexer.offset - 1),
-      method: lexer.yytext
-    };
-  }
-
-  return translationCall;
-}
-
-function addArgument (translationCall, tokenName, lexer) {
-  if (tokenName === 'T_CONSTANT_ENCAPSED_STRING') {
-    let text = lexer.yytext;
-    // Strip quotes
-    const quote = lexer.yytext.substr(0, 1);
-    text = text.substr(1, lexer.yytext.length - 2);
-
-    // Remove escapes
-    text = text.replace(new RegExp(`\\\\${quote}`, 'g'), quote).replace(new RegExp('\\\\n', 'g'), '\n');
-
-    // Add quotes to "
-    text = text.replace(/\\([\s\S])|(")/g, '\\$1$2');
-    translationCall.arguments[ translationCall.argumentCount ] += text;
-  } else {
-    translationCall.arguments[ translationCall.argumentCount ] += lexer.yytext;
-  }
-
-  return translationCall;
-}
-
-function addTranslation (translationCall, lastComment) {
-  const textDomainPos = getDomainPos(translationCall.method);
-
-  if (translationCall.arguments && (!options.domain || options.domain === translationCall.arguments[ textDomainPos ])) {
-    if (lastComment && (translationCall.line - lastComment.line === 1)) {
-      translationCall.comment = lastComment.text;
-    }
-
-    const translationObject = generateTranslationObject(translationCall);
-
-    const translationKey = generateTranslationKey(translationObject);
-    if (!translations[ translationKey ]) {
-      translations[ translationKey ] = translationObject;
-    } else {
-      translations[ translationKey ].info += `, ${translationObject.info}`;
-
-      if (translationObject.msgid_plural) {
-        translations[ translationKey ].msgid_plural = translationObject.msgid_plural;
-      }
-    }
-  }
-}
-
-function validArgument (tokenName) {
-  return [ 'T_CONSTANT_ENCAPSED_STRING', 'T_VARIABLE', 'T_STRING', 'T_OBJECT_OPERATOR', 'T_DOUBLE_COLON' ].indexOf(tokenName) !== -1;
-}
-
-function parseFile (filecontent, filePath) {
-  // Skip file if no translation functions is found
-  if (!validFunctionsInFile.test(filecontent)) {
-    return;
-  }
-  const filename = path.relative(options.relativeTo || path.dirname(options.destFile || __filename), filePath).replace(/\\/g, '/');
-
-  let prevToken = null;
-  let translationCall = {};
-  let lastComment = {};
-  let token;
-
-  parser.lexer.setInput(filecontent);
-
-  while ((token = parser.lexer.lex() || EOF) !== EOF) {
-    // console.log(getLineFromPos(filecontent, parser.lexer.offset - 1), ':', names[ token ], '(', parser.lexer.yytext, ')', 'prev:', prevToken);
-    if (isEmptyObject(translationCall)) {
-      // Detect function calls, ignore function defines and object calls
-      if (names[ token ] === 'T_STRING' && [ 'T_FUNCTION', 'T_OBJECT_OPERATOR', 'T_DOUBLE_COLON' ].indexOf(prevToken) === -1) {
-        translationCall = parseFunctionCall(parser.lexer, filename, filecontent);
-      } else if (names[ token ] === 'T_COMMENT') {
-        lastComment = parseComment(parser.lexer, filecontent) || lastComment;
-      }
-    } else {
-      if (!translationCall.arguments[ translationCall.argumentCount ]) {
-        translationCall.arguments[ translationCall.argumentCount ] = '';
-      }
-
-      if (token === '(') {
-        translationCall.inParantheses++;
-      } else if (token === ')') {
-        translationCall.inParantheses--;
-      } else if (token === ',' && translationCall.inParantheses === 1) {
-        translationCall.argumentCount++;
-      } else if (validArgument(names[ token ])) {
-        translationCall = addArgument(translationCall, names[ token ], parser.lexer);
-      }
-
-      // End of translation function.
-      // Add it to the list or append it to duplicate translation
-      if (translationCall.inParantheses === 0) {
-        addTranslation(translationCall, lastComment);
-        translationCall = {};
-      }
-    }
-
-    // Ignore whitespace as previous token
-    if (names[ token ] !== 'T_WHITESPACE') {
-      prevToken = names[ token ] || token;
-    }
-  }
-}
-
-function extend (target) {
-  const sources = [].slice.call(arguments, 1);
-  sources.forEach(source => {
-    for (let prop in source) {
-      if (source.hasOwnProperty(prop)) {
-        target[ prop ] = source[ prop ];
-      }
-    }
-  });
-  return target;
-}
 
 function setDefaultOptions () {
   const defaultOptions = {
@@ -237,6 +42,61 @@ function setDefaultOptions () {
 
 function isEmptyObject (obj) {
   return Object.keys(obj).length === 0;
+}
+
+function parseFunctionCall (lexer, filename, filecontent) {
+  let translationCall = {};
+
+  if (validFunctionCalls.test(lexer.yytext)) {
+    translationCall = {
+      argumentCount: 0,
+      arguments: [],
+      file: filename,
+      inParantheses: 0,
+      line: getLineFromPos(filecontent, lexer.offset - 1),
+      method: lexer.yytext
+    };
+  }
+
+  return translationCall;
+}
+
+function parseComment (lexer, filecontent) {
+  const commentmatch = commentRegexp.exec(lexer.yytext);
+  let comment = {};
+
+  if (commentmatch !== null) {
+    comment = {
+      text: commentmatch[ 1 ],
+      line: getLineFromPos(filecontent, lexer.offset - 1)
+    };
+  }
+
+  return comment;
+}
+
+function validArgument (tokenName) {
+  return [ 'T_CONSTANT_ENCAPSED_STRING', 'T_VARIABLE', 'T_STRING', 'T_OBJECT_OPERATOR', 'T_DOUBLE_COLON' ].indexOf(tokenName) !== -1;
+}
+
+function addArgument (translationCall, tokenName, lexer) {
+  if (tokenName === 'T_CONSTANT_ENCAPSED_STRING') {
+    let text = lexer.yytext;
+    // Strip quotes
+    const quote = lexer.yytext.substr(0, 1);
+    text = text.substr(1, lexer.yytext.length - 2);
+
+    // Remove escapes
+    text = text.replace(new RegExp(`\\\\${quote}`, 'g'), quote).replace(new RegExp('\\\\n', 'g'), '\n');
+
+    // Add quotes to "
+    text = text.replace(/\\([\s\S])|(")/g, '\\$1$2');
+    translationCall.arguments[ translationCall.argumentCount ] += text;
+  } else {
+    translationCall.arguments[ translationCall.argumentCount ] += lexer.yytext;
+  }
+
+  return translationCall;
 }
 
 /**
@@ -308,10 +168,6 @@ function getContextPos (method) {
   return contextPos;
 }
 
-function generateTranslationKey (translationObject) {
-  return translationObject.msgid + (translationObject.msgctxt || '');
-}
-
 function generateTranslationObject (translationCall) {
   const translationObject = {
     info: `${translationCall.file}:${translationCall.line}`,
@@ -332,6 +188,104 @@ function generateTranslationObject (translationCall) {
   }
 
   return translationObject;
+}
+
+function generateTranslationKey (translationObject) {
+  return translationObject.msgid + (translationObject.msgctxt || '');
+}
+
+function addTranslation (translationCall, lastComment) {
+  const textDomainPos = getDomainPos(translationCall.method);
+
+  if (translationCall.arguments && (!options.domain || options.domain === translationCall.arguments[ textDomainPos ])) {
+    if (lastComment && (translationCall.line - lastComment.line === 1)) {
+      translationCall.comment = lastComment.text;
+    }
+
+    const translationObject = generateTranslationObject(translationCall);
+
+    const translationKey = generateTranslationKey(translationObject);
+    if (!translations[ translationKey ]) {
+      translations[ translationKey ] = translationObject;
+    } else {
+      translations[ translationKey ].info += `, ${translationObject.info}`;
+
+      if (translationObject.msgid_plural) {
+        translations[ translationKey ].msgid_plural = translationObject.msgid_plural;
+      }
+    }
+  }
+}
+
+function parseFile (filecontent, filePath) {
+  // Skip file if no translation functions is found
+  if (!validFunctionsInFile.test(filecontent)) {
+    return;
+  }
+  const filename = path.relative(options.relativeTo || path.dirname(options.destFile || __filename), filePath).replace(/\\/g, '/');
+
+  let prevToken = null;
+  let translationCall = {};
+  let lastComment = {};
+  let token;
+
+  parser.lexer.setInput(filecontent);
+
+  while ((token = parser.lexer.lex() || EOF) !== EOF) {
+    // console.log(getLineFromPos(filecontent, parser.lexer.offset - 1), ':', names[ token ], '(', parser.lexer.yytext, ')', 'prev:', prevToken);
+    if (isEmptyObject(translationCall)) {
+      // Detect function calls, ignore function defines and object calls
+      if (names[ token ] === 'T_STRING' && [ 'T_FUNCTION', 'T_OBJECT_OPERATOR', 'T_DOUBLE_COLON' ].indexOf(prevToken) === -1) {
+        translationCall = parseFunctionCall(parser.lexer, filename, filecontent);
+      } else if (names[ token ] === 'T_COMMENT') {
+        lastComment = parseComment(parser.lexer, filecontent) || lastComment;
+      }
+    } else {
+      if (!translationCall.arguments[ translationCall.argumentCount ]) {
+        translationCall.arguments[ translationCall.argumentCount ] = '';
+      }
+
+      if (token === '(') {
+        translationCall.inParantheses++;
+      } else if (token === ')') {
+        translationCall.inParantheses--;
+      } else if (token === ',' && translationCall.inParantheses === 1) {
+        translationCall.argumentCount++;
+      } else if (validArgument(names[ token ])) {
+        translationCall = addArgument(translationCall, names[ token ], parser.lexer);
+      }
+
+      // End of translation function.
+      // Add it to the list or append it to duplicate translation
+      if (translationCall.inParantheses === 0) {
+        addTranslation(translationCall, lastComment);
+        translationCall = {};
+      }
+    }
+
+    // Ignore whitespace as previous token
+    if (names[ token ] !== 'T_WHITESPACE') {
+      prevToken = names[ token ] || token;
+    }
+  }
+}
+
+function setHeaders () {
+  if (!options.headers) {
+    options.headers = {};
+  }
+
+  if (options.bugReport) {
+    options.headers[ 'Report-Msgid-Bugs-To' ] = options.bugReport;
+  }
+
+  if (options.lastTranslator) {
+    options.headers[ 'Last-Translator' ] = options.lastTranslator;
+  }
+
+  if (options.team) {
+    options.headers[ 'Language-Team' ] = options.team;
+  }
 }
 
 function getPotMsgId (msgid, plural) {
@@ -430,6 +384,42 @@ msgstr ""
 
 function writePot (potContent) {
   fs.writeFileSync(options.destFile, potContent);
+}
+
+/**
+ * Constructor
+ * @param userOptions
+ * @return {string}
+ */
+function wpPot (userOptions) {
+  // Reset states
+  translations = {};
+
+  // Set options
+  options = userOptions;
+  setDefaultOptions();
+
+  // Set comment regexp to find translator comments
+  commentRegexp = new RegExp(`^[\\s\\*\\/]+${options.commentKeyword}(.*)`, 'im');
+
+  // Find files
+  const files = globby.sync(options.src);
+
+  // Parse files
+  for (const file of files) {
+    const filecontent = fs.readFileSync(file).toString();
+    parseFile(filecontent, file);
+  }
+
+  setHeaders();
+
+  const potContents = generatePot();
+
+  if (options.writeFile) {
+    writePot(potContents);
+  }
+
+  return potContents;
 }
 
 module.exports = wpPot;
