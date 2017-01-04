@@ -30,15 +30,15 @@ function wpPot (userOptions) {
   setDefaultOptions();
 
   // Set comment regexp to find translator comments
-  commentRegexp = new RegExp('^[\\s\\*\\/]+' + options.commentKeyword + '(.*)', 'im');
+  commentRegexp = new RegExp(`^[\\s\\*\\/]+${options.commentKeyword}(.*)`, 'im');
 
   // Find files
   const files = globby.sync(options.src);
 
   // Parse files
-  for (let i = 0; i < files.length; i++) {
-    const filecontent = fs.readFileSync(files[ i ]).toString();
-    parseFile(filecontent, files[ i ]);
+  for (const file of files) {
+    const filecontent = fs.readFileSync(file).toString();
+    parseFile(filecontent, file);
   }
 
   setHeaders();
@@ -58,15 +58,15 @@ function setHeaders () {
   }
 
   if (options.bugReport) {
-    options.headers['Report-Msgid-Bugs-To'] = options.bugReport;
+    options.headers[ 'Report-Msgid-Bugs-To' ] = options.bugReport;
   }
 
   if (options.lastTranslator) {
-    options.headers['Last-Translator'] = options.lastTranslator;
+    options.headers[ 'Last-Translator' ] = options.lastTranslator;
   }
 
   if (options.team) {
-    options.headers['Language-Team'] = options.team;
+    options.headers[ 'Language-Team' ] = options.team;
   }
 }
 
@@ -109,7 +109,7 @@ function addArgument (translationCall, tokenName, lexer) {
     text = text.substr(1, lexer.yytext.length - 2);
 
     // Remove escapes
-    text = text.replace(new RegExp('\\\\' + quote, 'g'), quote).replace(new RegExp('\\\\n', 'g'), '\n');
+    text = text.replace(new RegExp(`\\\\${quote}`, 'g'), quote).replace(new RegExp('\\\\n', 'g'), '\n');
 
     // Add quotes to "
     text = text.replace(/\\([\s\S])|(")/g, '\\$1$2');
@@ -135,7 +135,7 @@ function addTranslation (translationCall, lastComment) {
     if (!translations[ translationKey ]) {
       translations[ translationKey ] = translationObject;
     } else {
-      translations[ translationKey ].info += ', ' + translationObject.info;
+      translations[ translationKey ].info += `, ${translationObject.info}`;
 
       if (translationObject.msgid_plural) {
         translations[ translationKey ].msgid_plural = translationObject.msgid_plural;
@@ -203,7 +203,7 @@ function parseFile (filecontent, filePath) {
 
 function extend (target) {
   const sources = [].slice.call(arguments, 1);
-  sources.forEach(function (source) {
+  sources.forEach(source => {
     for (let prop in source) {
       if (source.hasOwnProperty(prop)) {
         target[ prop ] = source[ prop ];

@@ -8,8 +8,8 @@ const fs = require('fs');
 
 const defaultHeaders = fs.readFileSync('test/fixtures/default-headers.txt').toString();
 
-describe('Header tests', function () {
-  it('should generate a pot file with default headers when no headers is set', function () {
+describe('Header tests', () => {
+  it('should generate a pot file with default headers when no headers is set', () => {
     const potContents = wpPot({
       src: 'test/fixures/empty-dir/*.php',
       writeFile: false
@@ -18,7 +18,7 @@ describe('Header tests', function () {
     assert(potContents.indexOf(defaultHeaders) !== -1);
   });
 
-  it('should generate a pot file with team, translator or bug report options set', function () {
+  it('should generate a pot file with team, translator or bug report options set', () => {
     const potContents = wpPot({
       bugReport: 'http://example.com',
       lastTranslator: 'John Doe <mail@example.com>',
@@ -33,7 +33,7 @@ describe('Header tests', function () {
     assert(potContents.indexOf('"Language-Team: Team Team <mail@example.com>\\n"\n') !== -1);
   });
 
-  it('should generate a pot file with custom headers from php file with headers set', function () {
+  it('should generate a pot file with custom headers from php file with headers set', () => {
     const potContents = wpPot({
       headers: {
         'Report-Msgid-Bugs-To': 'http://example.com',
@@ -50,7 +50,7 @@ describe('Header tests', function () {
     assert(potContents.indexOf('"Language-Team: Team Team <mail@example.com>\\n"\n') !== -1);
   });
 
-  it('should generate a pot file without default headers from php file with headers false', function () {
+  it('should generate a pot file without default headers from php file with headers false', () => {
     const potContents = wpPot({
       src: 'test/fixures/empty-dir/*.php',
       writeFile: false,

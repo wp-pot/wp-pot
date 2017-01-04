@@ -6,8 +6,8 @@ const assert = require('assert');
 const wpPot = require('../');
 const testHelper = require('./test-helper');
 
-describe('Comment tests', function () {
-  it('Can read different type of comments', function () {
+describe('Comment tests', () => {
+  it('Can read different type of comments', () => {
     const fixturePath = 'test/fixtures/comments.php';
 
     const potContents = wpPot({
@@ -21,7 +21,7 @@ describe('Comment tests', function () {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':19', 'Comment too far away from function', false, false));
   });
 
-  it('Can read comments with other trigger', function () {
+  it('Can read comments with other trigger', () => {
     const fixturePath = 'test/fixtures/comments.php';
 
     const potContents = wpPot({
@@ -34,8 +34,8 @@ describe('Comment tests', function () {
   });
 });
 
-describe('File comment tests', function () {
-  it('Sets paths relative to option if set', function () {
+describe('File comment tests', () => {
+  it('Sets paths relative to option if set', () => {
     const fixturePath = 'test/fixtures/comments.php';
 
     const potContents = wpPot({
@@ -48,7 +48,7 @@ describe('File comment tests', function () {
     assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test', 'fixtures/comments.php:3', 'Single line comment', false, false));
   });
 
-  it('Sets paths relative to pot if no option is set', function () {
+  it('Sets paths relative to pot if no option is set', () => {
     const fixturePath = 'test/fixtures/comments.php';
 
     const potContents = wpPot({
@@ -61,7 +61,7 @@ describe('File comment tests', function () {
     assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test', 'fixtures/comments.php:3', 'Single line comment', false, false));
   });
 
-  it('Sets paths relative to script if no option or destFile is set', function () {
+  it('Sets paths relative to script if no option or destFile is set', () => {
     const fixturePath = 'test/fixtures/comments.php';
 
     const potContents = wpPot({

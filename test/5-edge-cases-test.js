@@ -8,10 +8,10 @@ const testHelper = require('./test-helper');
 
 const fixturePath = 'test/fixtures/edge-cases.php';
 
-describe('Edge cases function tests', function () {
+describe('Edge cases function tests', () => {
   let potContents;
 
-  before(function () {
+  before(() => {
     potContents = wpPot({
       src: fixturePath,
       writeFile: false,
@@ -19,39 +19,39 @@ describe('Edge cases function tests', function () {
     });
   });
 
-  it('should handle strings with escaped single quotes', function () {
+  it('should handle strings with escaped single quotes', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', "It's escaped", false, false));
   });
 
-  it('should handle strings with unescaped double quotes within single quotes', function () {
+  it('should handle strings with unescaped double quotes within single quotes', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', "It's escaped", false, false));
   });
 
-  it('should handle strings with escaped double quotes', function () {
+  it('should handle strings with escaped double quotes', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':4', 'This is \\"escaped\\"', false, false));
   });
 
-  it('should handle strings with double quotes', function () {
+  it('should handle strings with double quotes', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':5', 'This is \\"escaped\\"', false, false));
   });
 
-  it('should handle strings with line breaks in function call', function () {
+  it('should handle strings with line breaks in function call', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':6', '"\n"New\\n"\n"Line', false, false));
   });
 
-  it('should handle strings with line breaks in function call', function () {
+  it('should handle strings with line breaks in function call', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':8', '"\n"New\\n"\n"Line', false, false));
   });
 
-  it('should handle plural methods with non-integer value as count', function () {
+  it('should handle plural methods with non-integer value as count', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':13', 'Singular string', 'Plural string', false));
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':14', 'Singular string', 'Plural string', false));
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':15', 'Singular string', 'Plural string', false));
   });
 });
 
-describe('Edge cases domain tests', function () {
-  it('should handle strings with domain set as variable', function () {
+describe('Edge cases domain tests', () => {
+  it('should handle strings with domain set as variable', () => {
     const potContents = wpPot({
       src: fixturePath,
       writeFile: false,
@@ -60,7 +60,7 @@ describe('Edge cases domain tests', function () {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':16', 'Domain is a variable', false, false));
   });
 
-  it('should handle strings with domain set as a constant', function () {
+  it('should handle strings with domain set as a constant', () => {
     const potContents = wpPot({
       src: fixturePath,
       writeFile: false,
@@ -69,7 +69,7 @@ describe('Edge cases domain tests', function () {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':17', 'Domain is a object variable', false, false));
   });
 
-  it('should handle strings with domain set as a constant', function () {
+  it('should handle strings with domain set as a constant', () => {
     const potContents = wpPot({
       src: fixturePath,
       writeFile: false,
@@ -78,7 +78,7 @@ describe('Edge cases domain tests', function () {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':18', 'Domain is a static class variable', false, false));
   });
 
-  it('should handle strings with domain set as a constant', function () {
+  it('should handle strings with domain set as a constant', () => {
     const potContents = wpPot({
       src: fixturePath,
       writeFile: false,
@@ -87,7 +87,7 @@ describe('Edge cases domain tests', function () {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':19', 'Domain is a constant', false, false));
   });
 
-  it('should not include methods without domain when domain is set', function () {
+  it('should not include methods without domain when domain is set', () => {
     const potContents = wpPot({
       src: fixturePath,
       writeFile: false,

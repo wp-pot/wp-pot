@@ -6,8 +6,8 @@ const assert = require('assert');
 const wpPot = require('../');
 const testHelper = require('./test-helper');
 
-describe('Function tests', function () {
-  it('Can read all valid functions without domain check', function () {
+describe('Function tests', () => {
+  it('Can read all valid functions without domain check', () => {
     const fixturePath = 'test/fixtures/valid-functions.php';
 
     const potContents = wpPot({
@@ -18,7 +18,7 @@ describe('Function tests', function () {
     testHelper.testValidFunctions(potContents, fixturePath);
   });
 
-  it('Can read all valid functions with domain check', function () {
+  it('Can read all valid functions with domain check', () => {
     const fixturePath = 'test/fixtures/valid-functions.php';
 
     const potContents = wpPot({
@@ -30,7 +30,7 @@ describe('Function tests', function () {
     testHelper.testValidFunctions(potContents, fixturePath);
   });
 
-  it('Can not find any functions with domain check if invalid domain', function () {
+  it('Can not find any functions with domain check if invalid domain', () => {
     const fixturePath = 'test/fixtures/valid-functions.php';
 
     const potContents = wpPot({
@@ -42,7 +42,7 @@ describe('Function tests', function () {
     testHelper.testValidFunctions(potContents, fixturePath, true);
   });
 
-  it('Can merge duplicate strings and separate with context', function () {
+  it('Can merge duplicate strings and separate with context', () => {
     const fixturePath = 'test/fixtures/duplicated-strings.php';
 
     const potContents = wpPot({
