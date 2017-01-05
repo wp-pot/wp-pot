@@ -1,9 +1,10 @@
 {
   "extends": "semistandard",
   "rules": {
-    "complexity": [ "warn", { "max": 10 } ],
+    "complexity": [ "warn", { "max": 8 } ],
     "guard-for-in": "error",
+    "no-bitwise": "error",
     "no-use-before-define": "error",
-    "no-bitwise": "error"
+    "no-var": "error"
   }
 }
