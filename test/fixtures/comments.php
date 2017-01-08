@@ -14,8 +14,8 @@ __('Multiline comment, one line', 'testdomain');
  */
 __('Multiline comment, multi line', 'testdomain');
 
-// translators: This comment doesn't do anything
-
+// translators: This comment doesn't do anything for translation
+random_code();
 __('Comment too far away from function', 'testdomain');
 
 // Other keyword: This is a comment to the translator

@@ -60,7 +60,7 @@ describe('Edge cases domain tests', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':16', 'Domain is a variable', false, false));
   });
 
-  it('should handle strings with domain set as a constant', () => {
+  it('should handle strings with domain set as a object variable', () => {
     const potContents = wpPot({
       src: fixturePath,
       writeFile: false,
@@ -69,7 +69,7 @@ describe('Edge cases domain tests', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':17', 'Domain is a object variable', false, false));
   });
 
-  it('should handle strings with domain set as a constant', () => {
+  it('should handle strings with domain set as a static class variable', () => {
     const potContents = wpPot({
       src: fixturePath,
       writeFile: false,
