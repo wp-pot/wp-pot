@@ -21,7 +21,7 @@ let translations;
 let options;
 let commentRegexp;
 
-let lastComment = {};
+let lastComment;
 
 /**
  * Set default options
@@ -72,15 +72,11 @@ function parseComment (ast) {
   // Set comment regexp to find translator comments
   commentRegexp = new RegExp(`^[\\s*]*${options.commentKeyword}(.*)`, 'im');
 
-  let linenum = ast.loc.start.line;
   for (const line of ast.lines) {
     const commentmatch = commentRegexp.exec(line);
 
     if (commentmatch !== null) {
-      comment = {
-        text: commentmatch[ 1 ],
-        line: linenum
-      };
+      comment = commentmatch[ 1 ];
     }
   }
 
@@ -207,13 +203,7 @@ function generateTranslationKey (translationObject) {
  * @param {object} translationCall
  */
 function addTranslation (translationCall) {
-  const textDomainPos = getDomainPos(translationCall.method);
-
-  if (translationCall.args && (!options.domain || options.domain === translationCall.args[ textDomainPos ])) {
-    if (lastComment) {
-      translationCall.comment = lastComment.text;
-    }
-
+  if (translationCall.args) {
     const translationObject = generateTranslationObject(translationCall);
 
     const translationKey = generateTranslationKey(translationObject);
@@ -266,13 +256,17 @@ function parseCodeTree (ast, filename) {
   if (ast.kind === 'call' && validFunctionCalls.indexOf(ast.what.name) !== -1) {
     const args = parseArguments(ast.arguments);
 
-    const translationCall = {
-      args,
-      filename,
-      line: ast.loc.start.line,
-      method: ast.what.name
-    };
-    addTranslation(translationCall);
+    if (!options.domain || options.domain === args[ getDomainPos(ast.what.name) ]) {
+      const translationCall = {
+        args,
+        filename,
+        line: ast.loc.start.line,
+        method: ast.what.name,
+        comment: lastComment
+      };
+
+      addTranslation(translationCall);
+    }
   } else if (ast.children) {
     for (const child of ast.children) {
       parseCodeTree(child, filename);
@@ -282,7 +276,7 @@ function parseCodeTree (ast, filename) {
   if (ast.kind === 'doc') {
     lastComment = parseComment(ast);
   } else {
-    lastComment = false;
+    lastComment = null;
   }
 }
 
