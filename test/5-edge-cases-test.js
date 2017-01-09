@@ -59,6 +59,10 @@ describe('Edge cases function tests', () => {
   it('should handle methods in if blocks', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':25', 'Method in if block', false, false));
   });
+
+  it('should handle methods in returns', () => {
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':27', 'Returned function', false, false));
+  });
 });
 
 describe('Namespace edge cases', () => {

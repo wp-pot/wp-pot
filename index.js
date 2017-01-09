@@ -279,6 +279,8 @@ function parseCodeTree (ast, filename) {
     parseCodeTree(ast.arguments, filename);
   } else if (ast.body) {
     parseCodeTree(ast.body, filename);
+  } else if (ast.expr) {
+    parseCodeTree(ast.expr, filename);
   }
 
   parseComment(ast);

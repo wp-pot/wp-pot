@@ -24,3 +24,4 @@ echo __( 'Echoed translation', 'testdomain' );
 if  (1 === 1 ): ?>
 	<? _e( 'Method in if block', 'testdomain' ); ?>
 <?php endif;
+return __( 'Returned function', 'testdomain' );
