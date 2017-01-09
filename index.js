@@ -253,7 +253,9 @@ function parseArguments (args) {
  * @param {string} filename
  */
 function parseCodeTree (ast, filename) {
-  if (Array.isArray(ast)) {
+  if (!ast) {
+    return;
+  } else if (Array.isArray(ast)) {
     for (const child of ast) {
       parseCodeTree(child, filename);
     }
@@ -275,6 +277,8 @@ function parseCodeTree (ast, filename) {
     parseCodeTree(ast.children, filename);
   } else if (ast.arguments) {
     parseCodeTree(ast.arguments, filename);
+  } else if (ast.body) {
+    parseCodeTree(ast.body, filename);
   }
 
   parseComment(ast);

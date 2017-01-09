@@ -21,3 +21,6 @@ _e( 'Missing domain' );
 someFunction('this', 'is', 'a', 'random', 'function' );
 someFunction( __( 'Translation in function call', 'testdomain' ) );
 echo __( 'Echoed translation', 'testdomain' );
+if  (1 === 1 ): ?>
+	<? _e( 'Method in if block', 'testdomain' ); ?>
+<?php endif;
