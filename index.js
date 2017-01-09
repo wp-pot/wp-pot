@@ -63,24 +63,24 @@ function isEmptyObject (obj) {
  * Parse comment AST
  *
  * @param  {object} ast
- *
- * @return {object}
  */
 function parseComment (ast) {
   let comment = null;
 
-  // Set comment regexp to find translator comments
-  commentRegexp = new RegExp(`^[\\s*]*${options.commentKeyword}(.*)`, 'im');
+  if (ast.kind === 'doc') {
+    // Set comment regexp to find translator comments
+    commentRegexp = new RegExp(`^[\\s*]*${options.commentKeyword}(.*)`, 'im');
 
-  for (const line of ast.lines) {
-    const commentmatch = commentRegexp.exec(line);
+    for (const line of ast.lines) {
+      const commentmatch = commentRegexp.exec(line);
 
-    if (commentmatch !== null) {
-      comment = commentmatch[ 1 ];
+      if (commentmatch !== null) {
+        comment = commentmatch[ 1 ];
+      }
     }
   }
 
-  return comment;
+  lastComment = comment;
 }
 
 /**
@@ -253,7 +253,11 @@ function parseArguments (args) {
  * @param {string} filename
  */
 function parseCodeTree (ast, filename) {
-  if (ast.kind === 'call' && validFunctionCalls.indexOf(ast.what.name) !== -1) {
+  if (Array.isArray(ast)) {
+    for (const child of ast) {
+      parseCodeTree(child, filename);
+    }
+  } else if (ast.kind === 'call' && validFunctionCalls.indexOf(ast.what.name) !== -1) {
     const args = parseArguments(ast.arguments);
 
     if (!options.domain || options.domain === args[ getDomainPos(ast.what.name) ]) {
@@ -268,20 +272,12 @@ function parseCodeTree (ast, filename) {
       addTranslation(translationCall);
     }
   } else if (ast.children) {
-    if (Array.isArray(ast.children)) {
-      for (const child of ast.children) {
-        parseCodeTree(child, filename);
-      }
-    } else {
-      parseCodeTree(ast.children, filename);
-    }
+    parseCodeTree(ast.children, filename);
+  } else if (ast.arguments) {
+    parseCodeTree(ast.arguments, filename);
   }
 
-  if (ast.kind === 'doc') {
-    lastComment = parseComment(ast);
-  } else {
-    lastComment = null;
-  }
+  parseComment(ast);
 }
 
 /**

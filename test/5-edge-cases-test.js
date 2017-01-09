@@ -47,6 +47,14 @@ describe('Edge cases function tests', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':14', 'Singular string', 'Plural string', false));
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':15', 'Singular string', 'Plural string', false));
   });
+
+  it('should handle methods within other methods', () => {
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':22', 'Translation in function call', false, false));
+  });
+
+  it('should handle echoed methods', () => {
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':23', 'Echoed translation', false, false));
+  });
 });
 
 describe('Namespace edge cases', () => {

@@ -19,3 +19,5 @@ _e( 'Domain is a static class variable', $this::test );
 _e( 'Domain is a constant', TEST );
 _e( 'Missing domain' );
 someFunction('this', 'is', 'a', 'random', 'function' );
+someFunction( __( 'Translation in function call', 'testdomain' ) );
+echo __( 'Echoed translation', 'testdomain' );
