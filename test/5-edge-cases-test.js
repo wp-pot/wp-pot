@@ -6,10 +6,9 @@ const assert = require('assert');
 const wpPot = require('../');
 const testHelper = require('./test-helper');
 
-const fixturePath = 'test/fixtures/edge-cases.php';
-
 describe('Edge cases function tests', () => {
   let potContents;
+  const fixturePath = 'test/fixtures/edge-cases.php';
 
   before(() => {
     potContents = wpPot({
@@ -50,7 +49,24 @@ describe('Edge cases function tests', () => {
   });
 });
 
+describe('Namespace edge cases', () => {
+  // https://github.com/rasmusbe/wp-pot/issues/3
+  const fixturePath = 'test/fixtures/mixed-namespaces.php';
+  it('should not die when using multiple namespaces in a file', () => {
+    const potContents = wpPot({
+      src: fixturePath,
+      writeFile: false,
+      domain: 'testdomain'
+    });
+
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'Return string', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':7', 'Return string', false, false));
+  });
+});
+
 describe('Edge cases domain tests', () => {
+  const fixturePath = 'test/fixtures/edge-cases.php';
+
   it('should handle strings with domain set as variable', () => {
     const potContents = wpPot({
       src: fixturePath,

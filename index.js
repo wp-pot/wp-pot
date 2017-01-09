@@ -268,8 +268,12 @@ function parseCodeTree (ast, filename) {
       addTranslation(translationCall);
     }
   } else if (ast.children) {
-    for (const child of ast.children) {
-      parseCodeTree(child, filename);
+    if (Array.isArray(ast.children)) {
+      for (const child of ast.children) {
+        parseCodeTree(child, filename);
+      }
+    } else {
+      parseCodeTree(ast.children, filename);
     }
   }
 
@@ -297,7 +301,12 @@ function parseFile (filecontent, filePath) {
 
   const ast = parser.parseCode(filecontent, filename);
 
-  parseCodeTree(ast, filename);
+  try {
+    parseCodeTree(ast, filename);
+  } catch (e) {
+    e.message += ` | Unable to parse ${filename}`;
+    throw e;
+  }
 }
 
 /**
