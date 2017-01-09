@@ -273,14 +273,32 @@ function parseCodeTree (ast, filename) {
 
       addTranslation(translationCall);
     }
-  } else if (ast.children) {
-    parseCodeTree(ast.children, filename);
-  } else if (ast.arguments) {
-    parseCodeTree(ast.arguments, filename);
-  } else if (ast.body) {
-    parseCodeTree(ast.body, filename);
-  } else if (ast.expr) {
-    parseCodeTree(ast.expr, filename);
+  } else {
+    const childrenContainingCalls = [
+      'alternate',
+      'arguments',
+      'body',
+      'children',
+      'expr',
+      'falseExpr',
+      'ifnull',
+      'inner',
+      'items',
+      'key',
+      'left',
+      'right',
+      'source',
+      'test',
+      'trueExpr',
+      'value',
+      'what'
+    ];
+
+    for (const child of childrenContainingCalls) {
+      if (ast[ child ]) {
+        parseCodeTree(ast[ child ], filename);
+      }
+    }
   }
 
   parseComment(ast);
