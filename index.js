@@ -5,6 +5,7 @@ const fs = require('fs');
 const Engine = require('php-parser');
 const path = require('path');
 const globby = require('globby');
+const pathSort = require('path-sort');
 
 const parser = new Engine({
   parser: {
@@ -274,12 +275,14 @@ function parseCodeTree (ast, filename) {
       addTranslation(translationCall);
     }
   } else {
+    // List can not be in alphabetic order, otherwise it will not be ordered by occurence in code.
     const childrenContainingCalls = [
-      'alternate',
       'arguments',
       'body',
+      'alternate',
       'children',
       'expr',
+      'trueExpr',
       'falseExpr',
       'ifnull',
       'inner',
@@ -289,7 +292,6 @@ function parseCodeTree (ast, filename) {
       'right',
       'source',
       'test',
-      'trueExpr',
       'value',
       'what'
     ];
@@ -319,9 +321,8 @@ function parseFile (filecontent, filePath) {
 
   const filename = path.relative(options.relativeTo || path.dirname(options.destFile || __filename), filePath).replace(/\\/g, '/');
 
-  const ast = parser.parseCode(filecontent, filename);
-
   try {
+    const ast = parser.parseCode(filecontent, filename);
     parseCodeTree(ast, filename);
   } catch (e) {
     e.message += ` | Unable to parse ${filename}`;
@@ -499,8 +500,8 @@ function wpPot (userOptions) {
   options = userOptions;
   setDefaultOptions();
 
-  // Find files
-  const files = globby.sync(options.src);
+  // Find and sort file paths
+  const files = pathSort(globby.sync(options.src));
 
   // Parse files
   for (const file of files) {
