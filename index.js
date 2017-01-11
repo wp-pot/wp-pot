@@ -366,7 +366,7 @@ function escapeQuotes (text) {
  * Get msgid lines in pot format
  *
  * @param {string}  msgid
- * @param {Boolean} plural
+ * @param {Boolean} [plural]
  *
  * @return {Array}
  */
