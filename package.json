@@ -30,10 +30,10 @@
   "dependencies": {
     "globby": "^6.1.0",
     "path-sort": "^0.1.0",
-    "php-parser": "^1.0.0"
+    "php-parser": "^1.0.4"
   },
   "devDependencies": {
-    "eslint": "^3.12.1",
+    "eslint": "^3.13.1",
     "eslint-config-semistandard": "^7.0.0",
     "eslint-config-standard": "^6.2.1",
     "eslint-plugin-promise": "^3.4.0",
