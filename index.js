@@ -16,18 +16,19 @@ const parser = new Engine({
   }
 });
 
-const validFunctionCalls = [ '__', '_e', 'esc_attr__', 'esc_attr_e', 'esc_html__', 'esc_html_e', '_x', '_ex', 'esc_attr_x', 'esc_html_x', '_n', '_n_noop', '_nx', '_nx_noop' ];
-
 let translations;
 let options;
 let commentRegexp;
 
 let lastComment;
 
+let functionCalls = {};
+
 /**
  * Set default options
  */
 function setDefaultOptions () {
+
   const defaultOptions = {
     src: '**/*.php',
     destFile: 'translations.pot',
@@ -35,11 +36,27 @@ function setDefaultOptions () {
     headers: {
       'X-Poedit-Basepath': '..',
       'X-Poedit-SourceCharset': 'UTF-8',
-      'X-Poedit-KeywordsList': '__;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2',
+      //'X-Poedit-KeywordsList': '__;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2',
       'X-Poedit-SearchPath-0': '.',
       'X-Poedit-SearchPathExcluded-0': '*.js'
     },
-    writeFile: true
+    writeFile: true,
+    gettextFunctions: [
+      {name: '__'},
+      {name: '_e'},
+      {name: 'esc_attr__'},
+      {name: 'esc_attr_e'},
+      {name: 'esc_html__'},
+      {name: 'esc_html_e'},
+      {name: '_x', context: 2},
+      {name: '_ex', context: 2},
+      {name: 'esc_attr_x', context: 2},
+      {name: 'esc_html_x', context: 2},
+      {name: '_n', plural: 2},
+      {name: '_n_noop', plural: 2},
+      {name: '_nx', plural: 2, context: 4},
+      {name: '_nx_noop', plural: 2, context: 3}
+    ]
   };
 
   options = Object.assign({}, defaultOptions, options);
@@ -47,6 +64,25 @@ function setDefaultOptions () {
   if (!options.package) {
     options.package = options.domain || 'unnamed project';
   }
+
+  function setNameKey(acc,obj) {
+    acc[obj.name] = '';
+    return acc;
+  }
+
+  functionCalls.valid = options.gettextFunctions.reduce(setNameKey, {});
+
+  functionCalls.context = options.gettextFunctions.filter(function(obj) {
+    return !!obj.context;
+  }).reduce(setNameKey, {});
+
+  functionCalls.plural = options.gettextFunctions.filter(function(obj) {
+    return !!obj.plural;
+  }).reduce(setNameKey, {});
+
+  functionCalls.noop = options.gettextFunctions.filter(function(obj) {
+    return ~obj.name.indexOf('noop');
+  }).reduce(setNameKey, {});
 }
 
 /**
@@ -92,7 +128,7 @@ function parseComment (ast) {
  * @return {boolean}
  */
 function isPlural (method) {
-  return /(_n|_n_noop|_nx|_nx_noop)/.test(method);
+  return functionCalls.plural.hasOwnProperty(method);
 }
 
 /**
@@ -103,7 +139,7 @@ function isPlural (method) {
  * @return {boolean}
  */
 function hasContext (method) {
-  return /(_x|_ex|esc_attr_x|esc_html_x|_nx|_nx_noop)/.test(method);
+  return functionCalls.context.hasOwnProperty(method);
 }
 
 /**
@@ -114,7 +150,7 @@ function hasContext (method) {
  * @return {boolean}
  */
 function isNoop (method) {
-  return /(_nx_noop|_n_noop)/.test(method);
+  return functionCalls.noop.hasOwnProperty(method);
 }
 
 function getDomainPos (method) {
@@ -260,7 +296,7 @@ function parseCodeTree (ast, filename) {
     for (const child of ast) {
       parseCodeTree(child, filename);
     }
-  } else if (ast.kind === 'call' && validFunctionCalls.indexOf(ast.what.name) !== -1) {
+  } else if (ast.kind === 'call' && functionCalls.valid.hasOwnProperty(ast.what.name)) {
     const args = parseArguments(ast.arguments);
 
     if (!options.domain || options.domain === args[ getDomainPos(ast.what.name) ]) {
@@ -314,7 +350,7 @@ function parseCodeTree (ast, filename) {
  */
 function parseFile (filecontent, filePath) {
   // Skip file if no translation functions is found
-  const validFunctionsInFile = new RegExp(validFunctionCalls.join('|'));
+  const validFunctionsInFile = new RegExp(Object.keys(functionCalls.valid).join('|'));
   if (!validFunctionsInFile.test(filecontent)) {
     return;
   }
@@ -348,6 +384,18 @@ function setHeaders () {
 
   if (options.team) {
     options.headers[ 'Language-Team' ] = options.team;
+  }
+
+  if(!options.headers.hasOwnProperty('X-Poedit-KeywordsList')) {
+    options.headers[ 'X-Poedit-KeywordsList' ] = options.gettextFunctions.map(function(obj) {
+      var keyword = obj.name;
+      if(obj.plural || obj.context) {
+        keyword += ":1"
+        + (obj.plural ? ","+obj.plural : "")
+        + (obj.context ? ","+obj.context+"c" : "");
+      }
+      return keyword;
+    }).join(";");
   }
 }
 
