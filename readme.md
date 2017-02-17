@@ -53,16 +53,20 @@ wpPot({
   Description: Object containing extra POT-file headers. Set to false to not generate the default extra headers for Poedit.  
   Type: `object|bool`  
   Default: Headers used by Poedit
+- `gettextFunctions`  
+  Description: Gettext functions used for finding translations.  
+  Type: `object`  
+  Default: WordPress translation functions
 - `lastTranslator`  
   Description: Name and email address of the last translator (ex: `John Doe <me@example.com>`)  
-  Type: `string`    
+  Type: `string`  
   Default: undefined
 - `package`  
-  Description: Package name
+  Description: Package name  
   Type: `string`  
   Default: `domain` or `unnamed project` if domain is undefined
 - `relativeTo`  
-  Description: Path to folder that file comments should be relative to
+  Description: Path to folder that file comments should be relative to  
   Type: `string`  
   Default: `destFile` location or current working directory if `destFile` is undefined
 - `src`  

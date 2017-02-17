@@ -57,6 +57,8 @@ describe('Header tests', () => {
       headers: false
     });
 
-    assert(potContents.indexOf(defaultHeaders) === -1);
+    defaultHeaders.split('\n').forEach(function (line) {
+      assert(potContents.indexOf(line) === -1);
+    });
   });
 });
