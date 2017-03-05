@@ -30,7 +30,7 @@
   "dependencies": {
     "globby": "^6.1.0",
     "path-sort": "^0.1.0",
-    "php-parser": "^1.0.4"
+    "php-parser": "^2.0.0"
   },
   "devDependencies": {
     "eslint": "^3.13.1",
