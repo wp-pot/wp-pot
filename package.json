@@ -36,6 +36,8 @@
     "eslint": "^3.13.1",
     "eslint-config-semistandard": "^8.0.0",
     "eslint-config-standard": "^10.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
     "istanbul": "^0.4.5",
