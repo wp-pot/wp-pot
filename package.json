@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "eslint": "^3.13.1",
-    "eslint-config-semistandard": "^8.0.0",
+    "eslint-config-semistandard": "^11.0.0",
     "eslint-config-standard": "^10.0.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-node": "^4.2.2",
