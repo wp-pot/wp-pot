@@ -22,11 +22,7 @@ let commentRegexp;
 
 let lastComment;
 
-let functionCalls = {
-  valid: [],
-  contextPosition: {},
-  pluralPosition: {}
-};
+let functionCalls;
 
 /**
  * Check if variable is a empty object
@@ -82,6 +78,12 @@ function setDefaultOptions () {
   if (!options.package) {
     options.package = options.domain || 'unnamed project';
   }
+
+  functionCalls = {
+    valid: [],
+    contextPosition: {},
+    pluralPosition: {}
+  };
 
   options.gettextFunctions.forEach(function (methodObject) {
     functionCalls.valid.push(methodObject.name);
@@ -268,18 +270,21 @@ function parseCodeTree (ast, filename) {
     }
   } else if (ast.kind === 'call' && ast.what.kind === 'propertylookup' && ast.what.what.kind === 'variable') {
     const method = [ '$', ast.what.what.name, '->', ast.what.offset.name ].join('');
-    const args = parseArguments(ast.arguments);
 
-    if (!options.domain || options.domain === args[ args.length - 1 ]) {
-      const translationCall = {
-        args,
-        filename,
-        line: ast.what.loc.start.line,
-        method: method,
-        comment: lastComment
-      };
+    if (functionCalls.valid.indexOf(method) !== -1) {
+      const args = parseArguments(ast.arguments);
 
-      addTranslation(translationCall);
+      if (!options.domain || options.domain === args[ args.length - 1 ]) {
+        const translationCall = {
+          args,
+          filename,
+          line: ast.what.loc.start.line,
+          method: method,
+          comment: lastComment
+        };
+
+        addTranslation(translationCall);
+      }
     }
   } else {
     // List can not be in alphabetic order, otherwise it will not be ordered by occurence in code.
