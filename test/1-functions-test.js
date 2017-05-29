@@ -60,4 +60,18 @@ describe('Function tests', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':8', 'Single and plural string', 'Plural string', 'with context'));
     assert(!testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':9', 'Simple string', false, false));
   });
+
+  it('Test custom method', () => {
+    const fixturePath = 'test/fixtures/custom-method.php';
+
+    const potContents = wpPot({
+      src: fixturePath,
+      writeFile: false,
+      gettextFunctions: [
+        { name: '$this->trans' },
+      ]
+    });
+
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'Hello', false, false));
+  })
 });

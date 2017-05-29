@@ -266,6 +266,21 @@ function parseCodeTree (ast, filename) {
 
       addTranslation(translationCall);
     }
+  } else if (ast.kind === 'call' && ast.what.kind === 'propertylookup' && ast.what.what.kind === 'variable') {
+      const method = ['$', ast.what.what.name, '->', ast.what.offset.name].join('');
+      const args = parseArguments(ast.arguments);
+
+      if (!options.domain || options.domain === args[ args.length - 1 ]) {
+        const translationCall = {
+          args,
+          filename,
+          line: ast.what.loc.start.line,
+          method: method,
+          comment: lastComment
+        };
+
+        addTranslation(translationCall);
+      }
   } else {
     // List can not be in alphabetic order, otherwise it will not be ordered by occurence in code.
     const childrenContainingCalls = [
@@ -306,7 +321,7 @@ function parseCodeTree (ast, filename) {
  */
 function parseFile (filecontent, filePath) {
   // Skip file if no translation functions is found
-  const validFunctionsInFile = new RegExp(functionCalls.valid.join('|'));
+  const validFunctionsInFile = new RegExp(functionCalls.valid.join('|').replace('$', '\\$'));
   if (!validFunctionsInFile.test(filecontent)) {
     return;
   }
