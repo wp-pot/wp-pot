@@ -267,20 +267,20 @@ function parseCodeTree (ast, filename) {
       addTranslation(translationCall);
     }
   } else if (ast.kind === 'call' && ast.what.kind === 'propertylookup' && ast.what.what.kind === 'variable') {
-      const method = ['$', ast.what.what.name, '->', ast.what.offset.name].join('');
-      const args = parseArguments(ast.arguments);
+    const method = [ '$', ast.what.what.name, '->', ast.what.offset.name ].join('');
+    const args = parseArguments(ast.arguments);
 
-      if (!options.domain || options.domain === args[ args.length - 1 ]) {
-        const translationCall = {
-          args,
-          filename,
-          line: ast.what.loc.start.line,
-          method: method,
-          comment: lastComment
-        };
+    if (!options.domain || options.domain === args[ args.length - 1 ]) {
+      const translationCall = {
+        args,
+        filename,
+        line: ast.what.loc.start.line,
+        method: method,
+        comment: lastComment
+      };
 
-        addTranslation(translationCall);
-      }
+      addTranslation(translationCall);
+    }
   } else {
     // List can not be in alphabetic order, otherwise it will not be ordered by occurence in code.
     const childrenContainingCalls = [
