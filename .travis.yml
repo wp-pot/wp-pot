@@ -1,6 +1,9 @@
 sudo: false
 language: node_js
+before_script:
+  - mkdir tmp
+  - npm config set tmp $(pwd)/tmp
 node_js:
-  - node
+  - 'node'
+  - '7'
   - '6'
-  - '5'
