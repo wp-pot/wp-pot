@@ -25,7 +25,9 @@
     "node": ">=4"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "pot-maker.js",
+    "translation-parser.js"
   ],
   "license": "MIT",
   "dependencies": {
