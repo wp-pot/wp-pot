@@ -86,25 +86,23 @@ class PotMaker {
     let output = [];
 
     if (translations) {
-      for (let translationElement in translations) {
-        if (translations.hasOwnProperty(translationElement)) {
-          if (translations[ translationElement ].comment) {
-            output.push(`#. ${translations[ translationElement ].comment}`);
-          }
-
-          // Unify paths for Unix and Windows
-          output.push(`#: ${translations[ translationElement ].info.replace(/\\/g, '/')}`);
-
-          if (translations[ translationElement ].msgctxt) {
-            output.push(`msgctxt "${PotMaker.escapeQuotes(translations[ translationElement ].msgctxt)}"`);
-          }
-
-          output = output.concat(PotMaker.getPotMsgId(translations[ translationElement ].msgid));
-
-          output = output.concat(PotMaker.getPotMsgId(translations[ translationElement ].msgid_plural, true));
-
-          output = output.concat(PotMaker.getPotMsgStr(Boolean(translations[ translationElement ].msgid_plural)));
+      for (let translationElement of Object.keys(translations)) {
+        if (translations[ translationElement ].comment) {
+          output.push(`#. ${translations[ translationElement ].comment}`);
         }
+
+        // Unify paths for Unix and Windows
+        output.push(`#: ${translations[ translationElement ].info.replace(/\\/g, '/')}`);
+
+        if (translations[ translationElement ].msgctxt) {
+          output.push(`msgctxt "${PotMaker.escapeQuotes(translations[ translationElement ].msgctxt)}"`);
+        }
+
+        output = output.concat(PotMaker.getPotMsgId(translations[ translationElement ].msgid));
+
+        output = output.concat(PotMaker.getPotMsgId(translations[ translationElement ].msgid_plural, true));
+
+        output = output.concat(PotMaker.getPotMsgStr(Boolean(translations[ translationElement ].msgid_plural)));
       }
     }
 
