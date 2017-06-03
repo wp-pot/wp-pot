@@ -26,6 +26,10 @@ class TranslationParser {
   parseComment (ast) {
     let comment = null;
 
+    if (ast.loc && this.lastComment && this.lastComment.line === ast.loc.start.line) {
+      comment = this.lastComment;
+    }
+
     if (ast.kind === 'doc') {
       // Set comment regexp to find translator comments
       const commentRegexp = new RegExp(`^[\\s*]*${this.options.commentKeyword}(.*)`, 'im');
@@ -34,7 +38,15 @@ class TranslationParser {
         const commentmatch = commentRegexp.exec(line);
 
         if (commentmatch !== null) {
-          comment = commentmatch[ 1 ];
+          let commentLine = ast.loc.end.line;
+          if (ast.loc.end.column !== 0) {
+            commentLine++;
+          }
+
+          comment = {
+            text: commentmatch[ 1 ],
+            line: commentLine
+          };
         }
       }
     }
@@ -179,12 +191,17 @@ class TranslationParser {
       const args = TranslationParser.parseArguments(ast.arguments);
 
       if (!this.options.domain || this.options.domain === args[ args.length - 1 ]) {
+        let comment = null;
+        if (this.lastComment) {
+          comment = this.lastComment.text;
+        }
+
         const translationCall = {
           args,
           filename,
           line: ast.loc.start.line,
           method: ast.what.name,
-          comment: this.lastComment
+          comment: comment
         };
 
         this.addTranslation(translationCall);
@@ -196,12 +213,17 @@ class TranslationParser {
         const args = TranslationParser.parseArguments(ast.arguments);
 
         if (!this.options.domain || this.options.domain === args[ args.length - 1 ]) {
+          let comment = null;
+          if (this.lastComment) {
+            comment = this.lastComment.text;
+          }
+
           const translationCall = {
             args,
             filename,
             line: ast.what.loc.start.line,
             method: method,
-            comment: this.lastComment
+            comment: comment
           };
 
           this.addTranslation(translationCall);

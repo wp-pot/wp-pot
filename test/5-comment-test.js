@@ -19,6 +19,7 @@ describe('Comment tests', () => {
     assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is also a test', fixturePath + ':8', 'Multiline comment, one line', false, false));
     assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is test number three', fixturePath + ':15', 'Multiline comment, multi line', false, false));
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':19', 'Comment too far away from function', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test with stored translations', fixturePath + ':25', 'Stored translation with comment', false, false));
   });
 
   it('Can read comments with other trigger', () => {
