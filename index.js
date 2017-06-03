@@ -79,6 +79,35 @@ function setDefaultOptions (options) {
 }
 
 /**
+ * Generate string for header from gettext function
+ *
+ * @param {object} gettextFunctions
+ *
+ * @return {Array}
+ */
+function keywordsListStrings (gettextFunctions) {
+  const methodStrings = [];
+
+  for (const getTextFunction of gettextFunctions) {
+    let methodString = getTextFunction.name;
+
+    if (getTextFunction.plural || getTextFunction.context) {
+      methodString += ':1';
+    }
+    if (getTextFunction.plural) {
+      methodString += `,${getTextFunction.plural}`;
+    }
+    if (getTextFunction.context) {
+      methodString += `,${getTextFunction.context}c`;
+    }
+
+    methodStrings.push(methodString);
+  }
+
+  return methodStrings;
+}
+
+/**
  * Set default pot headers
  *
  * @param {object} options
@@ -103,24 +132,7 @@ function setHeaders (options) {
   }
 
   if (options.defaultHeaders && !options.headers.hasOwnProperty('X-Poedit-KeywordsList')) {
-    const keywordsList = [];
-    for (const getTextFunction of options.gettextFunctions) {
-      let keyword = getTextFunction.name;
-
-      if (getTextFunction.plural || getTextFunction.context) {
-        keyword += ':1';
-      }
-      if (getTextFunction.plural) {
-        keyword += `,${getTextFunction.plural}`;
-      }
-      if (getTextFunction.context) {
-        keyword += `,${getTextFunction.context}c`;
-      }
-
-      keywordsList.push(keyword);
-    }
-
-    options.headers[ 'X-Poedit-KeywordsList' ] = keywordsList.join(';');
+    options.headers[ 'X-Poedit-KeywordsList' ] = keywordsListStrings(options.gettextFunctions).join(';');
   }
 
   return options;

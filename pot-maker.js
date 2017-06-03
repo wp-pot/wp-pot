@@ -109,6 +109,11 @@ class PotMaker {
     return output;
   }
 
+  /**
+   * Sort object by key name
+   *
+   * @param {object} obj
+   */
   sortObject (obj) {
     return Object.keys(obj).sort().reduce(function (result, key) {
       result[ key ] = obj[ key ];
