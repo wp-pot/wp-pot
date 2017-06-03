@@ -28,28 +28,31 @@ class TranslationParser {
   parseFileHeader (headers, filecontent, filename) {
     const _this = this;
     const lines = filecontent.match(/[^\r\n]+/g);
-    lines.splice(30);
 
-    lines.forEach(function (lineContent, line) {
-      headers.forEach(function (header, index) {
-        const regex = new RegExp('^(?:[ \t]*<?php)?[ \t/*#@]*' + header + ':(.*)$', 'i');
-        const match = regex.exec(lineContent);
+    if (lines) {
+      lines.splice(30);
 
-        if (match) {
-          headers.splice(index, 1);
-          const headerValue = match[ 1 ].replace(/\s*(?:\*\/|\?>).*/, '').trim();
+      lines.forEach(function (lineContent, line) {
+        headers.forEach(function (header, index) {
+          const regex = new RegExp('^(?:[ \t]*<?php)?[ \t/*#@]*' + header + ':(.*)$', 'i');
+          const match = regex.exec(lineContent);
 
-          const translationCall = {
-            args: [ headerValue ],
-            filename,
-            line,
-            method: ''
-          };
+          if (match) {
+            headers.splice(index, 1);
+            const headerValue = match[ 1 ].replace(/\s*(?:\*\/|\?>).*/, '').trim();
 
-          _this.addTranslation(translationCall);
-        }
+            const translationCall = {
+              args: [ headerValue ],
+              filename,
+              line,
+              method: ''
+            };
+
+            _this.addTranslation(translationCall);
+          }
+        });
       });
-    });
+    }
   }
 
   /**
