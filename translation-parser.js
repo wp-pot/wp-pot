@@ -28,7 +28,7 @@ class TranslationParser {
 
     if (ast.kind === 'doc') {
       // Set comment regexp to find translator comments
-      let commentRegexp = new RegExp(`^[\\s*]*${this.options.commentKeyword}(.*)`, 'im');
+      const commentRegexp = new RegExp(`^[\\s*]*${this.options.commentKeyword}(.*)`, 'im');
 
       for (const line of ast.lines) {
         const commentmatch = commentRegexp.exec(line);

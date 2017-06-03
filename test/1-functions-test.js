@@ -54,7 +54,7 @@ describe('Function tests', () => {
       domain: 'testdomain'
     });
 
-    for (let fixturePath of fixturePaths) {
+    for (const fixturePath of fixturePaths) {
       assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'Simple string', false, false));
       assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'Simple string', false, false));
       assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':4', 'Simple string', false, 'with context'));

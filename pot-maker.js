@@ -86,7 +86,7 @@ class PotMaker {
     let output = [];
 
     if (translations) {
-      for (let translationElement of Object.keys(translations)) {
+      for (const translationElement of Object.keys(translations)) {
         if (translations[ translationElement ].comment) {
           output.push(`#. ${translations[ translationElement ].comment}`);
         }
@@ -139,7 +139,7 @@ msgstr ""
     if (this.options.headers && !PotMaker.isEmptyObject(this.options.headers)) {
       this.options.headers = this.sortObject(this.options.headers);
 
-      for (let key of Object.keys(this.options.headers)) {
+      for (const key of Object.keys(this.options.headers)) {
         contents += `"${key}: ${this.options.headers[ key ]}\\n"\n`;
       }
     }

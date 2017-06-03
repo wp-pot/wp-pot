@@ -56,7 +56,7 @@ function setDefaultOptions (options) {
     options.package = options.domain || 'unnamed project';
   }
 
-  let functionCalls = {
+  const functionCalls = {
     valid: [],
     contextPosition: {},
     pluralPosition: {}
@@ -103,21 +103,24 @@ function setHeaders (options) {
   }
 
   if (options.defaultHeaders && !options.headers.hasOwnProperty('X-Poedit-KeywordsList')) {
-    options.headers[ 'X-Poedit-KeywordsList' ] = options.gettextFunctions.map(function (obj) {
-      let keyword = obj.name;
+    const keywordsList = [];
+    for (const getTextFunction of options.gettextFunctions) {
+      let keyword = getTextFunction.name;
 
-      if (obj.plural || obj.context) {
+      if (getTextFunction.plural || getTextFunction.context) {
         keyword += ':1';
       }
-      if (obj.plural) {
-        keyword += `,${obj.plural}`;
+      if (getTextFunction.plural) {
+        keyword += `,${getTextFunction.plural}`;
       }
-      if (obj.context) {
-        keyword += `,${obj.context}c`;
+      if (getTextFunction.context) {
+        keyword += `,${getTextFunction.context}c`;
       }
 
-      return keyword;
-    }).join(';');
+      keywordsList.push(keyword);
+    }
+
+    options.headers[ 'X-Poedit-KeywordsList' ] = keywordsList.join(';');
   }
 
   return options;
