@@ -43,21 +43,26 @@ describe('Function tests', () => {
   });
 
   it('Can merge duplicate strings and separate with context', () => {
-    const fixturePath = 'test/fixtures/duplicated-strings.php';
+    const fixturePaths = [
+      'test/fixtures/duplicated-strings-1.php',
+      'test/fixtures/duplicated-strings-2.php'
+    ];
 
     const potContents = wpPot({
-      src: fixturePath,
+      src: fixturePaths,
       writeFile: false,
       domain: 'testdomain'
     });
 
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'Simple string', false, false));
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'Simple string', false, false));
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':4', 'Simple string', false, 'with context'));
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':5', 'Simple string', false, 'with context'));
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':6', 'Single and plural string', 'Plural string', false));
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':7', 'Single and plural string', 'Plural string', false));
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':8', 'Single and plural string', 'Plural string', 'with context'));
-    assert(!testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':9', 'Simple string', false, false));
+    for (let fixturePath of fixturePaths) {
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'Simple string', false, false));
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'Simple string', false, false));
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':4', 'Simple string', false, 'with context'));
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':5', 'Simple string', false, 'with context'));
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':6', 'Single and plural string', 'Plural string', false));
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':7', 'Single and plural string', 'Plural string', false));
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':8', 'Single and plural string', 'Plural string', 'with context'));
+      assert(!testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':9', 'Simple string', false, false));
+    }
   });
 });
