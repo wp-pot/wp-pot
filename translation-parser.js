@@ -19,6 +19,41 @@ class TranslationParser {
   }
 
   /**
+   * Parse theme or plugin meta data from file header
+   *
+   * @param {string} filecontent
+   * @param {string} filename
+   */
+  parseFileHeader (filecontent, filename) {
+    const _this = this;
+    const lines = filecontent.match(/[^\r\n]+/g);
+    lines.splice(30);
+
+    const headers = [ 'Plugin Name', 'Theme Name', 'Version', 'Author' ];
+
+    lines.forEach(function (lineContent, line) {
+      headers.forEach(function (header, index) {
+        const regex = new RegExp('^(?:[ \t]*<?php)?[ \t/*#@]*' + header + ':(.*)$', 'i');
+        const match = regex.exec(lineContent);
+
+        if (match) {
+          headers.splice(index, 1);
+          const headerValue = match[ 1 ].replace(/\s*(?:\*\/|\?>).*/, '').trim();
+
+          const translationCall = {
+            args: [ headerValue ],
+            filename,
+            line,
+            method: ''
+          };
+
+          _this.addTranslation(translationCall);
+        }
+      });
+    });
+  }
+
+  /**
    * Parse comment AST
    *
    * @param  {object} ast
@@ -277,12 +312,16 @@ class TranslationParser {
 
     this.translations = existingTranslations;
 
+    const filename = path.relative(this.options.relativeTo || path.dirname(this.options.destFile || __filename), filePath).replace(/\\/g, '/');
+
+    if (this.options.metadataFile === filename) {
+      this.parseFileHeader(filecontent, filename);
+    }
+
     // Skip file if no translation functions is found
     const validFunctionsInFile = new RegExp(this.options.functionCalls.valid.join('|').replace('$', '\\$'));
 
     if (validFunctionsInFile.test(filecontent)) {
-      const filename = path.relative(this.options.relativeTo || path.dirname(this.options.destFile || __filename), filePath).replace(/\\/g, '/');
-
       try {
         const ast = parser.parseCode(filecontent, filename);
         this.parseCodeTree(ast, filename);

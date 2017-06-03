@@ -61,6 +61,10 @@ wpPot({
   Description: Name and email address of the last translator (ex: `John Doe <me@example.com>`)  
   Type: `string`  
   Default: undefined
+- `metadataFile`  
+  Description: Path to file containing plugin/theme metadata header relative to `relativeTo`  
+  Type: `string`  
+  Default: undefined
 - `package`  
   Description: Package name  
   Type: `string`  
