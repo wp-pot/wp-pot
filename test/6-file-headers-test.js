@@ -34,4 +34,15 @@ describe('File Headers tests', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'Rasmus Bengtsson', false, false));
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':4', '1.0.0', false, false));
   });
+
+  it('Can read template name headers', () => {
+    const fixturePath = 'test/fixtures/template-headers.php';
+
+    const potContents = wpPot({
+      src: fixturePath,
+      writeFile: false
+    });
+
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'Hello World', false, false));
+  });
 });

@@ -21,15 +21,14 @@ class TranslationParser {
   /**
    * Parse theme or plugin meta data from file header
    *
+   * @param {Array} headers
    * @param {string} filecontent
    * @param {string} filename
    */
-  parseFileHeader (filecontent, filename) {
+  parseFileHeader (headers, filecontent, filename) {
     const _this = this;
     const lines = filecontent.match(/[^\r\n]+/g);
     lines.splice(30);
-
-    const headers = [ 'Plugin Name', 'Theme Name', 'Version', 'Author' ];
 
     lines.forEach(function (lineContent, line) {
       headers.forEach(function (header, index) {
@@ -315,8 +314,10 @@ class TranslationParser {
     const filename = path.relative(this.options.relativeTo || path.dirname(this.options.destFile || __filename), filePath).replace(/\\/g, '/');
 
     if (this.options.metadataFile === filename) {
-      this.parseFileHeader(filecontent, filename);
+      this.parseFileHeader([ 'Plugin Name', 'Theme Name', 'Version', 'Author' ], filecontent, filename);
     }
+
+    this.parseFileHeader([ 'Template Name' ], filecontent, filename);
 
     // Skip file if no translation functions is found
     const validFunctionsInFile = new RegExp(this.options.functionCalls.valid.join('|').replace('$', '\\$'));
