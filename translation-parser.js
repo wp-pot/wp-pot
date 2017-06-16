@@ -220,33 +220,22 @@ class TranslationParser {
   parseCodeTree (ast, filename) {
     if (!ast) {
       return;
-    } else if (Array.isArray(ast)) {
+    }
+
+    if (Array.isArray(ast)) {
       for (const child of ast) {
         this.parseCodeTree(child, filename);
       }
-    } else if (ast.kind === 'call' && this.options.functionCalls.valid.indexOf(ast.what.name) !== -1) {
-      const args = TranslationParser.parseArguments(ast.arguments);
-
-      if (!this.options.domain || this.options.domain === args[ args.length - 1 ]) {
-        let comment = null;
-        if (this.lastComment) {
-          comment = this.lastComment.text;
+    } else {
+      let methodName = '';
+      if (ast.kind === 'call') {
+        methodName = ast.what.name;
+        if (ast.what.kind === 'propertylookup' && ast.what.what.kind === 'variable') {
+          methodName = [ '$', ast.what.what.name, '->', ast.what.offset.name ].join('');
         }
-
-        const translationCall = {
-          args,
-          filename,
-          line: ast.loc.start.line,
-          method: ast.what.name,
-          comment: comment
-        };
-
-        this.addTranslation(translationCall);
       }
-    } else if (ast.kind === 'call' && ast.what.kind === 'propertylookup' && ast.what.what.kind === 'variable') {
-      const method = [ '$', ast.what.what.name, '->', ast.what.offset.name ].join('');
 
-      if (this.options.functionCalls.valid.indexOf(method) !== -1) {
+      if (ast.kind === 'call' && this.options.functionCalls.valid.indexOf(methodName) !== -1) {
         const args = TranslationParser.parseArguments(ast.arguments);
 
         if (!this.options.domain || this.options.domain === args[ args.length - 1 ]) {
@@ -258,39 +247,39 @@ class TranslationParser {
           const translationCall = {
             args,
             filename,
-            line: ast.what.loc.start.line,
-            method: method,
+            line: ast.loc.start.line,
+            method: methodName,
             comment: comment
           };
 
           this.addTranslation(translationCall);
         }
-      }
-    } else {
-      // List can not be in alphabetic order, otherwise it will not be ordered by occurence in code.
-      const childrenContainingCalls = [
-        'arguments',
-        'body',
-        'alternate',
-        'children',
-        'expr',
-        'trueExpr',
-        'falseExpr',
-        'ifnull',
-        'inner',
-        'items',
-        'key',
-        'left',
-        'right',
-        'source',
-        'test',
-        'value',
-        'what'
-      ];
+      } else {
+        // List can not be in alphabetic order, otherwise it will not be ordered by occurence in code.
+        const childrenContainingCalls = [
+          'arguments',
+          'body',
+          'alternate',
+          'children',
+          'expr',
+          'trueExpr',
+          'falseExpr',
+          'ifnull',
+          'inner',
+          'items',
+          'key',
+          'left',
+          'right',
+          'source',
+          'test',
+          'value',
+          'what'
+        ];
 
-      for (const child of childrenContainingCalls) {
-        if (ast[ child ]) {
-          this.parseCodeTree(ast[ child ], filename);
+        for (const child of childrenContainingCalls) {
+          if (ast[ child ]) {
+            this.parseCodeTree(ast[ child ], filename);
+          }
         }
       }
     }

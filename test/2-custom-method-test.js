@@ -20,6 +20,7 @@ describe('Custom method tests', () => {
 
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'Hello', false, false));
     assert(!testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'World', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':11', 'Custom translate function in method call', false, false));
   });
 
   it('Test custom method from custom class', () => {
@@ -35,5 +36,16 @@ describe('Custom method tests', () => {
 
     assert(!testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'Hello', false, false));
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'World', false, false));
+  });
+
+  it('Test function calls in other methods', () => {
+    const fixturePath = 'test/fixtures/custom-method.php';
+
+    const potContents = wpPot({
+      src: fixturePath,
+      writeFile: false
+    });
+
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':7', 'Translate function in method call', false, false));
   });
 });
