@@ -2,7 +2,7 @@ sudo: false
 language: node_js
 before_script:
   - mkdir tmp
-  - npm config set tmp $(pwd)/tmp
+  - export TMPDIR=$(pwd)/tmp
 node_js:
   - 'node'
   - '7'
