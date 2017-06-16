@@ -20,7 +20,7 @@ describe('Custom method tests', () => {
 
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'Hello', false, false));
     assert(!testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'World', false, false));
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':11', 'Custom translate function in method call', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':10', 'Custom translate function in method call', false, false));
   });
 
   it('Test custom method from custom class', () => {
