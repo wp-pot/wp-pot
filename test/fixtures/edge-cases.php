@@ -25,3 +25,6 @@ if  (1 === 1 ): ?>
 	<? _e( 'Method in if block', 'testdomain' ); ?>
 <?php endif;
 return __( 'Returned function', 'testdomain' );
+
+exit( __('Exit message', 'testdomain') );
+die( __('Exit message', 'testdomain') );

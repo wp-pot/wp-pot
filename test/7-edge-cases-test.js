@@ -63,6 +63,14 @@ describe('Edge cases function tests', () => {
   it('should handle methods in returns', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':27', 'Returned function', false, false));
   });
+
+  it('should handle methods in exits', () => {
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':29', 'Exit message', false, false));
+  });
+
+  it('should handle methods in dies', () => {
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':30', 'Exit message', false, false));
+  });
 });
 
 describe('Namespace edge cases', () => {

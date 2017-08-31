@@ -271,6 +271,7 @@ class TranslationParser {
           'left',
           'right',
           'source',
+          'status',
           'test',
           'value',
           'what'
