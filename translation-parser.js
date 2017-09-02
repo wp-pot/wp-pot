@@ -260,6 +260,7 @@ class TranslationParser {
           'arguments',
           'body',
           'alternate',
+          'catches',
           'children',
           'expr',
           'trueExpr',
