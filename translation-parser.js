@@ -16,6 +16,7 @@ class TranslationParser {
   constructor (options) {
     this.options = options;
     this.translations = [];
+    this.comments = {};
   }
 
   /**
@@ -58,37 +59,25 @@ class TranslationParser {
   /**
    * Parse comment AST
    *
-   * @param  {object} ast
+   * @param  {object} commentAst
    */
-  parseComment (ast) {
-    let comment = null;
-
-    if (ast.loc && this.lastComment && this.lastComment.line === ast.loc.start.line) {
-      comment = this.lastComment;
+  parseComment (commentAst) {
+    let commentRegexp;
+    if (commentAst.kind === 'commentblock') {
+      commentRegexp = new RegExp(`(?:\\/\\*)?[\\s*]*${this.options.commentKeyword}(.*)\\s*(?:\\*\\/)$`, 'im');
+    } else {
+      commentRegexp = new RegExp(`^\\/\\/\\s*${this.options.commentKeyword}(.*)$`, 'im');
     }
+    const commentParts = commentRegexp.exec(commentAst.value);
 
-    if (ast.kind === 'doc') {
-      // Set comment regexp to find translator comments
-      const commentRegexp = new RegExp(`^[\\s*]*${this.options.commentKeyword}(.*)`, 'im');
-
-      for (const line of ast.lines) {
-        const commentmatch = commentRegexp.exec(line);
-
-        if (commentmatch !== null) {
-          let commentLine = ast.loc.end.line;
-          if (ast.loc.end.column !== 0) {
-            commentLine++;
-          }
-
-          comment = {
-            text: commentmatch[ 1 ],
-            line: commentLine
-          };
-        }
+    if (commentParts) {
+      let lineNumber = commentAst.loc.end.line;
+      if (commentAst.loc.end.column === 0) {
+        lineNumber--;
       }
-    }
 
-    this.lastComment = comment;
+      this.comments[lineNumber] = commentParts[1];
+    }
   }
 
   /**
@@ -222,6 +211,12 @@ class TranslationParser {
       return;
     }
 
+    if (ast.comments) {
+      for (const comment of ast.comments) {
+        this.parseComment(comment);
+      }
+    }
+
     if (Array.isArray(ast)) {
       for (const child of ast) {
         this.parseCodeTree(child, filename);
@@ -242,8 +237,13 @@ class TranslationParser {
 
         if (!this.options.domain || this.options.domain === args[ args.length - 1 ]) {
           let comment = null;
-          if (this.lastComment) {
-            comment = this.lastComment.text;
+
+          if (this.comments[ast.loc.start.line - 1]) {
+            comment = this.comments[ast.loc.start.line - 1];
+            delete this.comments[ast.loc.start.line - 1];
+          } else if (this.comments[ast.loc.start.line]) {
+            comment = this.comments[ast.loc.start.line];
+            delete this.comments[ast.loc.start.line];
           }
 
           const translationCall = {
@@ -287,8 +287,6 @@ class TranslationParser {
         }
       }
     }
-
-    this.parseComment(ast);
   }
 
   /**
