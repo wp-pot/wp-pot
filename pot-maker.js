@@ -89,7 +89,9 @@ class PotMaker {
     if (translations) {
       for (const translationElement of Object.keys(translations)) {
         if (translations[ translationElement ].comment) {
-          output.push(`#. ${translations[ translationElement ].comment}`);
+          for (const comment of translations[ translationElement ].comment) {
+            output.push(`#. ${comment}`);
+          }
         }
 
         if (!noFilePaths) {

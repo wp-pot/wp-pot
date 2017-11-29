@@ -16,6 +16,7 @@ class TranslationParser {
   constructor (options) {
     this.options = options;
     this.translations = [];
+    this.comments = {};
   }
 
   /**
@@ -58,37 +59,25 @@ class TranslationParser {
   /**
    * Parse comment AST
    *
-   * @param  {object} ast
+   * @param  {object} commentAst
    */
-  parseComment (ast) {
-    let comment = null;
-
-    if (ast.loc && this.lastComment && this.lastComment.line === ast.loc.start.line) {
-      comment = this.lastComment;
+  parseComment (commentAst) {
+    let commentRegexp;
+    if (commentAst.kind === 'commentblock') {
+      commentRegexp = new RegExp(`(?:\\/\\*)?[\\s*]*${this.options.commentKeyword}(.*)\\s*(?:\\*\\/)$`, 'im');
+    } else {
+      commentRegexp = new RegExp(`^\\/\\/\\s*${this.options.commentKeyword}(.*)$`, 'im');
     }
+    const commentParts = commentRegexp.exec(commentAst.value);
 
-    if (ast.kind === 'doc') {
-      // Set comment regexp to find translator comments
-      const commentRegexp = new RegExp(`^[\\s*]*${this.options.commentKeyword}(.*)`, 'im');
-
-      for (const line of ast.lines) {
-        const commentmatch = commentRegexp.exec(line);
-
-        if (commentmatch !== null) {
-          let commentLine = ast.loc.end.line;
-          if (ast.loc.end.column !== 0) {
-            commentLine++;
-          }
-
-          comment = {
-            text: commentmatch[ 1 ],
-            line: commentLine
-          };
-        }
+    if (commentParts) {
+      let lineNumber = commentAst.loc.end.line;
+      if (commentAst.loc.end.column === 0) {
+        lineNumber--;
       }
-    }
 
-    this.lastComment = comment;
+      this.comments[lineNumber] = commentParts[1];
+    }
   }
 
   /**
@@ -160,11 +149,12 @@ class TranslationParser {
   generateTranslationObject (translationCall) {
     const translationObject = {
       info: `${translationCall.filename}:${translationCall.line}`,
-      msgid: translationCall.args[ 0 ]
+      msgid: translationCall.args[ 0 ],
+      comment: []
     };
 
     if (translationCall.comment) {
-      translationObject.comment = this.options.commentKeyword + translationCall.comment;
+      translationObject.comment.push(this.options.commentKeyword + translationCall.comment);
     }
 
     if (this.isPlural(translationCall.method)) {
@@ -207,8 +197,38 @@ class TranslationParser {
         if (translationObject.msgid_plural) {
           this.translations[ translationKey ].msgid_plural = translationObject.msgid_plural;
         }
+
+        if (translationObject.comment) {
+          this.translations[ translationKey ].comment.push(translationObject.comment[0]);
+        }
       }
     }
+  }
+
+  getComment (lineNumber) {
+    const linesWithComment = Object.keys(this.comments);
+    if (!linesWithComment) {
+      return null;
+    }
+
+    if (linesWithComment[0] > lineNumber) {
+      return null;
+    }
+
+    let comment;
+    if (lineNumber - linesWithComment[0] > 2) {
+      delete this.comments[linesWithComment[0]];
+      comment = this.getComment(lineNumber);
+    } else {
+      comment = this.comments[linesWithComment[0]];
+      delete this.comments[linesWithComment[0]];
+    }
+
+    if (comment) {
+      comment = comment.replace(/\s+$/, '');
+    }
+
+    return comment;
   }
 
   /**
@@ -222,6 +242,12 @@ class TranslationParser {
       return;
     }
 
+    if (ast.comments) {
+      for (const comment of ast.comments) {
+        this.parseComment(comment);
+      }
+    }
+
     if (Array.isArray(ast)) {
       for (const child of ast) {
         this.parseCodeTree(child, filename);
@@ -230,9 +256,10 @@ class TranslationParser {
       let methodName = '';
       if (ast.kind === 'call') {
         methodName = ast.what.name;
+
         if (ast.what.kind === 'propertylookup' && ast.what.what.kind === 'variable') {
           methodName = [ '$', ast.what.what.name, '->', ast.what.offset.name ].join('');
-        } else if (ast.what.kind === 'identifier' && ast.what.resolution === 'fqn') {
+        } else if (ast.what.kind === 'identifier' && (ast.what.resolution === 'qn' || ast.what.resolution === 'fqn')) {
           methodName = ast.what.name.replace(/^\\/, '');
         }
       }
@@ -241,17 +268,12 @@ class TranslationParser {
         const args = TranslationParser.parseArguments(ast.arguments);
 
         if (!this.options.domain || this.options.domain === args[ args.length - 1 ]) {
-          let comment = null;
-          if (this.lastComment) {
-            comment = this.lastComment.text;
-          }
-
           const translationCall = {
             args,
             filename,
             line: ast.loc.start.line,
             method: methodName,
-            comment: comment
+            comment: this.getComment(ast.loc.start.line)
           };
 
           this.addTranslation(translationCall);
@@ -287,8 +309,6 @@ class TranslationParser {
         }
       }
     }
-
-    this.parseComment(ast);
   }
 
   /**
