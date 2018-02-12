@@ -27,6 +27,7 @@ function setDefaultOptions (options) {
       'X-Poedit-SearchPathExcluded-0': '*.js'
     },
     defaultHeaders: true,
+    noFilePaths: false,
     writeFile: true,
     gettextFunctions: [
       { name: '__' },

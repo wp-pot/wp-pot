@@ -78,10 +78,11 @@ class PotMaker {
    * Write translation to array with pot format.
    *
    * @param {object} translations
+   * @param {bool}   noFilePaths
    *
    * @return {Array}
    */
-  static translationToPot (translations) {
+  static translationToPot (translations, noFilePaths) {
     // Write translation rows.
     let output = [];
 
@@ -91,8 +92,10 @@ class PotMaker {
           output.push(`#. ${translations[ translationElement ].comment}`);
         }
 
-        // Unify paths for Unix and Windows
-        output.push(`#: ${translations[ translationElement ].info.replace(/\\/g, '/')}`);
+        if (!noFilePaths) {
+          // Unify paths for Unix and Windows
+          output.push(`#: ${translations[ translationElement ].info.replace(/\\/g, '/')}`);
+        }
 
         if (translations[ translationElement ].msgctxt) {
           output.push(`msgctxt "${PotMaker.escapeQuotes(translations[ translationElement ].msgctxt)}"`);
@@ -152,7 +155,7 @@ msgstr ""
     contents += '"Plural-Forms: nplurals=2; plural=(n != 1);\\n"\n';
     contents += '\n';
 
-    const translationLines = PotMaker.translationToPot(translations);
+    const translationLines = PotMaker.translationToPot(translations, this.options.noFilePaths);
     contents += translationLines.join('\n');
 
     return contents;

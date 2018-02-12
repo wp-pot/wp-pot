@@ -6,6 +6,36 @@ const assert = require('assert');
 const wpPot = require('../');
 const testHelper = require('./test-helper');
 
+describe('File path comment tests', () => {
+  it('Can hide file paths', () => {
+    const fixturePath = 'test/fixtures/valid-functions.php';
+
+    const potContents = wpPot({
+      src: fixturePath,
+      writeFile: false,
+      noFilePaths: true,
+    });
+
+    // Do not find the path
+    assert.equal(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'Return string', false, false), false);
+
+    // But find the string
+    assert(testHelper.verifyLanguageBlock(potContents, false, false, 'Return string', false, false));
+  });
+
+  it('Can read comments with other trigger', () => {
+    const fixturePath = 'test/fixtures/comments.php';
+
+    const potContents = wpPot({
+      src: fixturePath,
+      writeFile: false,
+      commentKeyword: 'Other keyword: '
+    });
+
+    assert(testHelper.verifyLanguageBlock(potContents, 'Other keyword: This is a comment to the translator', fixturePath + ':22', 'Comment with other keyword', false, false));
+  });
+});
+
 describe('Comment tests', () => {
   it('Can read different type of comments', () => {
     const fixturePath = 'test/fixtures/comments.php';
