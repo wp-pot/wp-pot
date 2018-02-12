@@ -13,7 +13,7 @@ describe('File path comment tests', () => {
     const potContents = wpPot({
       src: fixturePath,
       writeFile: false,
-      noFilePaths: true,
+      noFilePaths: true
     });
 
     // Do not find the path
