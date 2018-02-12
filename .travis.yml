@@ -5,6 +5,8 @@ before_script:
   - export TMPDIR=$(pwd)/tmp
 node_js:
   - 'node'
+  - '9'
+  - '8'
   - '7'
   - '6'
   - '4'
