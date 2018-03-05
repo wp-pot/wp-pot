@@ -22,7 +22,7 @@
     "url": "https://github.com/rasmusbe"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "files": [
     "index.js",
@@ -33,7 +33,7 @@
   "dependencies": {
     "globby": "^8.0.0",
     "path-sort": "^0.1.0",
-    "php-parser": "glayzzle/php-parser#master"
+    "php-parser": "github:glayzzle/php-parser#master"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
