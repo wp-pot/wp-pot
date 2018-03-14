@@ -308,7 +308,7 @@ class TranslationParser {
     const filename = path.relative(this.options.relativeTo || path.dirname(this.options.destFile || __filename), filePath).replace(/\\/g, '/');
 
     if (this.options.metadataFile === filename) {
-      this.parseFileHeader([ 'Plugin Name', 'Theme Name', 'Description', 'Author', 'Author URI', 'Plugin URI' ], filecontent, filename);
+      this.parseFileHeader([ 'Plugin Name', 'Theme Name', 'Description', 'Author', 'Author URI', 'Plugin URI', 'Theme URI' ], filecontent, filename);
     }
 
     this.parseFileHeader([ 'Template Name' ], filecontent, filename);
