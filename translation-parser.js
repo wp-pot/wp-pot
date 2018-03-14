@@ -44,7 +44,7 @@ class TranslationParser {
             const translationCall = {
               args: [ headerValue ],
               filename,
-              line,
+              line: line + 1,
               method: ''
             };
 
