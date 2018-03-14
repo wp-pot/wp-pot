@@ -16,9 +16,11 @@ describe('File Headers tests', () => {
       metadataFile: fixturePath
     });
 
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'Test Theme', false, false));
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'Rasmus Bengtsson', false, false));
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':4', '1.0.0', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'Test Theme', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':4', 'Rasmus Bengtsson', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':5', 'Test Description', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':6', 'http://www.example.org', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':7', 'http://www.example.com', false, false));
   });
 
   it('Can read plugin headers', () => {
@@ -30,9 +32,11 @@ describe('File Headers tests', () => {
       metadataFile: fixturePath
     });
 
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'Test Plugin', false, false));
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'Rasmus Bengtsson', false, false));
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':4', '1.0.0', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'Test Plugin', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':4', 'Rasmus Bengtsson', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':5', 'Test Description', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':6', 'http://www.example.org', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':7', 'http://www.example.com', false, false));
   });
 
   it('Can read template name headers', () => {
@@ -43,6 +47,6 @@ describe('File Headers tests', () => {
       writeFile: false
     });
 
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'Hello World', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'Hello World', false, false));
   });
 });
