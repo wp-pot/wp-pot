@@ -30,3 +30,5 @@ exit( __('Exit message', 'testdomain') );
 die( __('Exit message', 'testdomain') );
 
 try{ $a = esc_html__("Text within try", "testdomain"); } catch ( Exception $e) { $b = esc_html__("Text within catch", "testdomain"); }
+
+\_e('With root namespace', 'testdomain');

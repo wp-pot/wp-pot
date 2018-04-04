@@ -232,6 +232,8 @@ class TranslationParser {
         methodName = ast.what.name;
         if (ast.what.kind === 'propertylookup' && ast.what.what.kind === 'variable') {
           methodName = [ '$', ast.what.what.name, '->', ast.what.offset.name ].join('');
+        } else if (ast.what.kind === 'identifier' && ast.what.resolution === 'fqn') {
+          methodName = ast.what.name.replace(/^\\/, '');
         }
       }
 

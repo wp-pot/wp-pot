@@ -79,6 +79,10 @@ describe('Edge cases function tests', () => {
   it('should handle methods in catch', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':32', 'Text within catch', false, false));
   });
+
+  it('should handle methods with root namespace', () => {
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':34', 'With root namespace', false, false));
+  });
 });
 
 describe('Namespace edge cases', () => {
