@@ -200,6 +200,26 @@ class TranslationParser {
     }
   }
 
+  getComment (lineNumber) {
+    const linesWithComment = Object.keys(this.comments);
+    if (!linesWithComment) {
+      return null;
+    }
+
+    if (linesWithComment[0] > lineNumber) {
+      return null;
+    }
+
+    if (lineNumber - linesWithComment[0] > 2) {
+      delete this.comments[linesWithComment[0]];
+      return this.getComment(lineNumber);
+    } else {
+      const comment = this.comments[linesWithComment[0]];
+      delete this.comments[linesWithComment[0]];
+      return comment;
+    }
+  }
+
   /**
    * Parse the AST code tree
    *
@@ -225,9 +245,10 @@ class TranslationParser {
       let methodName = '';
       if (ast.kind === 'call') {
         methodName = ast.what.name;
+
         if (ast.what.kind === 'propertylookup' && ast.what.what.kind === 'variable') {
           methodName = [ '$', ast.what.what.name, '->', ast.what.offset.name ].join('');
-        } else if (ast.what.kind === 'identifier' && ast.what.resolution === 'fqn') {
+        } else if (ast.what.kind === 'identifier' && (ast.what.resolution === 'qn' || ast.what.resolution === 'fqn')) {
           methodName = ast.what.name.replace(/^\\/, '');
         }
       }
@@ -236,22 +257,12 @@ class TranslationParser {
         const args = TranslationParser.parseArguments(ast.arguments);
 
         if (!this.options.domain || this.options.domain === args[ args.length - 1 ]) {
-          let comment = null;
-
-          if (this.comments[ast.loc.start.line - 1]) {
-            comment = this.comments[ast.loc.start.line - 1];
-            delete this.comments[ast.loc.start.line - 1];
-          } else if (this.comments[ast.loc.start.line]) {
-            comment = this.comments[ast.loc.start.line];
-            delete this.comments[ast.loc.start.line];
-          }
-
           const translationCall = {
             args,
             filename,
             line: ast.loc.start.line,
             method: methodName,
-            comment: comment
+            comment: this.getComment(ast.loc.start.line)
           };
 
           this.addTranslation(translationCall);

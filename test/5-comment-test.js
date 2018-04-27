@@ -22,18 +22,6 @@ describe('File path comment tests', () => {
     // But find the string
     assert(testHelper.verifyLanguageBlock(potContents, false, false, 'Return string', false, false));
   });
-
-  it('Can read comments with other trigger', () => {
-    const fixturePath = 'test/fixtures/comments.php';
-
-    const potContents = wpPot({
-      src: fixturePath,
-      writeFile: false,
-      commentKeyword: 'Other keyword: '
-    });
-
-    assert(testHelper.verifyLanguageBlock(potContents, 'Other keyword: This is a comment to the translator', fixturePath + ':22', 'Comment with other keyword', false, false));
-  });
 });
 
 describe('Comment tests', () => {
@@ -48,11 +36,11 @@ describe('Comment tests', () => {
     assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test', fixturePath + ':3', 'Single line comment', false, false));
     assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is also a test', fixturePath + ':8', 'Multiline comment, one line', false, false));
     assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is test number three', fixturePath + ':15', 'Multiline comment, multi line', false, false));
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':19', 'Comment too far away from function', false, false));
-    assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test with stored translations', fixturePath + ':25', 'Stored translation with comment', false, false));
-    assert(testHelper.verifyLanguageBlock(potContents, 'translators: sprintf test translation in array', fixturePath + ':29', 'sprintf translation in array', false, false));
-    assert(testHelper.verifyLanguageBlock(potContents, 'translators: test translation in keyed array', fixturePath + ':34', 'translation in keyed array', false, false));
-    assert(testHelper.verifyLanguageBlock(potContents, 'translators: example inside sprintf', fixturePath + ':39', 'translation inside sprintf', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':20', 'Comment too far away from function', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test with stored translations', fixturePath + ':26', 'Stored translation with comment', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, 'translators: sprintf test translation in array', fixturePath + ':30', 'sprintf translation in array', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, 'translators: test translation in keyed array', fixturePath + ':35', 'translation in keyed array', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, 'translators: example inside sprintf', fixturePath + ':40', 'translation inside sprintf', false, false));
   });
 
   it('Can read comments with other trigger', () => {
@@ -64,7 +52,7 @@ describe('Comment tests', () => {
       commentKeyword: 'Other keyword: '
     });
 
-    assert(testHelper.verifyLanguageBlock(potContents, 'Other keyword: This is a comment to the translator', fixturePath + ':22', 'Comment with other keyword', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, 'Other keyword: This is a comment to the translator', fixturePath + ':23', 'Comment with other keyword', false, false));
   });
 });
 
@@ -104,5 +92,20 @@ describe('File comment tests', () => {
     });
 
     assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test', fixturePath + ':3', 'Single line comment', false, false));
+  });
+});
+
+describe('Comment edge cases', () => {
+  it('Edge case with missing comment', () => {
+    // https://github.com/rasmusbe/wp-pot/issues/29#issuecomment-384191855
+
+    const fixturePath = 'test/fixtures/missing-comment.php';
+    const potContents = wpPot({
+      src: fixturePath,
+      writeFile: false,
+      domain: 'testdomain'
+    });
+
+    assert(testHelper.verifyLanguageBlock(potContents, 'translators: 1: current year, 2: site title link.', fixturePath + ':10', '&copy; %1$d %2$s', false, 'site copyright'));
   });
 });
