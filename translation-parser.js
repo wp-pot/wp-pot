@@ -149,11 +149,12 @@ class TranslationParser {
   generateTranslationObject (translationCall) {
     const translationObject = {
       info: `${translationCall.filename}:${translationCall.line}`,
-      msgid: translationCall.args[ 0 ]
+      msgid: translationCall.args[ 0 ],
+      comment: []
     };
 
     if (translationCall.comment) {
-      translationObject.comment = this.options.commentKeyword + translationCall.comment;
+      translationObject.comment.push(this.options.commentKeyword + translationCall.comment);
     }
 
     if (this.isPlural(translationCall.method)) {
@@ -196,6 +197,10 @@ class TranslationParser {
         if (translationObject.msgid_plural) {
           this.translations[ translationKey ].msgid_plural = translationObject.msgid_plural;
         }
+
+        if (translationObject.comment) {
+          this.translations[ translationKey ].comment.push(translationObject.comment[0]);
+        }
       }
     }
   }
@@ -210,14 +215,20 @@ class TranslationParser {
       return null;
     }
 
+    let comment;
     if (lineNumber - linesWithComment[0] > 2) {
       delete this.comments[linesWithComment[0]];
-      return this.getComment(lineNumber);
+      comment = this.getComment(lineNumber);
     } else {
-      const comment = this.comments[linesWithComment[0]];
+      comment = this.comments[linesWithComment[0]];
       delete this.comments[linesWithComment[0]];
-      return comment;
     }
+
+    if (comment) {
+      comment = comment.replace(/\s+$/, '');
+    }
+
+    return comment;
   }
 
   /**

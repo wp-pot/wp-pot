@@ -39,3 +39,9 @@ $message = sprintf(
 	/* translators: example inside sprintf */
 	__( 'translation inside sprintf', 'testdomain' )
 );
+
+// translators: This is comment 1
+__('Multiple comments for same id', 'testdomain');
+
+// translators: This is comment 2
+__('Multiple comments for same id', 'testdomain');

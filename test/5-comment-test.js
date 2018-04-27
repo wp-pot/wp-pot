@@ -41,6 +41,8 @@ describe('Comment tests', () => {
     assert(testHelper.verifyLanguageBlock(potContents, 'translators: sprintf test translation in array', fixturePath + ':30', 'sprintf translation in array', false, false));
     assert(testHelper.verifyLanguageBlock(potContents, 'translators: test translation in keyed array', fixturePath + ':35', 'translation in keyed array', false, false));
     assert(testHelper.verifyLanguageBlock(potContents, 'translators: example inside sprintf', fixturePath + ':40', 'translation inside sprintf', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is comment 1', fixturePath + ':44', 'Multiple comments for same id', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is comment 2', fixturePath + ':47', 'Multiple comments for same id', false, false));
   });
 
   it('Can read comments with other trigger', () => {

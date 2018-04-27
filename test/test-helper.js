@@ -20,16 +20,16 @@ function verifyLanguageBlock (potContents, comment, fileinfo, msgid, plural, con
   for (const block of blocks) {
     const blocklines = block.split('\n');
 
-    let fileinfoLine = 0;
+    const commentLines = blocklines.slice(0).filter(function (row) {
+      return row.match(/^#\. /);
+    });
 
-    if (comment && block.indexOf('#. ' + comment) === -1) {
+    if (comment && commentLines.indexOf('#. ' + comment) === -1) {
       continue;
-    } else if (comment) {
-      fileinfoLine++;
     }
 
     // Check if correct file
-    if (fileinfo && blocklines[ fileinfoLine ].indexOf(fileinfo) === -1) {
+    if (fileinfo && blocklines[ commentLines.length ].indexOf(fileinfo) === -1) {
       continue;
     }
 
