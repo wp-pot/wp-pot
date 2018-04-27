@@ -79,7 +79,7 @@ wpPot({
   Type: `string`
   Default: `destFile` location or current working directory if `destFile` is undefined.
 - `src`
-  Description: Glob or globs to match files (see [Globbing Patterns](https://github.com/sindresorhus/globby#globbing-patterns))
+  Description: Glob or globs to match files
   Type: `string|array`
   Default: `**/*.php`
 - `team`
