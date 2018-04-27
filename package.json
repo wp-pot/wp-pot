@@ -31,7 +31,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "globby": "^8.0.0",
+    "matched": "^2.0.1",
     "path-sort": "^0.1.0",
     "php-parser": "^2.1.0"
   },

@@ -2,7 +2,7 @@
 'use strict';
 
 const fs = require('fs');
-const globby = require('globby');
+const matched = require('matched');
 const pathSort = require('path-sort');
 
 const TranslationParser = require('./translation-parser');
@@ -162,7 +162,7 @@ function wpPot (options) {
   options = setDefaultOptions(options);
 
   // Find and sort file paths
-  const files = pathSort(globby.sync(options.src));
+  const files = pathSort(matched.sync(options.src));
 
   // Parse files
   for (const file of files) {
