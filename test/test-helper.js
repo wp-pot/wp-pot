@@ -26,6 +26,8 @@ function verifyLanguageBlock (potContents, comment, fileinfo, msgid, plural, con
 
     if (comment && commentLines.indexOf('#. ' + comment) === -1) {
       continue;
+    } else if (!comment && commentLines.length) {
+      continue;
     }
 
     // Check if correct file

@@ -198,7 +198,7 @@ class TranslationParser {
           this.translations[ translationKey ].msgid_plural = translationObject.msgid_plural;
         }
 
-        if (translationObject.comment) {
+        if (translationObject.comment[0]) {
           this.translations[ translationKey ].comment.push(translationObject.comment[0]);
         }
       }
