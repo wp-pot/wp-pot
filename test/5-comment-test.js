@@ -17,7 +17,7 @@ describe('File path comment tests', () => {
     });
 
     // Do not find the path
-    assert.equal(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'Return string', false, false), false);
+    assert.strictEqual(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'Return string', false, false), false);
 
     // But find the string
     assert(testHelper.verifyLanguageBlock(potContents, false, false, 'Return string', false, false));
@@ -72,7 +72,7 @@ describe('File comment tests', () => {
       writeFile: false
     });
 
-    assert.equal(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test', fixturePath + ':3', 'Single line comment', false, false), false);
+    assert.strictEqual(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test', fixturePath + ':3', 'Single line comment', false, false), false);
     assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test', 'fixtures/comments.php:3', 'Single line comment', false, false));
   });
 
@@ -85,7 +85,7 @@ describe('File comment tests', () => {
       writeFile: false
     });
 
-    assert.equal(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test', fixturePath + ':3', 'Single line comment', false, false), false);
+    assert.strictEqual(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test', fixturePath + ':3', 'Single line comment', false, false), false);
     assert(testHelper.verifyLanguageBlock(potContents, 'translators: This is a test', 'fixtures/comments.php:3', 'Single line comment', false, false));
   });
 
