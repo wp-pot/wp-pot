@@ -2,9 +2,9 @@ sudo: false
 language: node_js
 before_install:
 # package-lock.json was introduced in npm@5
-- '[[ $(node -v) =~ ^v9.*$ ]] || npm install -g npm@latest' # skipped when using node 9
-- npm install -g greenkeeper-lockfile
-install: npm install
+- '[[ $(node -v) =~ ^v9.*$ ]] || travis_retry timeout 5m npm install -g npm@latest' # skipped when using node 9
+- travis_retry timeout 5m npm install -g greenkeeper-lockfile
+install: travis_retry timeout 5m npm install
 before_script:
   - mkdir tmp
   - export TMPDIR=$(pwd)/tmp
