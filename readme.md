@@ -93,6 +93,7 @@ wpPot({
 
 
 ## Related
+- [php-parser](https://github.com/glayzzle/php-parser) - NodeJS PHP Parser used in this project
 - [gulp-wp-pot](https://github.com/rasmusbe/gulp-wp-pot) - Run wp-pot via gulp
 - [wp-pot-cli](https://github.com/rasmusbe/wp-pot-cli) - Run wp-pot via cli command
 
