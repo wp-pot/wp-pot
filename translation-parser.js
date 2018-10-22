@@ -100,6 +100,8 @@ class TranslationParser {
         argsArray.push(`$${arg.name}`);
       } else if (arg.kind === 'constref') {
         argsArray.push(`${arg.name.name}`);
+      } else if (arg.kind === 'identifier' && arg.name.kind === 'classreference') {
+        argsArray.push(`${arg.name.name}`);
       } else {
         argsArray.push(arg.value);
       }
@@ -259,7 +261,7 @@ class TranslationParser {
 
         if (ast.what.kind === 'propertylookup' && ast.what.what.kind === 'variable') {
           methodName = [ '$', ast.what.what.name, '->', ast.what.offset.name ].join('');
-        } else if (ast.what.kind === 'identifier' && (ast.what.resolution === 'qn' || ast.what.resolution === 'fqn')) {
+        } else if ((ast.what.kind === 'identifier' || ast.what.kind === 'classreference') && (ast.what.resolution === 'qn' || ast.what.resolution === 'fqn')) {
           methodName = ast.what.name.replace(/^\\/, '');
         }
       }
@@ -287,6 +289,7 @@ class TranslationParser {
           'catches',
           'children',
           'expr',
+          'expression',
           'trueExpr',
           'falseExpr',
           'ifnull',
