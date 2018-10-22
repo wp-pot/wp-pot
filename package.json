@@ -33,7 +33,7 @@
   "dependencies": {
     "matched": "^3.0.1",
     "path-sort": "^0.1.0",
-    "php-parser": "3.0.0-prerelease.5"
+    "php-parser": "3.0.0-prerelease.6"
   },
   "devDependencies": {
     "eslint": "^5.5.0",
