@@ -290,6 +290,7 @@ class TranslationParser {
           'children',
           'expr',
           'expression',
+          'expressions',
           'trueExpr',
           'falseExpr',
           'ifnull',
