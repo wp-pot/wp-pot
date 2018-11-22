@@ -1,6 +1,6 @@
 {
   "name": "wp-pot",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "Generate pot-files for WordPress localization",
   "main": "index.js",
   "scripts": {
