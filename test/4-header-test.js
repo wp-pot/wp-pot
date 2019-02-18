@@ -1,5 +1,5 @@
 /* eslint-env node, mocha */
-/* global before, after, describe, it */
+/* global describe, it */
 'use strict';
 
 const assert = require('assert');
