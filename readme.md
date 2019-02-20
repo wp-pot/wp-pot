@@ -2,7 +2,7 @@
 
 ## Information
 
-[![npm version](https://badge.fury.io/js/wp-pot.svg)](https://www.npmjs.com/package/wp-pot) [![Build Status](https://travis-ci.org/rasmusbe/wp-pot.svg?branch=master)](https://travis-ci.org/rasmusbe/wp-pot) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/?branch=master)
+[![npm version](https://badge.fury.io/js/wp-pot.svg)](https://www.npmjs.com/package/wp-pot) [![Build Status](https://travis-ci.com/rasmusbe/wp-pot.svg?branch=master)](https://travis-ci.org/rasmusbe/wp-pot) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/?branch=master)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frasmusbe%2Fwp-pot.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Frasmusbe%2Fwp-pot?ref=badge_shield)
 
 | Package     | wp-pot                                               |
