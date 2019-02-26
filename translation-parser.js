@@ -40,10 +40,10 @@ class TranslationParser {
 
           if (match) {
             headers.splice(index, 1);
-            const headerValue = match[ 1 ].replace(/\s*(?:\*\/|\?>).*/, '').trim();
+            const headerValue = match[1].replace(/\s*(?:\*\/|\?>).*/, '').trim();
 
             const translationCall = {
-              args: [ headerValue ],
+              args: [headerValue],
               filename,
               line: line + 1,
               method: ''
@@ -139,7 +139,7 @@ class TranslationParser {
    * @return {number}
    */
   getContextPos (method) {
-    return this.options.functionCalls.contextPosition[ method ] - 1;
+    return this.options.functionCalls.contextPosition[method] - 1;
   }
 
   /**
@@ -151,7 +151,7 @@ class TranslationParser {
   generateTranslationObject (translationCall) {
     const translationObject = {
       info: `${translationCall.filename}:${translationCall.line}`,
-      msgid: translationCall.args[ 0 ],
+      msgid: translationCall.args[0],
       comment: []
     };
 
@@ -160,12 +160,12 @@ class TranslationParser {
     }
 
     if (this.isPlural(translationCall.method)) {
-      translationObject.msgid_plural = translationCall.args[ 1 ];
+      translationObject.msgid_plural = translationCall.args[1];
     }
 
     if (this.hasContext(translationCall.method)) {
       const contextKey = this.getContextPos(translationCall.method);
-      translationObject.msgctxt = translationCall.args[ contextKey ];
+      translationObject.msgctxt = translationCall.args[contextKey];
     }
 
     return translationObject;
@@ -191,17 +191,17 @@ class TranslationParser {
       const translationObject = this.generateTranslationObject(translationCall);
 
       const translationKey = TranslationParser.generateTranslationKey(translationObject);
-      if (!this.translations[ translationKey ]) {
-        this.translations[ translationKey ] = translationObject;
+      if (!this.translations[translationKey]) {
+        this.translations[translationKey] = translationObject;
       } else {
-        this.translations[ translationKey ].info += `, ${translationObject.info}`;
+        this.translations[translationKey].info += `, ${translationObject.info}`;
 
         if (translationObject.msgid_plural) {
-          this.translations[ translationKey ].msgid_plural = translationObject.msgid_plural;
+          this.translations[translationKey].msgid_plural = translationObject.msgid_plural;
         }
 
         if (translationObject.comment[0]) {
-          this.translations[ translationKey ].comment.push(translationObject.comment[0]);
+          this.translations[translationKey].comment.push(translationObject.comment[0]);
         }
       }
     }
@@ -234,6 +234,31 @@ class TranslationParser {
   }
 
   /**
+   * Check if ast is a valid function call
+   *
+   * @param {object} ast
+   *
+   * @return {string|null}
+   */
+  validFunctionCall (ast) {
+    if (ast.kind === 'call') {
+      let methodName = ast.what.name;
+
+      if (ast.what.kind === 'propertylookup' && ast.what.what.kind === 'variable') {
+        methodName = ['$', ast.what.what.name, '->', ast.what.offset.name].join('');
+      } else if ((ast.what.kind === 'identifier' || ast.what.kind === 'classreference') && (ast.what.resolution === 'qn' || ast.what.resolution === 'fqn')) {
+        methodName = ast.what.name.replace(/^\\/, '');
+      }
+
+      if (this.options.functionCalls.valid.indexOf(methodName) !== -1) {
+        return methodName;
+      }
+    }
+
+    return null;
+  }
+
+  /**
    * Parse the AST code tree
    *
    * @param {object} ast
@@ -254,62 +279,54 @@ class TranslationParser {
       for (const child of ast) {
         this.parseCodeTree(child, filename);
       }
-    } else {
-      let methodName = '';
-      if (ast.kind === 'call') {
-        methodName = ast.what.name;
+      return;
+    }
 
-        if (ast.what.kind === 'propertylookup' && ast.what.what.kind === 'variable') {
-          methodName = [ '$', ast.what.what.name, '->', ast.what.offset.name ].join('');
-        } else if ((ast.what.kind === 'identifier' || ast.what.kind === 'classreference') && (ast.what.resolution === 'qn' || ast.what.resolution === 'fqn')) {
-          methodName = ast.what.name.replace(/^\\/, '');
-        }
+    const methodName = this.validFunctionCall(ast);
+
+    if (methodName) {
+      const args = TranslationParser.parseArguments(ast.arguments);
+
+      if (!this.options.domain || this.options.domain === args[args.length - 1]) {
+        const translationCall = {
+          args,
+          filename,
+          line: ast.loc.start.line,
+          method: methodName,
+          comment: this.getComment(ast.loc.start.line)
+        };
+
+        this.addTranslation(translationCall);
       }
+    } else {
+      // List can not be in alphabetic order, otherwise it will not be ordered by occurence in code.
+      const childrenContainingCalls = [
+        'arguments',
+        'body',
+        'alternate',
+        'catches',
+        'children',
+        'expr',
+        'expression',
+        'expressions',
+        'trueExpr',
+        'falseExpr',
+        'ifnull',
+        'inner',
+        'items',
+        'key',
+        'left',
+        'right',
+        'source',
+        'status',
+        'test',
+        'value',
+        'what'
+      ];
 
-      if (ast.kind === 'call' && this.options.functionCalls.valid.indexOf(methodName) !== -1) {
-        const args = TranslationParser.parseArguments(ast.arguments);
-
-        if (!this.options.domain || this.options.domain === args[ args.length - 1 ]) {
-          const translationCall = {
-            args,
-            filename,
-            line: ast.loc.start.line,
-            method: methodName,
-            comment: this.getComment(ast.loc.start.line)
-          };
-
-          this.addTranslation(translationCall);
-        }
-      } else {
-        // List can not be in alphabetic order, otherwise it will not be ordered by occurence in code.
-        const childrenContainingCalls = [
-          'arguments',
-          'body',
-          'alternate',
-          'catches',
-          'children',
-          'expr',
-          'expression',
-          'expressions',
-          'trueExpr',
-          'falseExpr',
-          'ifnull',
-          'inner',
-          'items',
-          'key',
-          'left',
-          'right',
-          'source',
-          'status',
-          'test',
-          'value',
-          'what'
-        ];
-
-        for (const child of childrenContainingCalls) {
-          if (ast[ child ]) {
-            this.parseCodeTree(ast[ child ], filename);
-          }
+      for (const child of childrenContainingCalls) {
+        if (ast[child]) {
+          this.parseCodeTree(ast[child], filename);
         }
       }
     }
@@ -334,10 +351,10 @@ class TranslationParser {
     const filename = path.relative(this.options.relativeTo || path.dirname(this.options.destFile || __filename), filePath).replace(/\\/g, '/');
 
     if (this.options.metadataFile === filename) {
-      this.parseFileHeader([ 'Plugin Name', 'Theme Name', 'Description', 'Author', 'Author URI', 'Plugin URI', 'Theme URI' ], filecontent, filename);
+      this.parseFileHeader(['Plugin Name', 'Theme Name', 'Description', 'Author', 'Author URI', 'Plugin URI', 'Theme URI'], filecontent, filename);
     }
 
-    this.parseFileHeader([ 'Template Name' ], filecontent, filename);
+    this.parseFileHeader(['Template Name'], filecontent, filename);
 
     // Skip file if no translation functions is found
     const validFunctionsInFile = new RegExp(this.options.functionCalls.valid.join('|').replace('$', '\\$'));
