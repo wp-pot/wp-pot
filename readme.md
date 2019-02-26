@@ -2,8 +2,8 @@
 
 ## Information
 
-[![npm version](https://badge.fury.io/js/wp-pot.svg)](https://www.npmjs.com/package/wp-pot) [![Build Status](https://circleci.com/gh/rasmusbe/wp-pot/tree/master.svg?style=svg)](https://circleci.com/gh/rasmusbe/wp-pot/tree/master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/?branch=master)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frasmusbe%2Fwp-pot.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Frasmusbe%2Fwp-pot?ref=badge_shield)
+[![Build Status](https://circleci.com/gh/rasmusbe/wp-pot/tree/master.svg?style=svg)](https://circleci.com/gh/rasmusbe/wp-pot/tree/master) [![npm version](https://badge.fury.io/js/wp-pot.svg)](https://www.npmjs.com/package/wp-pot) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/?branch=master)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frasmusbe%2Fwp-pot.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Frasmusbe%2Fwp-pot?ref=badge_shield) [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/rasmusbe/wp-pot.svg)](http://isitmaintained.com/project/rasmusbe/wp-pot "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/rasmusbe/wp-pot.svg)](http://isitmaintained.com/project/rasmusbe/wp-pot "Percentage of issues still open")
 
 | Package     | wp-pot                                               |
 | ----------- | ---------------------------------------------------- |
