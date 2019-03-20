@@ -82,6 +82,10 @@ wpPot({
   Description: Glob or globs to match files
   Type: `string|array`
   Default: `**/*.php`
+- `globOpts`
+  Description: [node-glob options](https://github.com/isaacs/node-glob#options) object to be passed through.
+  Type: `Object`
+  Default: `{}`
 - `team`
   Description: Name and email address of the translation team (ex: `Team <team@example.com> `).
   Type: `string`
