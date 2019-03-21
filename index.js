@@ -18,6 +18,7 @@ const PotMaker = require('./pot-maker');
 function setDefaultOptions (options) {
   const defaultOptions = {
     src: '**/*.php',
+    globOpts: {},
     destFile: 'translations.pot',
     commentKeyword: 'translators:',
     headers: {
@@ -162,7 +163,7 @@ function wpPot (options) {
   options = setDefaultOptions(options);
 
   // Find and sort file paths
-  const files = pathSort(matched.sync(options.src));
+  const files = pathSort(matched.sync(options.src, options.globOpts));
 
   // Parse files
   for (const file of files) {
