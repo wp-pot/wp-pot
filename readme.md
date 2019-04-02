@@ -107,4 +107,4 @@ wpPot({
 MIT © [Rasmus Bengtsson](https://github.com/rasmusbe)
 
 
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frasmusbe%2Fwp-pot.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frasmusbe%2Fwp-pot?ref=badge_large)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frasmusbe%2Fwp-pot.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frasmusbe%2Fwp-pot?ref=badge_large) [![Greenkeeper badge](https://badges.greenkeeper.io/rasmusbe/wp-pot.svg)](https://greenkeeper.io/)
