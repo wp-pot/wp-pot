@@ -14,6 +14,7 @@ const assert = require('assert');
  * @param context
  * @return {boolean}
  */
+
 function verifyLanguageBlock (potContents, comment, fileinfo, msgid, plural, context) {
   const blocks = potContents.split('\n\n');
 

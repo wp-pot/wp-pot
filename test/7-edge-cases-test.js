@@ -83,6 +83,14 @@ describe('Edge cases function tests', () => {
   it('should handle methods with root namespace', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':34', 'With root namespace', false, false));
   });
+
+  it('should not include strings that are variables', () => {
+    // https://github.com/rasmusbe/wp-pot/issues/72
+    assert(!testHelper.verifyLanguageBlock(potContents, false, false, '$object->ignoreThis', false, false));
+    assert(!testHelper.verifyLanguageBlock(potContents, false, false, false, '$object->ignoreThis', false));
+    assert(!testHelper.verifyLanguageBlock(potContents, false, false, '$ignoreThis', false));
+    assert(!testHelper.verifyLanguageBlock(potContents, false, false, false, '$ignoreThis', false, false));
+  });
 });
 
 describe('Namespace edge cases', () => {
