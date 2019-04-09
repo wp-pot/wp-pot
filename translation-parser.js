@@ -258,6 +258,18 @@ class TranslationParser {
     return null;
   }
 
+  validArgs (methodName, args) {
+    if (args[0] && args[0].kind !== 'string') {
+      return false;
+    }
+
+    if (this.isPlural(methodName) && args[1] && args[1].kind !== 'string') {
+      return false;
+    }
+
+    return true;
+  }
+
   /**
    * Parse the AST code tree
    *
@@ -287,7 +299,7 @@ class TranslationParser {
     if (methodName) {
       const args = TranslationParser.parseArguments(ast.arguments);
 
-      if (!this.options.domain || this.options.domain === args[args.length - 1]) {
+      if ((!this.options.domain || this.options.domain === args[args.length - 1]) && this.validArgs(methodName, ast.arguments)) {
         const translationCall = {
           args,
           filename,

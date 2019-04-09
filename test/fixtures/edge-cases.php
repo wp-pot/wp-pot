@@ -32,3 +32,9 @@ die( __('Exit message', 'testdomain') );
 try{ $a = esc_html__("Text within try", "testdomain"); } catch ( Exception $e) { $b = esc_html__("Text within catch", "testdomain"); }
 
 \_e('With root namespace', 'testdomain');
+
+__($object->ignoreThis, 'testdomain');
+_n('Ignore when argument is variable', $object->ignoreThis, 1, 'testdomain');
+
+_($ignoreThis, 'testdomain');
+_n('Ignore when argument is variable', $ignoreThis, 1, 'testdomain');
