@@ -31,7 +31,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "matched": "^3.0.1",
+    "matched": "^4.0.0",
     "path-sort": "^0.1.0",
     "php-parser": "^3.0.0-prerelease.8"
   },
