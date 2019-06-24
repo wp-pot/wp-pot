@@ -8,7 +8,7 @@
     "test-cs": "eslint .",
     "fix-cs": "eslint --fix .",
     "test-mocha": "mocha",
-    "cover": "istanbul cover --report clover --report lcov _mocha"
+    "cover": "nyc --reporter clover npm run test-mocha"
   },
   "keywords": [
     "pot",
@@ -43,7 +43,7 @@
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-standard": "^4.0.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^6.1.4"
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1"
   }
 }
