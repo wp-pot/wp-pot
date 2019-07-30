@@ -68,10 +68,10 @@ function setDefaultOptions (options) {
     functionCalls.valid.push(methodObject.name);
 
     if (methodObject.plural) {
-      functionCalls.pluralPosition[ methodObject.name ] = methodObject.plural;
+      functionCalls.pluralPosition[methodObject.name] = methodObject.plural;
     }
     if (methodObject.context) {
-      functionCalls.contextPosition[ methodObject.name ] = methodObject.context;
+      functionCalls.contextPosition[methodObject.name] = methodObject.context;
     }
   });
 
@@ -122,19 +122,19 @@ function setHeaders (options) {
   }
 
   if (options.bugReport) {
-    options.headers[ 'Report-Msgid-Bugs-To' ] = options.bugReport;
+    options.headers['Report-Msgid-Bugs-To'] = options.bugReport;
   }
 
   if (options.lastTranslator) {
-    options.headers[ 'Last-Translator' ] = options.lastTranslator;
+    options.headers['Last-Translator'] = options.lastTranslator;
   }
 
   if (options.team) {
-    options.headers[ 'Language-Team' ] = options.team;
+    options.headers['Language-Team'] = options.team;
   }
 
-  if (options.defaultHeaders && !options.headers.hasOwnProperty('X-Poedit-KeywordsList')) {
-    options.headers[ 'X-Poedit-KeywordsList' ] = keywordsListStrings(options.gettextFunctions).join(';');
+  if (options.defaultHeaders && !Object.prototype.hasOwnProperty.call(options.headers, 'X-Poedit-KeywordsList')) {
+    options.headers['X-Poedit-KeywordsList'] = keywordsListStrings(options.gettextFunctions).join(';');
   }
 
   return options;

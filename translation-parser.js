@@ -117,7 +117,7 @@ class TranslationParser {
    * @return {boolean}
    */
   isPlural (method) {
-    return this.options.functionCalls.pluralPosition.hasOwnProperty(method);
+    return Object.prototype.hasOwnProperty.call(this.options.functionCalls.pluralPosition, method);
   }
 
   /**
@@ -128,7 +128,7 @@ class TranslationParser {
    * @return {boolean}
    */
   hasContext (method) {
-    return this.options.functionCalls.contextPosition.hasOwnProperty(method);
+    return Object.prototype.hasOwnProperty.call(this.options.functionCalls.contextPosition, method);
   }
 
   /**
