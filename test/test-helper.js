@@ -32,7 +32,7 @@ function verifyLanguageBlock (potContents, comment, fileinfo, msgid, plural, con
     }
 
     // Check if correct file
-    if (fileinfo && blocklines[ commentLines.length ].indexOf(fileinfo) === -1) {
+    if (fileinfo && blocklines[commentLines.length].indexOf(fileinfo) === -1) {
       continue;
     }
 

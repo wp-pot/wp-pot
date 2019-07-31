@@ -50,7 +50,7 @@ class PotMaker {
         for (let rowId = 0; rowId < rows.length; rowId++) {
           const lineBreak = rowId === (rows.length - 1) ? '' : '\\n';
 
-          output.push(`"${rows[ rowId ] + lineBreak}"`);
+          output.push(`"${rows[rowId] + lineBreak}"`);
         }
       } else {
         output.push(`${idKey} "${msgid}"`);
@@ -68,9 +68,9 @@ class PotMaker {
    */
   static getPotMsgStr (plural) {
     if (!plural) {
-      return [ 'msgstr ""\n' ];
+      return ['msgstr ""\n'];
     } else {
-      return [ 'msgstr[0] ""', 'msgstr[1] ""\n' ];
+      return ['msgstr[0] ""', 'msgstr[1] ""\n'];
     }
   }
 
@@ -88,26 +88,26 @@ class PotMaker {
 
     if (translations) {
       for (const translationElement of Object.keys(translations)) {
-        if (translations[ translationElement ].comment) {
-          for (const comment of translations[ translationElement ].comment) {
+        if (translations[translationElement].comment) {
+          for (const comment of translations[translationElement].comment) {
             output.push(`#. ${comment}`);
           }
         }
 
         if (!noFilePaths) {
           // Unify paths for Unix and Windows
-          output.push(`#: ${translations[ translationElement ].info.replace(/\\/g, '/')}`);
+          output.push(`#: ${translations[translationElement].info.replace(/\\/g, '/')}`);
         }
 
-        if (translations[ translationElement ].msgctxt) {
-          output.push(`msgctxt "${PotMaker.escapeQuotes(translations[ translationElement ].msgctxt)}"`);
+        if (translations[translationElement].msgctxt) {
+          output.push(`msgctxt "${PotMaker.escapeQuotes(translations[translationElement].msgctxt)}"`);
         }
 
-        output = output.concat(PotMaker.getPotMsgId(translations[ translationElement ].msgid));
+        output = output.concat(PotMaker.getPotMsgId(translations[translationElement].msgid));
 
-        output = output.concat(PotMaker.getPotMsgId(translations[ translationElement ].msgid_plural, true));
+        output = output.concat(PotMaker.getPotMsgId(translations[translationElement].msgid_plural, true));
 
-        output = output.concat(PotMaker.getPotMsgStr(Boolean(translations[ translationElement ].msgid_plural)));
+        output = output.concat(PotMaker.getPotMsgStr(Boolean(translations[translationElement].msgid_plural)));
       }
     }
 
@@ -121,7 +121,7 @@ class PotMaker {
    */
   sortObject (obj) {
     return Object.keys(obj).sort().reduce(function (result, key) {
-      result[ key ] = obj[ key ];
+      result[key] = obj[key];
       return result;
     }, {});
   }
@@ -150,7 +150,7 @@ msgstr ""
       this.options.headers = this.sortObject(this.options.headers);
 
       for (const key of Object.keys(this.options.headers)) {
-        contents += `"${key}: ${this.options.headers[ key ]}\\n"\n`;
+        contents += `"${key}: ${this.options.headers[key]}\\n"\n`;
       }
     }
 

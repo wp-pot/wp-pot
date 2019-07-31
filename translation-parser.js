@@ -12,6 +12,11 @@ const parser = new Engine({
   }
 });
 
+function objectHas (obj, key) {
+  if (!obj || typeof obj !== 'object') return false;
+  return Object.prototype.hasOwnProperty.call(obj, key);
+}
+
 class TranslationParser {
   constructor (options) {
     this.options = options;
@@ -110,28 +115,6 @@ class TranslationParser {
   }
 
   /**
-   * Determine if `key` is plural or not.
-   *
-   * @param  {string} method
-   *
-   * @return {boolean}
-   */
-  isPlural (method) {
-    return this.options.functionCalls.pluralPosition.hasOwnProperty(method);
-  }
-
-  /**
-   * Determine if `key` has context or not.
-   *
-   * @param  {string} method
-   *
-   * @return {boolean}
-   */
-  hasContext (method) {
-    return this.options.functionCalls.contextPosition.hasOwnProperty(method);
-  }
-
-  /**
    * Get context argument position
    *
    * @param {string} method
@@ -159,11 +142,11 @@ class TranslationParser {
       translationObject.comment.push(this.options.commentKeyword + translationCall.comment);
     }
 
-    if (this.isPlural(translationCall.method)) {
+    if (objectHas(this.options.functionCalls.pluralPosition, translationCall.method)) {
       translationObject.msgid_plural = translationCall.args[1];
     }
 
-    if (this.hasContext(translationCall.method)) {
+    if (objectHas(this.options.functionCalls.contextPosition, translationCall.method)) {
       const contextKey = this.getContextPos(translationCall.method);
       translationObject.msgctxt = translationCall.args[contextKey];
     }
@@ -263,7 +246,7 @@ class TranslationParser {
       return false;
     }
 
-    if (this.isPlural(methodName) && args[1] && args[1].kind !== 'string') {
+    if (objectHas(this.options.functionCalls.pluralPosition, methodName) && args[1] && args[1].kind !== 'string') {
       return false;
     }
 
