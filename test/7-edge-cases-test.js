@@ -84,7 +84,7 @@ describe('Edge cases function tests', () => {
   });
 
   it('should not include strings that are variables', () => {
-    // https://github.com/rasmusbe/wp-pot/issues/72
+    // https://github.com/wp-pot/wp-pot/issues/72
     assert(!testHelper.verifyLanguageBlock(potContents, false, false, '$object->ignoreThis', false, false));
     assert(!testHelper.verifyLanguageBlock(potContents, false, false, false, '$object->ignoreThis', false));
     assert(!testHelper.verifyLanguageBlock(potContents, false, false, '$ignoreThis', false));
@@ -93,7 +93,7 @@ describe('Edge cases function tests', () => {
 });
 
 describe('Namespace edge cases', () => {
-  // https://github.com/rasmusbe/wp-pot/issues/3
+  // https://github.com/wp-pot/wp-pot/issues/3
   const fixturePath = 'test/fixtures/mixed-namespaces.php';
   it('should not die when using multiple namespaces in a file', () => {
     const potContents = wpPot({

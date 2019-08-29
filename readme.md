@@ -2,8 +2,8 @@
 
 ## Information
 
-[![Build Status](https://circleci.com/gh/rasmusbe/wp-pot/tree/master.svg?style=svg)](https://circleci.com/gh/rasmusbe/wp-pot/tree/master) [![npm version](https://badge.fury.io/js/wp-pot.svg)](https://www.npmjs.com/package/wp-pot) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/rasmusbe/wp-pot/?branch=master)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frasmusbe%2Fwp-pot.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Frasmusbe%2Fwp-pot?ref=badge_shield) [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/rasmusbe/wp-pot.svg)](http://isitmaintained.com/project/rasmusbe/wp-pot "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/rasmusbe/wp-pot.svg)](http://isitmaintained.com/project/rasmusbe/wp-pot "Percentage of issues still open") [![Greenkeeper badge](https://badges.greenkeeper.io/rasmusbe/wp-pot.svg)](https://greenkeeper.io/)
+[![Build Status](https://circleci.com/gh/wp-pot/wp-pot/tree/master.svg?style=svg)](https://circleci.com/gh/wp-pot/wp-pot/tree/master) [![npm version](https://badge.fury.io/js/wp-pot.svg)](https://www.npmjs.com/package/wp-pot) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wp-pot/wp-pot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wp-pot/wp-pot/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/wp-pot/wp-pot/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/wp-pot/wp-pot/?branch=master)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwp-pot%2Fwp-pot.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwp-pot%2Fwp-pot?ref=badge_shield) [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/wp-pot/wp-pot.svg)](http://isitmaintained.com/project/wp-pot/wp-pot "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/wp-pot/wp-pot.svg)](http://isitmaintained.com/project/wp-pot/wp-pot "Percentage of issues still open") [![Greenkeeper badge](https://badges.greenkeeper.io/wp-pot/wp-pot.svg)](https://greenkeeper.io/)
 
 | Package     | wp-pot                                               |
 | ----------- | ---------------------------------------------------- |
@@ -102,8 +102,8 @@ wpPot({
 
 ## Related
 - [php-parser](https://github.com/glayzzle/php-parser) - NodeJS PHP Parser used in this project
-- [gulp-wp-pot](https://github.com/rasmusbe/gulp-wp-pot) - Run wp-pot via gulp
-- [wp-pot-cli](https://github.com/rasmusbe/wp-pot-cli) - Run wp-pot via cli command
+- [gulp-wp-pot](https://github.com/wp-pot/gulp-wp-pot) - Run wp-pot via gulp
+- [wp-pot-cli](https://github.com/wp-pot/wp-pot-cli) - Run wp-pot via cli command
 
 
 ## License
@@ -111,4 +111,4 @@ wpPot({
 MIT © [Rasmus Bengtsson](https://github.com/rasmusbe)
 
 
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frasmusbe%2Fwp-pot.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frasmusbe%2Fwp-pot?ref=badge_large)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwp-pot%2Fwp-pot.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwp-pot%2Fwp-pot?ref=badge_large)

@@ -4,7 +4,7 @@ Everyone is welcome to contribute with patches, bug-fixes and new features.
 
 ## Ideas
 
-If you have a idea the easiest way is to create a [issue](https://github.com/rasmusbe/wp-pot/issues).
+If you have a idea the easiest way is to create a [issue](https://github.com/wp-pot/wp-pot/issues).
 
 ## Bugs
 
@@ -20,12 +20,12 @@ Good pull requests with patches, improvements or new features is always welcome.
 
 **Please follow** the projects code style. The project code should be following the code style that is based on [JavaScript Standard Style](https://standardjs.com/#the-rules) but with semicolons (semistandard).
 
-* Fork [wp-pot](https://github.com/rasmusbe/wp-pot) on Github and add the upstream remote.
+* Fork [wp-pot](https://github.com/wp-pot/wp-pot) on Github and add the upstream remote.
 
 ```
 git clone https://github.com/<your-username>/wp-pot.git
 cd wp-pot
-git remote add upstream https://github.com/rasmusbe/wp-pot.git
+git remote add upstream https://github.com/wp-pot/wp-pot.git
 ```
 
 This is useful if you cloned your repo a while ago and you now want to updated it.
@@ -62,4 +62,4 @@ If you are making several changes at once please divide them into multiple pull 
 
 ## License
 
-By contributing your code, you agree to license your contribution under the [MIT license](https://github.com/rasmusbe/wp-pot/blob/master/license).
+By contributing your code, you agree to license your contribution under the [MIT license](https://github.com/wp-pot/wp-pot/blob/master/license).

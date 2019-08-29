@@ -55,7 +55,7 @@ describe('Comment tests', () => {
 
     assert(testHelper.verifyLanguageBlock(potContents, 'Other keyword: This is a comment to the translator', fixturePath + ':23', 'Comment with other keyword', false, false));
 
-    // https://github.com/rasmusbe/wp-pot/issues/39
+    // https://github.com/wp-pot/wp-pot/issues/39
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':44', 'Multiple comments for same id', false, false));
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':47', 'Multiple comments for same id', false, false));
   });
@@ -102,7 +102,7 @@ describe('File comment tests', () => {
 
 describe('Comment edge cases', () => {
   it('Edge case with missing comment', () => {
-    // https://github.com/rasmusbe/wp-pot/issues/29#issuecomment-384191855
+    // https://github.com/wp-pot/wp-pot/issues/29#issuecomment-384191855
 
     const fixturePath = 'test/fixtures/missing-comment.php';
     const potContents = wpPot({
