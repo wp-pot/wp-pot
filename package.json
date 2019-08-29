@@ -15,7 +15,9 @@
     "wordpress",
     "translation"
   ],
-  "repository": "wp-pot/wp-pot",
+  "repository": "https://github.com/wp-pot/wp-pot.git",
+  "homepage": "https://github.com/wp-pot/wp-pot",
+  "bugs": "https://github.com/wp-pot/wp-pot/issues",
   "author": {
     "name": "Rasmus Bengtsson",
     "url": "https://github.com/rasmusbe"
