@@ -45,7 +45,8 @@ function setDefaultOptions (options) {
       { name: 'esc_html__' },
       { name: 'esc_html_e' },
       { name: 'esc_html_x', context: 2 }
-    ]
+    ],
+    ignoreTemplateNameHeader: false
   };
 
   if (options.headers === false) {

@@ -48,4 +48,16 @@ describe('File Headers tests', () => {
 
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'Hello World', false, false));
   });
+
+  it('Skips reading template name headers if skipTemplateNameHeader option true', () => {
+    const fixturePath = 'test/fixtures/template-headers.php';
+
+    const potContents = wpPot({
+      src: fixturePath,
+      writeFile: false,
+      ignoreTemplateNameHeader: true
+    });
+
+    assert.strictEqual(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'Hello World', false, false), false);
+  });
 });

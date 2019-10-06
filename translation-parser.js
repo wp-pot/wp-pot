@@ -349,7 +349,9 @@ class TranslationParser {
       this.parseFileHeader(['Plugin Name', 'Theme Name', 'Description', 'Author', 'Author URI', 'Plugin URI', 'Theme URI'], filecontent, filename);
     }
 
-    this.parseFileHeader(['Template Name'], filecontent, filename);
+    if (!this.options.ignoreTemplateNameHeader) {
+      this.parseFileHeader(['Template Name'], filecontent, filename);
+    }
 
     // Skip file if no translation functions is found
     const validFunctionsInFile = new RegExp(this.options.functionCalls.valid.join('|').replace('$', '\\$'));
