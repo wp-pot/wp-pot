@@ -98,6 +98,10 @@ wpPot({
   Description: Write pot-file to disk. The function always returns the contents as well.
   Type: `boolean`
   Default: `true`
+- `ignoreTemplateNameHeader`
+  Description: Do not extract `/* Template Name: String */` headers to POT file.
+  Type: `boolean`
+  Default: `false`
 
 
 ## Related
