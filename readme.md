@@ -2,7 +2,7 @@
 
 ## Information
 
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wp-pot/wp-pot/Node CI) [![npm version](https://badge.fury.io/js/wp-pot.svg)](https://www.npmjs.com/package/wp-pot) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wp-pot/wp-pot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wp-pot/wp-pot/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/wp-pot/wp-pot/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/wp-pot/wp-pot/?branch=master)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wp-pot/wp-pot/Node%20CI) [![npm version](https://badge.fury.io/js/wp-pot.svg)](https://www.npmjs.com/package/wp-pot) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wp-pot/wp-pot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wp-pot/wp-pot/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/wp-pot/wp-pot/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/wp-pot/wp-pot/?branch=master)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwp-pot%2Fwp-pot.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwp-pot%2Fwp-pot?ref=badge_shield) [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/wp-pot/wp-pot.svg)](http://isitmaintained.com/project/wp-pot/wp-pot "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/wp-pot/wp-pot.svg)](http://isitmaintained.com/project/wp-pot/wp-pot "Percentage of issues still open") [![Greenkeeper badge](https://badges.greenkeeper.io/wp-pot/wp-pot.svg)](https://greenkeeper.io/)
 
 | Package     | wp-pot                                               |
