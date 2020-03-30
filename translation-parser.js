@@ -9,6 +9,9 @@ const parser = new Engine({
   },
   ast: {
     withPositions: true
+  },
+  lexer: {
+    short_tags: true
   }
 });
 
@@ -95,22 +98,19 @@ class TranslationParser {
   static parseArguments (args) {
     const argsArray = [];
     for (const arg of args) {
-      if (arg.inner) {
-        argsArray.push(arg.inner.value);
-      } else if (arg.kind === 'propertylookup') {
+      if (arg.kind === 'propertylookup') {
         argsArray.push(`$${arg.what.name}->${arg.offset.name}`);
       } else if (arg.kind === 'staticlookup') {
         argsArray.push(`$${arg.what.name}::${arg.offset.name}`);
       } else if (arg.kind === 'variable') {
         argsArray.push(`$${arg.name}`);
-      } else if (arg.kind === 'constref') {
-        argsArray.push(`${arg.name.name}`);
-      } else if (arg.kind === 'identifier' && arg.name.kind === 'classreference') {
-        argsArray.push(`${arg.name.name}`);
+      } else if (arg.kind === 'name' && arg.resolution === 'uqn') {
+        argsArray.push(arg.name);
       } else {
         argsArray.push(arg.value);
       }
     }
+
     return argsArray;
   }
 
@@ -229,7 +229,7 @@ class TranslationParser {
 
       if (ast.what.kind === 'propertylookup' && ast.what.what.kind === 'variable') {
         methodName = ['$', ast.what.what.name, '->', ast.what.offset.name].join('');
-      } else if ((ast.what.kind === 'identifier' || ast.what.kind === 'classreference') && (ast.what.resolution === 'qn' || ast.what.resolution === 'fqn')) {
+      } else if (ast.what.kind === 'name' && ast.what.resolution === 'fqn') {
         methodName = ast.what.name.replace(/^\\/, '');
       }
 
@@ -298,25 +298,14 @@ class TranslationParser {
       const childrenContainingCalls = [
         'arguments',
         'body',
-        'alternate',
         'catches',
         'children',
         'expr',
         'expression',
         'expressions',
-        'trueExpr',
-        'falseExpr',
-        'ifnull',
-        'inner',
         'items',
-        'key',
-        'left',
         'right',
-        'source',
-        'status',
-        'test',
-        'value',
-        'what'
+        'value'
       ];
 
       for (const child of childrenContainingCalls) {
