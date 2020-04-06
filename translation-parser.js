@@ -304,6 +304,7 @@ class TranslationParser {
         'expression',
         'expressions',
         'items',
+        'left',
         'right',
         'value'
       ];

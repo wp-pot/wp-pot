@@ -90,6 +90,12 @@ describe('Edge cases function tests', () => {
     assert(!testHelper.verifyLanguageBlock(potContents, false, false, '$ignoreThis', false));
     assert(!testHelper.verifyLanguageBlock(potContents, false, false, false, '$ignoreThis', false, false));
   });
+
+  it('should include strings from concatenated functions', () => {
+    // https://github.com/wp-pot/gulp-wp-pot/issues/108
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':42', 'Concat functions with .', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':42', 'Concat functions with . again', false, false));
+  });
 });
 
 describe('Namespace edge cases', () => {
