@@ -306,7 +306,8 @@ class TranslationParser {
         'items',
         'left',
         'right',
-        'value'
+        'value',
+        'what'
       ];
 
       for (const child of childrenContainingCalls) {
