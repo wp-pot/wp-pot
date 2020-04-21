@@ -22,7 +22,9 @@ someFunction('this', 'is', 'a', 'random', 'function' );
 someFunction( __( 'Translation in function call', 'testdomain' ) );
 echo __( 'Echoed translation', 'testdomain' );
 if  (1 === 1 ): ?>
-	<? _e( 'Method in if block', 'testdomain' ); ?>
+	<? _e( 'Method in if block', 'testdomain' );
+elseif  (2 === 2 ): ?>
+	<? _e( 'Method in elseif block', 'testdomain' ); ?>
 <?php endif;
 return __( 'Returned function', 'testdomain' );
 
@@ -40,3 +42,5 @@ _($ignoreThis, 'testdomain');
 _n('Ignore when argument is variable', $ignoreThis, 1, 'testdomain');
 
 wc_print_notice( apply_filters( 'woocommerce_checkout_coupon_message', esc_html__( 'Concat functions with .', 'testdomain' ) . ' <a href="#" class="showcoupon">' . esc_html__( 'Concat functions with . again', 'testdomain' ) . '</a>' ), 'notice' );
+
+$a = (new ClassName(__('Text in new class parameter', 'testdomain')))->function();

@@ -297,6 +297,7 @@ class TranslationParser {
       // List can not be in alphabetic order, otherwise it will not be ordered by occurence in code.
       const childrenContainingCalls = [
         'arguments',
+        'alternate',
         'body',
         'catches',
         'children',

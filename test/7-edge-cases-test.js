@@ -59,28 +59,32 @@ describe('Edge cases function tests', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':25', 'Method in if block', false, false));
   });
 
+  it('should handle methods in elseif blocks', () => {
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':27', 'Method in elseif block', false, false));
+  });
+
   it('should handle methods in returns', () => {
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':27', 'Returned function', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':29', 'Returned function', false, false));
   });
 
   it('should handle methods in exits', () => {
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':29', 'Exit message', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':31', 'Exit message', false, false));
   });
 
   it('should handle methods in dies', () => {
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':30', 'Exit message', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':32', 'Exit message', false, false));
   });
 
   it('should handle methods in try', () => {
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':32', 'Text within try', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':34', 'Text within try', false, false));
   });
 
   it('should handle methods in catch', () => {
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':32', 'Text within catch', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':34', 'Text within catch', false, false));
   });
 
   it('should handle methods with root namespace', () => {
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':34', 'With root namespace', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':36', 'With root namespace', false, false));
   });
 
   it('should not include strings that are variables', () => {
@@ -93,8 +97,12 @@ describe('Edge cases function tests', () => {
 
   it('should include strings from concatenated functions', () => {
     // https://github.com/wp-pot/gulp-wp-pot/issues/108
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':42', 'Concat functions with .', false, false));
-    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':42', 'Concat functions with . again', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':44', 'Concat functions with .', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':44', 'Concat functions with . again', false, false));
+  });
+
+  it('should include text in new class parameter', () => {
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':46', 'Text in new class parameter', false, false));
   });
 });
 
