@@ -23,7 +23,7 @@
     "url": "https://github.com/rasmusbe"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "files": [
     "index.js",
