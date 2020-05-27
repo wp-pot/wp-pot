@@ -104,6 +104,11 @@ describe('Edge cases function tests', () => {
   it('should include text in new class parameter', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':46', 'Text in new class parameter', false, false));
   });
+
+  it('should include text in ternary statements', () => {
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':48', 'Text in true ternary statements', false, false));
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':49', 'Text in false ternary statements', false, false));
+  });
 });
 
 describe('Namespace edge cases', () => {

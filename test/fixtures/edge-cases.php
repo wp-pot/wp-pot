@@ -44,3 +44,6 @@ _n('Ignore when argument is variable', $ignoreThis, 1, 'testdomain');
 wc_print_notice( apply_filters( 'woocommerce_checkout_coupon_message', esc_html__( 'Concat functions with .', 'testdomain' ) . ' <a href="#" class="showcoupon">' . esc_html__( 'Concat functions with . again', 'testdomain' ) . '</a>' ), 'notice' );
 
 $a = (new ClassName(__('Text in new class parameter', 'testdomain')))->function();
+
+echo ( $bool_flag ) ? esc_html__( 'Text in true ternary statements', 'testdomain' ) : '';
+echo ( $bool_flag ) ? '' : esc_html__( 'Text in false ternary statements', 'testdomain' );
