@@ -348,7 +348,7 @@ class TranslationParser {
     }
 
     // Skip file if no translation functions is found
-    const validFunctionsInFile = new RegExp(this.options.functionCalls.valid.join('|').replace('$', '\\$'));
+    const validFunctionsInFile = new RegExp(this.options.functionCalls.valid.join('|').replace(/\$/g, '\\$'));
 
     if (validFunctionsInFile.test(filecontent)) {
       try {
