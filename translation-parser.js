@@ -20,6 +20,10 @@ function objectHas (obj, key) {
   return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
+function replaceAll (string, search, replace) {
+  return string.split(search).join(replace);
+}
+
 class TranslationParser {
   constructor (options) {
     this.options = options;
@@ -348,7 +352,7 @@ class TranslationParser {
     }
 
     // Skip file if no translation functions is found
-    const validFunctionsInFile = new RegExp(this.options.functionCalls.valid.join('|').replace(/\$/g, '\\$'));
+    const validFunctionsInFile = new RegExp(replaceAll(this.options.functionCalls.valid.join('|'), '$', '\\$'));
 
     if (validFunctionsInFile.test(filecontent)) {
       try {
