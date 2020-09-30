@@ -23,12 +23,12 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - uses: actions/cache@v1
+    - uses: actions/cache@v2
       with:
         path: ~/.npm
-        key: ${{ runner.os }}-${{ matrix.node-version }}-node-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-${{ matrix.node-version }}-node-
+          ${{ runner.os }}-node-
     - name: npm install and test
       run: |
         npm ci
