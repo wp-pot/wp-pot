@@ -311,6 +311,7 @@ class TranslationParser {
         'trueExpr',
         'falseExpr',
         'items',
+        'key',
         'left',
         'right',
         'value',

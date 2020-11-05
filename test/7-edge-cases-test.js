@@ -109,6 +109,10 @@ describe('Edge cases function tests', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':48', 'Text in true ternary statements', false, false));
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':49', 'Text in false ternary statements', false, false));
   });
+
+  it('should include text in array keys', () => {
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':51', 'Translation is in an array key', false, false));
+  });
 });
 
 describe('Namespace edge cases', () => {
