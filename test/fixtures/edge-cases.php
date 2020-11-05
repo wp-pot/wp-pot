@@ -47,3 +47,6 @@ $a = (new ClassName(__('Text in new class parameter', 'testdomain')))->function(
 
 echo ( $bool_flag ) ? esc_html__( 'Text in true ternary statements', 'testdomain' ) : '';
 echo ( $bool_flag ) ? '' : esc_html__( 'Text in false ternary statements', 'testdomain' );
+[
+	__( 'Translation is in an array key', 'testdomain' ) => 'Value',
+];
