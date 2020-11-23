@@ -37,7 +37,7 @@ function verifyLanguageBlock (potContents, comment, fileinfo, msgid, plural, con
     }
 
     // Check if msgid is correct
-    if (msgid && block.indexOf('msgid "' + msgid + '"\n') === -1) {
+    if (block.indexOf('msgid "' + msgid + '"\n') === -1) {
       continue;
     }
 

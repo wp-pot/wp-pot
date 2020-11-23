@@ -41,6 +41,10 @@ describe('Edge cases function tests', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':8', '"\n"New\\n"\n"Line', false, false));
   });
 
+  it('should handle empty strings', () => {
+    assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':53', '', false, false));
+  });
+
   it('should handle plural methods with non-integer value as count', () => {
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':13', 'Singular string', 'Plural string', false));
     assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':14', 'Singular string', 'Plural string', false));
