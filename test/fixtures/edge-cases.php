@@ -50,3 +50,4 @@ echo ( $bool_flag ) ? '' : esc_html__( 'Text in false ternary statements', 'test
 [
 	__( 'Translation is in an array key', 'testdomain' ) => 'Value',
 ];
+__( '', 'testdomain' );

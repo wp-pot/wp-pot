@@ -40,7 +40,7 @@ class PotMaker {
     const output = [];
     const idKey = (plural ? 'msgid_plural' : 'msgid');
 
-    if (msgid) {
+    if (msgid !== undefined) {
       msgid = PotMaker.escapeQuotes(msgid);
 
       if (/\n/.test(msgid)) {
