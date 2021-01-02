@@ -127,7 +127,7 @@ class PotMaker {
   }
 
   /**
-   * Geneate pot contents
+   * Generate pot contents
    *
    * @param {object} translations
    *
