@@ -48,7 +48,6 @@ export class WP_Pot {
 
   public parse(src: string | readonly string[]): WP_Pot {
     const files = globby.sync(src, this.options.globOpts);
-    // todo sort files?
     for (const filename of files) {
       if (
         this.options.php?.extensions?.some((extension) =>

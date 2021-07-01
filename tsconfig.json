@@ -3,7 +3,8 @@
   "outDir": "dist",
   "compilerOptions": {
     "declaration": true,
-    "outDir": "lib",
+    "sourceMap": true,
+    "outDir": "dist",
     "stripInternal": true,
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true

@@ -3,13 +3,11 @@
   "version": "1.9.9",
   "description": "Generate pot-files for WordPress localization",
   "scripts": {
-    "build": "pine build",
-    "cover": "nyc --reporter clover npm run test-mocha",
-    "fix-cs": "eslint src --ext .ts --fix",
-    "prepublishOnly": "npm run build",
-    "test-cs": "eslint src test --ext .ts",
-    "test-mocha": "mocha --require ts-node/register ./test/*.ts",
-    "test": "npm run test-cs && npm run test-mocha"
+    "build": "rimraf dist && tsc",
+    "prepare": "npm run build",
+    "lint": "eslint src test --ext .ts",
+    "mocha": "nyc mocha --require ts-node/register/transpile-only --require source-map-support/register ./test/*.ts",
+    "test": "npm run lint && npm run mocha"
   },
   "keywords": [
     "pot",
@@ -27,11 +25,10 @@
     "node": ">=12"
   },
   "files": [
-    "lib/**/*"
+    "dist/"
   ],
-  "main": "lib/cjs/index.js",
-  "module": "lib/esm/index.js",
-  "types": "lib/types",
+  "main": "dist/index.js",
+  "types": "dist",
   "license": "MIT",
   "dependencies": {
     "globby": "^11.0.3",
@@ -47,9 +44,25 @@
     "esbuild": "^0.11.23",
     "eslint": "^7.25.0",
     "mocha": "^8.3.2",
-    "nyc": "15.1.0",
+    "nyc": "^15.1.0",
     "rimraf": "^3.0.2",
+    "source-map-support": "^0.5.19",
     "ts-node": "^10.0.0",
     "typescript": "^4.2.4"
+  },
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "exclude": [
+      "**/*.d.ts",
+      "coverage",
+      "test"
+    ],
+    "reporter": [
+      "html"
+    ],
+    "all": true
   }
 }
