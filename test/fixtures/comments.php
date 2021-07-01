@@ -40,6 +40,9 @@ $message = sprintf(
 	__( 'translation inside sprintf', 'testdomain' )
 );
 
+// First one is missing a translators comment
+__('Multiple comments for same id', 'testdomain');
+
 // translators: This is comment 1
 __('Multiple comments for same id', 'testdomain');
 
