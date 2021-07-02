@@ -1,118 +1,111 @@
-/* eslint-env node, mocha */
-"use strict";
-
-import { strict as assert } from "assert";
+import test from "ava";
 import { WP_Pot } from "../src/index";
-import { describe, it } from "mocha";
-import { verifyLanguageBlock } from "./test-helper";
+import { verifyLanguageBlock } from "./helpers/test-helper";
 
-describe("File Headers tests", () => {
-  it("Can read theme headers", () => {
-    const fixturePath = "test/fixtures/theme-headers.php";
+test("Read theme headers", (t) => {
+  const fixturePath = "test/fixtures/theme-headers.php";
 
-    const potContents = new WP_Pot({ php: { metadataFile: fixturePath } })
-      .parse(fixturePath)
-      .generatePot();
+  const potContents = new WP_Pot({ php: { metadataFile: fixturePath } })
+    .parse(fixturePath)
+    .generatePot();
 
-    assert(
-      verifyLanguageBlock(potContents, {
-        fileinfo: fixturePath + ":3",
-        msgid: "Test Theme",
-      })
-    );
-    assert(
-      verifyLanguageBlock(potContents, {
-        fileinfo: fixturePath + ":4",
-        msgid: "Rasmus Bengtsson",
-      })
-    );
-    assert(
-      verifyLanguageBlock(potContents, {
-        fileinfo: fixturePath + ":5",
-        msgid: "Test Description",
-      })
-    );
-    assert(
-      verifyLanguageBlock(potContents, {
-        fileinfo: fixturePath + ":6",
-        msgid: "http://www.example.org",
-      })
-    );
-    assert(
-      verifyLanguageBlock(potContents, {
-        fileinfo: fixturePath + ":7",
-        msgid: "http://www.example.com",
-      })
-    );
-  });
+  t.true(
+    verifyLanguageBlock(potContents, {
+      fileinfo: fixturePath + ":3",
+      msgid: "Test Theme",
+    })
+  );
+  t.true(
+    verifyLanguageBlock(potContents, {
+      fileinfo: fixturePath + ":4",
+      msgid: "Rasmus Bengtsson",
+    })
+  );
+  t.true(
+    verifyLanguageBlock(potContents, {
+      fileinfo: fixturePath + ":5",
+      msgid: "Test Description",
+    })
+  );
+  t.true(
+    verifyLanguageBlock(potContents, {
+      fileinfo: fixturePath + ":6",
+      msgid: "http://www.example.org",
+    })
+  );
+  t.true(
+    verifyLanguageBlock(potContents, {
+      fileinfo: fixturePath + ":7",
+      msgid: "http://www.example.com",
+    })
+  );
+});
 
-  it("Can read plugin headers", () => {
-    const fixturePath = "test/fixtures/plugin-headers.php";
+test("Read plugin headers", (t) => {
+  const fixturePath = "test/fixtures/plugin-headers.php";
 
-    const potContents = new WP_Pot({ php: { metadataFile: fixturePath } })
-      .parse(fixturePath)
-      .generatePot();
+  const potContents = new WP_Pot({ php: { metadataFile: fixturePath } })
+    .parse(fixturePath)
+    .generatePot();
 
-    assert(
-      verifyLanguageBlock(potContents, {
-        fileinfo: fixturePath + ":3",
-        msgid: "Test Plugin",
-      })
-    );
-    assert(
-      verifyLanguageBlock(potContents, {
-        fileinfo: fixturePath + ":4",
-        msgid: "Rasmus Bengtsson",
-      })
-    );
-    assert(
-      verifyLanguageBlock(potContents, {
-        fileinfo: fixturePath + ":5",
-        msgid: "Test Description",
-      })
-    );
-    assert(
-      verifyLanguageBlock(potContents, {
-        fileinfo: fixturePath + ":6",
-        msgid: "http://www.example.org",
-      })
-    );
-    assert(
-      verifyLanguageBlock(potContents, {
-        fileinfo: fixturePath + ":7",
-        msgid: "http://www.example.com",
-      })
-    );
-  });
+  t.true(
+    verifyLanguageBlock(potContents, {
+      fileinfo: fixturePath + ":3",
+      msgid: "Test Plugin",
+    })
+  );
+  t.true(
+    verifyLanguageBlock(potContents, {
+      fileinfo: fixturePath + ":4",
+      msgid: "Rasmus Bengtsson",
+    })
+  );
+  t.true(
+    verifyLanguageBlock(potContents, {
+      fileinfo: fixturePath + ":5",
+      msgid: "Test Description",
+    })
+  );
+  t.true(
+    verifyLanguageBlock(potContents, {
+      fileinfo: fixturePath + ":6",
+      msgid: "http://www.example.org",
+    })
+  );
+  t.true(
+    verifyLanguageBlock(potContents, {
+      fileinfo: fixturePath + ":7",
+      msgid: "http://www.example.com",
+    })
+  );
+});
 
-  it("Can read template name headers", () => {
-    const fixturePath = "test/fixtures/template-headers.php";
+test("Read template name headers", (t) => {
+  const fixturePath = "test/fixtures/template-headers.php";
 
-    const potContents = new WP_Pot({ php: { metadataFile: fixturePath } })
-      .parse(fixturePath)
-      .generatePot();
+  const potContents = new WP_Pot({ php: { metadataFile: fixturePath } })
+    .parse(fixturePath)
+    .generatePot();
 
-    assert(
-      verifyLanguageBlock(potContents, {
-        fileinfo: fixturePath + ":3",
-        msgid: "Hello World",
-      })
-    );
-  });
+  t.true(
+    verifyLanguageBlock(potContents, {
+      fileinfo: fixturePath + ":3",
+      msgid: "Hello World",
+    })
+  );
+});
 
-  it("Skips reading template name headers if skipTemplateNameHeader option true", () => {
-    const fixturePath = "test/fixtures/template-headers.php";
+test("Skip reading template name headers if ignoreTemplateNameHeader option true", (t) => {
+  const fixturePath = "test/fixtures/template-headers.php";
 
-    const potContents = new WP_Pot({ php: { ignoreTemplateNameHeader: true } })
-      .parse(fixturePath)
-      .generatePot();
+  const potContents = new WP_Pot({ php: { ignoreTemplateNameHeader: true } })
+    .parse(fixturePath)
+    .generatePot();
 
-    assert.strictEqual(
-      verifyLanguageBlock(potContents, {
-        fileinfo: fixturePath + ":3",
-        msgid: "Hello World",
-      }),
-      false
-    );
-  });
+  t.false(
+    verifyLanguageBlock(potContents, {
+      fileinfo: fixturePath + ":3",
+      msgid: "Hello World",
+    })
+  );
 });

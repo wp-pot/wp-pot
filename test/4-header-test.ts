@@ -1,92 +1,96 @@
-/* eslint-env node, mocha */
-"use strict";
-
-import { strict as assert } from "assert";
 import { WP_Pot } from "../src/index";
-import { describe, it } from "mocha";
 import { readFileSync } from "fs";
+import anyTest, { TestInterface } from "ava";
+import Observable from "zen-observable";
 
-const defaultHeaders = readFileSync(
-  "test/fixtures/default-headers.txt"
-).toString();
+type Context = {
+  defaultHeaders: string;
+};
 
-describe("Header tests", () => {
-  it("should generate a pot file with default headers when no headers is set", () => {
-    const potContents = new WP_Pot()
-      .parse("test/fixures/empty-dir/*.php")
-      .generatePot();
+const test = anyTest as TestInterface<Context>;
 
-    assert(potContents.indexOf(defaultHeaders) !== -1);
-  });
+test.before((t) => {
+  t.context.defaultHeaders = readFileSync(
+    "test/fixtures/default-headers.txt"
+  ).toString();
+});
 
-  it("should generate a pot file with team, translator or bug report options set", () => {
-    const potContents = new WP_Pot({
-      pot: {
-        bugReport: "http://example.com",
-        lastTranslator: "John Doe <mail@example.com>",
-        team: "Team Team <mail@example.com>",
+test("Generate a pot file with default headers when no headers is set", (t) => {
+  const potContents = new WP_Pot()
+    .parse("test/fixures/empty-dir/*.php")
+    .generatePot();
+
+  t.not(potContents.indexOf(t.context.defaultHeaders), -1);
+});
+
+test("Generate a pot file with team, translator and bug report options set", (t) => {
+  const potContents = new WP_Pot({
+    pot: {
+      bugReport: "http://example.com",
+      lastTranslator: "John Doe <mail@example.com>",
+      team: "Team Team <mail@example.com>",
+    },
+  })
+    .parse("test/fixures/empty-dir/*.php")
+    .generatePot();
+
+  t.not(potContents.indexOf(t.context.defaultHeaders), -1);
+
+  t.not(
+    potContents.indexOf('"Report-Msgid-Bugs-To: http://example.com\\n"\n'),
+    -1
+  );
+
+  t.not(
+    potContents.indexOf('"Last-Translator: John Doe <mail@example.com>\\n"\n'),
+    -1
+  );
+
+  t.not(
+    potContents.indexOf('"Language-Team: Team Team <mail@example.com>\\n"\n'),
+    -1
+  );
+});
+
+test("Generate a pot file with extra headers set", (t) => {
+  const potContents = new WP_Pot({
+    pot: {
+      extraHeaders: {
+        "Report-Msgid-Bugs-To": "http://example.org",
+        "Last-Translator": "John Doe <mail@example.org>",
+        "Language-Team": "Team Team <mail@example.org>",
       },
-    })
-      .parse("test/fixures/empty-dir/*.php")
-      .generatePot();
+    },
+  })
+    .parse("test/fixures/empty-dir/*.php")
+    .generatePot();
 
-    assert(potContents.indexOf(defaultHeaders) !== -1);
-    assert(
-      potContents.indexOf('"Report-Msgid-Bugs-To: http://example.com\\n"\n') !==
-        -1
-    );
-    assert(
-      potContents.indexOf(
-        '"Last-Translator: John Doe <mail@example.com>\\n"\n'
-      ) !== -1
-    );
-    assert(
-      potContents.indexOf(
-        '"Language-Team: Team Team <mail@example.com>\\n"\n'
-      ) !== -1
-    );
-  });
+  t.not(potContents.indexOf(t.context.defaultHeaders), -1);
 
-  it("should generate a pot file with extra headers set", () => {
-    const potContents = new WP_Pot({
-      pot: {
-        extraHeaders: {
-          "Report-Msgid-Bugs-To": "http://example.com",
-          "Last-Translator": "John Doe <mail@example.com>",
-          "Language-Team": "Team Team <mail@example.com>",
-        },
-      },
-    })
-      .parse("test/fixures/empty-dir/*.php")
-      .generatePot();
+  t.not(
+    potContents.indexOf('"Report-Msgid-Bugs-To: http://example.org\\n"\n'),
+    -1
+  );
 
-    assert(potContents.indexOf(defaultHeaders) !== -1);
+  t.not(
+    potContents.indexOf('"Last-Translator: John Doe <mail@example.org>\\n"\n'),
+    -1
+  );
 
-    assert(
-      potContents.indexOf('"Report-Msgid-Bugs-To: http://example.com\\n"\n') !==
-        -1
-    );
-    assert(
-      potContents.indexOf(
-        '"Last-Translator: John Doe <mail@example.com>\\n"\n'
-      ) !== -1
-    );
-    assert(
-      potContents.indexOf(
-        '"Language-Team: Team Team <mail@example.com>\\n"\n'
-      ) !== -1
-    );
-  });
+  t.not(
+    potContents.indexOf('"Language-Team: Team Team <mail@example.org>\\n"\n'),
+    -1
+  );
+});
 
-  it("should generate a pot file without default headers from php file with headers false", () => {
-    const potContents = new WP_Pot({
-      pot: { defaultHeaders: false },
-    })
-      .parse("test/fixures/empty-dir/*.php")
-      .generatePot();
+test("Generate a pot file without default headers", (t) => {
+  const potContents = new WP_Pot({
+    pot: { defaultHeaders: false },
+  })
+    .parse("test/fixures/empty-dir/*.php")
+    .generatePot();
 
-    defaultHeaders.split("\n").forEach(function (line) {
-      assert(potContents.indexOf(line) === -1);
-    });
-  });
+  return Observable.from(t.context.defaultHeaders.split("\n")).map((line) =>
+    t.is(potContents.indexOf(line), -1)
+  );
 });

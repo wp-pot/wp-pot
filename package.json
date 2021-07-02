@@ -6,8 +6,9 @@
     "build": "rimraf dist && tsc",
     "prepare": "npm run build",
     "lint": "eslint src test --ext .ts",
-    "mocha": "nyc mocha --require ts-node/register/transpile-only --require source-map-support/register ./test/*.ts",
-    "test": "npm run lint && npm run mocha"
+    "ava": "ava",
+    "test": "npm run lint && npm run ava",
+    "cover": "rimraf coverage && nyc ava"
   },
   "keywords": [
     "pot",
@@ -35,20 +36,18 @@
     "php-parser": "^3.0.2"
   },
   "devDependencies": {
-    "@pinefile/pine": "^1.0.0-alpha.28",
     "@tsconfig/node12": "^1.0.9",
-    "@types/mocha": "^8.2.2",
     "@types/node": "^15.0.2",
+    "@types/zen-observable": "^0.8.2",
     "@typescript-eslint/eslint-plugin": "^4.22.1",
     "@typescript-eslint/parser": "^4.22.1",
-    "esbuild": "^0.11.23",
+    "ava": "^3.15.0",
     "eslint": "^7.25.0",
-    "mocha": "^8.3.2",
     "nyc": "^15.1.0",
     "rimraf": "^3.0.2",
-    "source-map-support": "^0.5.19",
     "ts-node": "^10.0.0",
-    "typescript": "^4.2.4"
+    "typescript": "^4.2.4",
+    "zen-observable": "^0.8.15"
   },
   "nyc": {
     "extension": [
@@ -64,5 +63,17 @@
       "html"
     ],
     "all": true
+  },
+  "ava": {
+    "files": [
+      "test/*"
+    ],
+    "extensions": [
+      "ts"
+    ],
+    "nodeArguments": [
+      "--loader=ts-node/esm",
+      "--no-warnings"
+    ]
   }
 }

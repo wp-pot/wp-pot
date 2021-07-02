@@ -1,6 +1,6 @@
 "use strict";
 
-import { strict as assert } from "assert";
+import { ExecutionContext } from "ava";
 
 type VerifyLanguageBlockOptions = {
   msgid: string;
@@ -95,6 +95,11 @@ export const verifyLanguageBlock = (
   return false;
 };
 
+export type TestValidFunctionsInput = {
+  potContents: string;
+  fixturePath: string;
+};
+
 /**
  * Test the valid-functions.php file
  * Since this file is used many times its a separate function
@@ -103,106 +108,116 @@ export const verifyLanguageBlock = (
  * @param invert
  */
 export const testValidFunctions = (
-  potContents: string,
-  fixturePath: string,
-  invert = false
+  t: ExecutionContext,
+  input: TestValidFunctionsInput,
+  expected = true
 ): void => {
-  const test: typeof assert["ok"] = (value, message?: string | Error): void => {
-    assert.equal(value, !invert, message);
-  };
-
-  test(
-    verifyLanguageBlock(potContents, {
-      fileinfo: fixturePath + ":2",
+  t.is(
+    verifyLanguageBlock(input.potContents, {
+      fileinfo: `${input.fixturePath}:2`,
       msgid: "Return string",
-    })
+    }),
+    expected
   );
-  test(
-    verifyLanguageBlock(potContents, {
-      fileinfo: fixturePath + ":3",
+  t.is(
+    verifyLanguageBlock(input.potContents, {
+      fileinfo: `${input.fixturePath}:3`,
       msgid: "Print string",
-    })
+    }),
+    expected
   );
-  test(
-    verifyLanguageBlock(potContents, {
-      fileinfo: fixturePath + ":4",
+  t.is(
+    verifyLanguageBlock(input.potContents, {
+      fileinfo: `${input.fixturePath}:4`,
       msgid: "Escape for attribute and return string",
-    })
+    }),
+    expected
   );
-  test(
-    verifyLanguageBlock(potContents, {
-      fileinfo: fixturePath + ":5",
+  t.is(
+    verifyLanguageBlock(input.potContents, {
+      fileinfo: `${input.fixturePath}:5`,
       msgid: "Escape for attribute and print string",
-    })
+    }),
+    expected
   );
-  test(
-    verifyLanguageBlock(potContents, {
-      fileinfo: fixturePath + ":6",
+  t.is(
+    verifyLanguageBlock(input.potContents, {
+      fileinfo: `${input.fixturePath}:6`,
       msgid: "Escape for html and return string",
-    })
+    }),
+    expected
   );
-  test(
-    verifyLanguageBlock(potContents, {
-      fileinfo: fixturePath + ":7",
+  t.is(
+    verifyLanguageBlock(input.potContents, {
+      fileinfo: `${input.fixturePath}:7`,
       msgid: "Escape for html and print string",
-    })
+    }),
+    expected
   );
-  test(
-    verifyLanguageBlock(potContents, {
-      fileinfo: fixturePath + ":8",
+  t.is(
+    verifyLanguageBlock(input.potContents, {
+      fileinfo: `${input.fixturePath}:8`,
       msgid: "Return string with context",
       context: "Some context",
-    })
+    }),
+    expected
   );
-  test(
-    verifyLanguageBlock(potContents, {
-      fileinfo: fixturePath + ":9",
+  t.is(
+    verifyLanguageBlock(input.potContents, {
+      fileinfo: `${input.fixturePath}:9`,
       msgid: "Print string with context",
       context: "Some context",
-    })
+    }),
+    expected
   );
-  test(
-    verifyLanguageBlock(potContents, {
-      fileinfo: fixturePath + ":10",
+  t.is(
+    verifyLanguageBlock(input.potContents, {
+      fileinfo: `${input.fixturePath}:10`,
       msgid: "Escape string with context for attribute",
       context: "Some context",
-    })
+    }),
+    expected
   );
-  test(
-    verifyLanguageBlock(potContents, {
-      fileinfo: fixturePath + ":11",
+  t.is(
+    verifyLanguageBlock(input.potContents, {
+      fileinfo: `${input.fixturePath}:11`,
       msgid: "Escape string with context for html",
       context: "Some context",
-    })
+    }),
+    expected
   );
-  test(
-    verifyLanguageBlock(potContents, {
-      fileinfo: fixturePath + ":12",
+  t.is(
+    verifyLanguageBlock(input.potContents, {
+      fileinfo: `${input.fixturePath}:12`,
       msgid: "Singular string",
       plural: "Plural string",
-    })
+    }),
+    expected
   );
-  test(
-    verifyLanguageBlock(potContents, {
-      fileinfo: fixturePath + ":13",
+  t.is(
+    verifyLanguageBlock(input.potContents, {
+      fileinfo: `${input.fixturePath}:13`,
       msgid: "Singular string with noop",
       plural: "Plural string with noop",
-    })
+    }),
+    expected
   );
-  test(
-    verifyLanguageBlock(potContents, {
-      fileinfo: fixturePath + ":14",
+  t.is(
+    verifyLanguageBlock(input.potContents, {
+      fileinfo: `${input.fixturePath}:14`,
       msgid: "Singular string with context",
       plural: "Plural string with context",
       context: "Some context",
-    })
+    }),
+    expected
   );
-  test(
-    verifyLanguageBlock(potContents, {
-      fileinfo: fixturePath + ":15",
+  t.is(
+    verifyLanguageBlock(input.potContents, {
+      fileinfo: `${input.fixturePath}:15`,
       msgid: "Singular string with noop and context",
       plural: "Plural string with noop and context",
       context: "Some context",
-    })
+    }),
+    expected
   );
 };
