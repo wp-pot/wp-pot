@@ -20,7 +20,7 @@ function setDefaultHeaders(headers, options) {
     'X-Poedit-SearchPathExcluded-0': '*.js'
   }
 
-  return Object.assign({}, defaultHeaders, headers||{})
+  return Object.assign({}, defaultHeaders, headers || {})
 }
 
 /**
@@ -95,7 +95,7 @@ function setDefaultOptions (options) {
   options.functionCalls = functionCalls;
 
   options.headers = setDefaultHeaders(options.headers, options);
-console.log(options.headers)
+
   return options;
 }
 
