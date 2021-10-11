@@ -134,7 +134,7 @@ class PotMaker {
    * @return {string}
    */
   generatePot (translations) {
-    const copyrightText = typeof this.options.copyrightText === 'function' ? this.options.copyrightText(this.options) : this.options.copyrightText
+    const copyrightText = typeof this.options.copyrightText === 'function' ? this.options.copyrightText(this.options) : this.options.copyrightText;
 
     let contents = (
       `${copyrightText}

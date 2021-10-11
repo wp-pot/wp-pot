@@ -8,7 +8,7 @@ const pathSort = require('path-sort');
 const TranslationParser = require('./translation-parser');
 const PotMaker = require('./pot-maker');
 
-function setDefaultHeaders(headers, options) {
+function setDefaultHeaders (headers, options) {
   const defaultHeaders = {
     'Project-Id-Version': options.package,
     'MIME-Version': '1.0',
@@ -18,9 +18,9 @@ function setDefaultHeaders(headers, options) {
     'X-Poedit-SourceCharset': 'UTF-8',
     'X-Poedit-SearchPath-0': '.',
     'X-Poedit-SearchPathExcluded-0': '*.js'
-  }
+  };
 
-  return Object.assign({}, defaultHeaders, headers || {})
+  return Object.assign({}, defaultHeaders, headers || {});
 }
 
 /**
@@ -41,7 +41,7 @@ function setDefaultOptions (options) {
       const year = new Date().getFullYear();
 
       return `# Copyright (C) ${year} ${options.package}
-# This file is distributed under the same license as the ${options.package} package.`
+# This file is distributed under the same license as the ${options.package} package.`;
     },
     defaultHeaders: true,
     noFilePaths: false,
