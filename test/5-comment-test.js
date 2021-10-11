@@ -5,6 +5,11 @@ const assert = require('assert');
 const wpPot = require('../');
 const testHelper = require('./test-helper');
 
+function defaultCopyrightText (name) {
+  return `# Copyright (C) 2021 ${name}
+# This file is distributed under the same license as the ${name} package.`;
+}
+
 describe('File path comment tests', () => {
   it('Can hide file paths', () => {
     const fixturePath = 'test/fixtures/valid-functions.php';
@@ -112,5 +117,41 @@ describe('Comment edge cases', () => {
     });
 
     assert(testHelper.verifyLanguageBlock(potContents, 'translators: 1: current year, 2: site title link.', fixturePath + ':10', '&copy; %1$d %2$s', false, 'site copyright'));
+  });
+});
+
+describe('Copyright comment', () => {
+  it('should work with default copyright text', () => {
+    const potContents = wpPot({
+      src: 'test/fixures/empty-dir/*.php',
+      writeFile: false,
+      package: 'foobar',
+    });
+
+    assert(potContents.indexOf(defaultCopyrightText('foobar')) !== -1);
+  });
+
+  it('should work with custom copyright string', () => {
+    const potContents = wpPot({
+      src: 'test/fixures/empty-dir/*.php',
+      writeFile: false,
+      package: 'foobar',
+      copyrightText: 'Copyright foobar'
+    });
+
+    assert(potContents.indexOf('Copyright foobar') !== -1);
+  });
+
+  it('should work with custom copyright function and options', () => {
+    const potContents = wpPot({
+      src: 'test/fixures/empty-dir/*.php',
+      writeFile: false,
+      package: 'foobar',
+      copyrightText: function (options) {
+        return `Copyright ${options.package}`;
+      }
+    });
+
+    assert(potContents.indexOf('Copyright foobar') !== -1);
   });
 });
