@@ -125,7 +125,7 @@ describe('Copyright comment', () => {
     const potContents = wpPot({
       src: 'test/fixures/empty-dir/*.php',
       writeFile: false,
-      package: 'foobar',
+      package: 'foobar'
     });
 
     assert(potContents.indexOf(defaultCopyrightText('foobar')) !== -1);
