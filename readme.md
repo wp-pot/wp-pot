@@ -2,14 +2,14 @@
 
 ## Information
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wp-pot/wp-pot/Node%20CI/master)](https://github.com/wp-pot/wp-pot/actions) [![npm version](https://badge.fury.io/js/wp-pot.svg)](https://www.npmjs.com/package/wp-pot) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wp-pot/wp-pot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wp-pot/wp-pot/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/wp-pot/wp-pot/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/wp-pot/wp-pot/?branch=master) [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/wp-pot/wp-pot.svg)](http://isitmaintained.com/project/wp-pot/wp-pot "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/wp-pot/wp-pot.svg)](http://isitmaintained.com/project/wp-pot/wp-pot "Percentage of issues still open") 
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wp-pot/wp-pot/Node%20CI/master)](https://github.com/wp-pot/wp-pot/actions) [![npm version](https://badge.fury.io/js/wp-pot.svg)](https://www.npmjs.com/package/wp-pot) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wp-pot/wp-pot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wp-pot/wp-pot/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/wp-pot/wp-pot/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/wp-pot/wp-pot/?branch=master) [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/wp-pot/wp-pot.svg)](http://isitmaintained.com/project/wp-pot/wp-pot "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/wp-pot/wp-pot.svg)](http://isitmaintained.com/project/wp-pot/wp-pot "Percentage of issues still open")
 
 | Package     | wp-pot                                               |
 | ----------- | ---------------------------------------------------- |
 | Description | Generate pot files for WordPress plugins and themes. |
 
 ## Like my work and want to say thanks?
-Do it here:  
+Do it here:
 <a href="https://www.buymeacoffee.com/rasmus" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
 
 ## Install
@@ -45,6 +45,10 @@ wpPot({
   Description: Keyword to trigger translator comment.
   Type: `string`
   Default: `translators:`
+- `copyrightText`
+  Description: Copyright text
+  Type: `function|string`
+  Default: A function that takes `options` object as a argument and return the default copyright text.
 - `domain`
   Description: Domain to retrieve the translated text. All textdomains is included if undefined.
   Type: `string`
@@ -54,7 +58,7 @@ wpPot({
   Type: `string`
   Default: `domain.pot` or `translations.pot` if domain is undefined.
 - `headers`
-  Description: Object containing extra POT-file headers. Set to false to not generate the default extra headers for Poedit.
+  Description: Object containing all default headers. Set to false to not generate the default extra headers for Poedit.
   Type: `object|bool`
   Default: Headers used by Poedit.
 - `gettextFunctions`
