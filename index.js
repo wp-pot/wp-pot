@@ -27,6 +27,12 @@ function setDefaultOptions (options) {
       'X-Poedit-SearchPath-0': '.',
       'X-Poedit-SearchPathExcluded-0': '*.js'
     },
+    copyrightText: function (options) {
+      const year = new Date().getFullYear();
+
+      return `# Copyright (C) ${year} ${this.options.package}
+      # This file is distributed under the same license as the ${options.package} package.`
+    },
     defaultHeaders: true,
     noFilePaths: false,
     writeFile: true,

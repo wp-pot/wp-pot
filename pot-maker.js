@@ -134,11 +134,10 @@ class PotMaker {
    * @return {string}
    */
   generatePot (translations) {
-    const year = new Date().getFullYear();
+    const copyrightText = typeof this.options.copyrightText === 'function' ? this.options.copyrightText(this.options) : this.options.copyrightText
 
     let contents = (
-      `# Copyright (C) ${year} ${this.options.package}
-# This file is distributed under the same license as the ${this.options.package} package.
+      `${copyrightText}
 msgid ""
 msgstr ""
 "Project-Id-Version: ${this.options.package}\\n"
