@@ -65,11 +65,13 @@ function setDefaultOptions (options) {
     ignoreTemplateNameHeader: false
   };
 
+  options = Object.assign({}, defaultOptions, options);
+
   if (options.headers === false) {
     options.defaultHeaders = false;
+  } else {
+    options.headers = setDefaultHeaders(options.headers, options);
   }
-
-  options = Object.assign({}, defaultOptions, options);
 
   if (!options.package) {
     options.package = options.domain || 'unnamed project';
@@ -93,8 +95,6 @@ function setDefaultOptions (options) {
   });
 
   options.functionCalls = functionCalls;
-
-  options.headers = setDefaultHeaders(options.headers, options);
 
   return options;
 }
