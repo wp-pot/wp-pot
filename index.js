@@ -8,6 +8,21 @@ const pathSort = require('path-sort');
 const TranslationParser = require('./translation-parser');
 const PotMaker = require('./pot-maker');
 
+function setDefaultHeaders(headers, options) {
+  const defaultHeaders = {
+    'Project-Id-Version': options.package,
+    'MIME-Version': '1.0',
+    'Content-Type': 'text/plain; charset=UTF-8',
+    'Content-Transfer-Econdig': '8bit',
+    'X-Poedit-Basepath': '..',
+    'X-Poedit-SourceCharset': 'UTF-8',
+    'X-Poedit-SearchPath-0': '.',
+    'X-Poedit-SearchPathExcluded-0': '*.js'
+  }
+
+  return Object.assign({}, defaultHeaders, headers||{})
+}
+
 /**
  * Set default options
  *
@@ -21,17 +36,12 @@ function setDefaultOptions (options) {
     globOpts: {},
     destFile: 'translations.pot',
     commentKeyword: 'translators:',
-    headers: {
-      'X-Poedit-Basepath': '..',
-      'X-Poedit-SourceCharset': 'UTF-8',
-      'X-Poedit-SearchPath-0': '.',
-      'X-Poedit-SearchPathExcluded-0': '*.js'
-    },
+    headers: {},
     copyrightText: function (options) {
       const year = new Date().getFullYear();
 
-      return `# Copyright (C) ${year} ${this.options.package}
-      # This file is distributed under the same license as the ${options.package} package.`
+      return `# Copyright (C) ${year} ${options.package}
+# This file is distributed under the same license as the ${options.package} package.`
     },
     defaultHeaders: true,
     noFilePaths: false,
@@ -84,6 +94,8 @@ function setDefaultOptions (options) {
 
   options.functionCalls = functionCalls;
 
+  options.headers = setDefaultHeaders(options.headers, options);
+console.log(options.headers)
   return options;
 }
 
