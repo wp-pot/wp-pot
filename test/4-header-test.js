@@ -43,7 +43,7 @@ describe('Header tests', () => {
       writeFile: false
     });
 
-    assert(potContents.indexOf(defaultHeaders) === -1);
+    assert(potContents.indexOf(defaultHeaders) !== -1);
     assert(potContents.indexOf('"Report-Msgid-Bugs-To: http://example.com\\n"\n') !== -1);
     assert(potContents.indexOf('"Last-Translator: John Doe <mail@example.com>\\n"\n') !== -1);
     assert(potContents.indexOf('"Language-Team: Team Team <mail@example.com>\\n"\n') !== -1);
@@ -59,5 +59,17 @@ describe('Header tests', () => {
     defaultHeaders.split('\n').forEach(function (line) {
       assert(potContents.indexOf(line) === -1);
     });
+  });
+
+  it('should generate a pot file with custom Project-Id-Version header', () => {
+    const potContents = wpPot({
+      src: 'test/fixures/empty-dir/*.php',
+      writeFile: false,
+      headers: {
+        'Project-Id-Version': '1.2.3'
+      }
+    });
+
+    assert(potContents.indexOf('"Project-Id-Version: 1.2.3\\n"\n') !== -1);
   });
 });
