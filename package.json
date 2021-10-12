@@ -5,8 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "test": "npm run test-cs && npm run test-mocha",
-    "test-cs": "eslint src test",
-    "fix-cs": "eslint --fix src test",
+    "test-cs": "semistandard src test",
+    "fix-cs": "semistandard --fix src test",
     "test-mocha": "mocha",
     "cover": "nyc --reporter clover npm run test-mocha"
   },
@@ -26,9 +26,7 @@
     "node": ">=12"
   },
   "files": [
-    "index.js",
-    "pot-maker.js",
-    "translation-parser.js"
+    "src"
   ],
   "license": "MIT",
   "dependencies": {
@@ -38,14 +36,8 @@
     "php-parser": "^3.0.2"
   },
   "devDependencies": {
-    "eslint": "7.32.0",
-    "eslint-config-semistandard": "16.0.0",
-    "eslint-config-standard": "16.0.3",
-    "eslint-plugin-import": "2.25.1",
-    "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-promise": "5.1.0",
-    "eslint-plugin-standard": "5.0.0",
     "mocha": "9.1.2",
-    "nyc": "15.1.0"
+    "nyc": "15.1.0",
+    "semistandard": "^16.0.1"
   }
 }
