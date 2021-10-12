@@ -233,12 +233,15 @@ describe('JavaScript', () => {
       const fixturePath = 'test/fixtures/missing-comment.js';
       const potContents = wpPot({
         parser: 'js',
+        parserOptions: {
+          ecmaVersion: 6
+        },
         src: fixturePath,
         writeFile: false,
         domain: 'testdomain'
       });
 
-      assert(testHelper.verifyLanguageBlock(potContents, 'translators: 1: current year, 2: site title link.', fixturePath + ':10', '&copy; %1$d %2$s', false, 'site copyright'));
+      assert(testHelper.verifyLanguageBlock(potContents, 'translators: 1: current year, 2: site title link.', fixturePath + ':8', '&copy; %1$d %2$s', false, 'site copyright'));
     });
   });
 });

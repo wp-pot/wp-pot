@@ -15,12 +15,11 @@ function replaceAll (string, search, replace) {
 
 class JSParser {
   constructor (options) {
-    this.options = Object.assign({}, {
-      parserOptions: {
-        comment: true,
-        loc: true
-      }
-    }, options);
+    this.options = options;
+    this.options.parserOptions = Object.assign({}, {
+      comment: true,
+      loc: true
+    }, this.options.parserOptions);
     this.translations = [];
     this.comments = {};
   }
@@ -177,16 +176,34 @@ class JSParser {
     let translationNode = null;
 
     switch (node.type) {
+      case 'BinaryExpression':
+        if (node.right) {
+          this.parseNode(node.right)
+        }
+        
+        if (node.left) {
+          this.parseNode(node.left)
+        }
+  
+        break;
       case 'ExpressionStatement':
         if (
-          !node.expression.callee ||
-          node.expression.callee.type !== 'Identifier'
+          node.expression && 
+          node.expression.callee &&
+          node.expression.callee.type == 'Identifier'
         ) {
-          return;
+          translationMethod = node.expression.callee.name;
+          translationNode = node.expression;
         }
 
-        translationMethod = node.expression.callee.name;
-        translationNode = node.expression;
+        if (node.expression && node.expression.right) {
+          this.parseNode(node.expression.right)
+        }
+        
+        if (node.expression && node.expression.left) {
+          this.parseNode(node.expression.left)
+        }
+  
         break;
       case 'CallExpression':
         translationMethod = node.callee.name;
@@ -290,7 +307,7 @@ class JSParser {
         throw e;
       }
     }
-    console.log(this.translations, Object.keys(this.translations).length, this.filename);
+    // console.log(this.translations, Object.keys(this.translations).length, this.filename);
     return this.translations;
   }
 }

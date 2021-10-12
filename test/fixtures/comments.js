@@ -22,7 +22,7 @@ __('Comment too far away from function', 'testdomain');
 __('Comment with other keyword', 'testdomain');
 
 // translators: This is a test with stored translations
-const variable = __('Stored translation with comment', 'testdomain');
+var variable = __('Stored translation with comment', 'testdomain');
 
 var t = [
   /* translators: sprintf test translation in array */
@@ -34,7 +34,7 @@ var t = {
   foo: __('translation in keyed array', 'testdomain'),
 };
 
-const message = sprintf(
+var message = sprintf(
   /* translators: example inside sprintf */
   __('translation inside sprintf', 'testdomain') // TODO
 );
