@@ -1,7 +1,7 @@
 {
   "extends": "semistandard",
   "rules": {
-    "complexity": [ "warn", { "max": 20 } ],
+    "complexity": ["warn", { "max": 20 }],
     "guard-for-in": "error",
     "no-bitwise": "error",
     "no-use-before-define": "error",

@@ -5,8 +5,8 @@
   "main": "src/index.js",
   "scripts": {
     "test": "npm run test-cs && npm run test-mocha",
-    "test-cs": "eslint .",
-    "fix-cs": "eslint --fix .",
+    "test-cs": "eslint src test",
+    "fix-cs": "eslint --fix src test",
     "test-mocha": "mocha",
     "cover": "nyc --reporter clover npm run test-mocha"
   },
