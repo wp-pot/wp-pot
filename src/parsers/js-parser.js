@@ -35,7 +35,7 @@ class JSParser {
 
     if (!this.translations[translationKey]) {
       this.translations[translationKey] = translationObject;
-    } else {
+    } else if (this.translations[translationKey].info.indexOf(translationObject.info) === -1) {
       this.translations[translationKey].info += `, ${translationObject.info}`;
 
       if (translationObject.msgid_plural) {
@@ -187,15 +187,6 @@ class JSParser {
 
         break;
       case 'ExpressionStatement':
-        if (
-          node.expression &&
-          node.expression.callee &&
-          node.expression.callee.type === 'Identifier'
-        ) {
-          translationMethod = node.expression.callee.name;
-          translationNode = node.expression;
-        }
-
         if (node.expression && node.expression.right) {
           this.parseNode(node.expression.right);
         }
@@ -204,28 +195,62 @@ class JSParser {
           this.parseNode(node.expression.left);
         }
 
+        if (
+          node.expression &&
+          node.expression.callee
+        ) {
+          this.parseNode(node.expression);
+        }
+
         break;
       case 'CallExpression':
+        node.arguments.filter(node => node.type).forEach(node => {
+          this.parseNode(node);
+        });
+
         translationMethod = node.callee.name;
         translationNode = node;
-        node.arguments.filter(node => node.arguments).forEach(node => {
-          this.parseNode(node);
-        });
+
         break;
       case 'ObjectExpression':
-        node.properties.forEach(node => {
-          this.parseNode(node);
-        });
+        if (node.properties) {
+          node.properties.forEach(node => {
+            this.parseNode(node);
+          });
+        }
+
         break;
       case 'ArrayExpression':
-        node.elements.forEach(node => {
-          this.parseNode(node);
-        });
+        if (node.elements) {
+          node.elements.forEach(node => {
+            this.parseNode(node);
+          });
+        }
+
+        break;
+      case 'Identifier':
+        translationNode = node;
+        translationMethod = node.name;
+        break;
+      case 'FunctionExpression':
+      case 'FunctionDeclaration':
+        if (node.id) {
+          this.parseNode(node.id);
+        }
+        if (node.body && node.body.body) {
+          node.body.body.forEach(node => {
+            this.parseNode(node);
+          });
+        }
+
         break;
       case 'VariableDeclaration':
-        node.declarations.filter(node => node.init).forEach(node => {
-          this.parseNode(node.init);
-        });
+        if (node.declarations) {
+          node.declarations.filter(node => node.init).forEach(node => {
+            this.parseNode(node.init);
+          });
+        }
+
         break;
       default:
         for (const key in node) {
@@ -309,7 +334,7 @@ class JSParser {
         throw e;
       }
     }
-    // console.log(this.translations, Object.keys(this.translations).length, this.filename);
+
     return this.translations;
   }
 }

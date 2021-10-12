@@ -68,7 +68,6 @@ describe('PHP', () => {
   });
 });
 
-
 describe('JavaScript', () => {
   describe('Function tests', () => {
     it('Can read all valid functions without domain check', () => {
