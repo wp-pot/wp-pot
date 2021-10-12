@@ -26,12 +26,12 @@ const variable = __('Stored translation with comment', 'testdomain');
 
 var t = [
   /* translators: sprintf test translation in array */
-  sprintf(__('sprintf translation in array', 'testdomain')) // TODO
+  sprintf(__('sprintf translation in array', 'testdomain')), // TODO
 ];
 
 var t = {
   /* translators: test translation in keyed array */
-  foo: __('translation in keyed array', 'testdomain')
+  foo: __('translation in keyed array', 'testdomain'),
 };
 
 const message = sprintf(
