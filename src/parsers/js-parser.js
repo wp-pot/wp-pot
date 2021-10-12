@@ -73,7 +73,6 @@ class JSParser {
       translationObject.msgid_plural = node.arguments[1].value;
     }
 
-    // TODO
     if (objectHas(this.options.functionCalls.contextPosition, node.callee.name)) {
       const contextKey = this.getContextPos(node.callee.name);
       translationObject.msgctxt = node.arguments[contextKey].value;
