@@ -178,32 +178,32 @@ class JSParser {
     switch (node.type) {
       case 'BinaryExpression':
         if (node.right) {
-          this.parseNode(node.right)
+          this.parseNode(node.right);
         }
-        
+
         if (node.left) {
-          this.parseNode(node.left)
+          this.parseNode(node.left);
         }
-  
+
         break;
       case 'ExpressionStatement':
         if (
-          node.expression && 
+          node.expression &&
           node.expression.callee &&
-          node.expression.callee.type == 'Identifier'
+          node.expression.callee.type === 'Identifier'
         ) {
           translationMethod = node.expression.callee.name;
           translationNode = node.expression;
         }
 
         if (node.expression && node.expression.right) {
-          this.parseNode(node.expression.right)
+          this.parseNode(node.expression.right);
         }
-        
+
         if (node.expression && node.expression.left) {
-          this.parseNode(node.expression.left)
+          this.parseNode(node.expression.left);
         }
-  
+
         break;
       case 'CallExpression':
         translationMethod = node.callee.name;
@@ -247,7 +247,9 @@ class JSParser {
       return;
     }
 
-    this.addTranslation(translationNode);
+    if (!this.options.domain || this.options.domain === translationNode.arguments[translationNode.arguments.length - 1].value) {
+      this.addTranslation(translationNode);
+    }
   }
 
   /**
