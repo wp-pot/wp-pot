@@ -5,8 +5,14 @@ const fs = require('fs');
 const matched = require('matched');
 const pathSort = require('path-sort');
 
-const TranslationParser = require('./translation-parser');
+const PHParser = require('./parsers/php-parser');
+const JSParser = require('./parsers/js-parser');
 const PotMaker = require('./pot-maker');
+
+const parsers = {
+  php: PHParser,
+  js: JSParser
+};
 
 /**
  * Set default options
@@ -46,7 +52,8 @@ function setDefaultOptions (options) {
       { name: 'esc_html_e' },
       { name: 'esc_html_x', context: 2 }
     ],
-    ignoreTemplateNameHeader: false
+    ignoreTemplateNameHeader: false,
+    parser: 'php'
   };
 
   if (options.headers === false) {
@@ -166,10 +173,12 @@ function wpPot (options) {
   // Find and sort file paths
   const files = pathSort(matched.sync(options.src, options.globOpts));
 
+  const Parser = parsers[options.parser];
+
   // Parse files
   for (const file of files) {
     const filecontent = fs.readFileSync(file).toString();
-    const translationParser = new TranslationParser(options);
+    const translationParser = new Parser(options);
     translations = translationParser.parseFile(filecontent, file, translations);
   }
 

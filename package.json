@@ -32,6 +32,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "espree": "^7.3.1",
     "matched": "^5.0.0",
     "path-sort": "^0.1.0",
     "php-parser": "^3.0.2"

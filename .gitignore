@@ -15,3 +15,7 @@ node_modules
 # Optional npm cache directory
 .npm
 .nyc_output
+
+# WP Pot
+*.pot
+/test.js

@@ -24,7 +24,7 @@ function replaceAll (string, search, replace) {
   return string.split(search).join(replace);
 }
 
-class TranslationParser {
+class PHPParser {
   constructor (options) {
     this.options = options;
     this.translations = [];
@@ -177,7 +177,7 @@ class TranslationParser {
     if (translationCall.args) {
       const translationObject = this.generateTranslationObject(translationCall);
 
-      const translationKey = TranslationParser.generateTranslationKey(translationObject);
+      const translationKey = PHPParser.generateTranslationKey(translationObject);
       if (!this.translations[translationKey]) {
         this.translations[translationKey] = translationObject;
       } else {
@@ -284,7 +284,7 @@ class TranslationParser {
     const methodName = this.validFunctionCall(ast);
 
     if (methodName) {
-      const args = TranslationParser.parseArguments(ast.arguments);
+      const args = PHPParser.parseArguments(ast.arguments);
 
       if ((!this.options.domain || this.options.domain === args[args.length - 1]) && this.validArgs(methodName, ast.arguments)) {
         const translationCall = {
@@ -369,4 +369,4 @@ class TranslationParser {
   }
 }
 
-module.exports = TranslationParser;
+module.exports = PHPParser;
