@@ -173,8 +173,26 @@ class JSParser {
   parseNode (node) {
     let translationMethod = '';
     let translationNode = null;
-
+// console.log(node.type,node);
     switch (node.type) {
+      case 'TryStatement':
+        if (node.block && node.block.body) {
+          node.block.body.forEach(node => {
+            this.parseNode(node);
+          });
+        }
+
+        if (node.handler && node.handler.body)  {
+          this.parseNode(node.handler.body);
+        }
+
+        break;
+      case 'ReturnStatement':
+        if (node.argument) {
+          this.parseNode(node.argument)
+        }
+
+        break;
       case 'BinaryExpression':
         if (node.right) {
           this.parseNode(node.right);
@@ -184,6 +202,17 @@ class JSParser {
           this.parseNode(node.left);
         }
 
+        break;
+      case 'BlockStatement':
+        if (node.body && node.body.body) {
+          node.body.body.forEach(node => {
+            this.parseNode(node);
+          });
+        } else if (node.body instanceof Array) {
+          node.body.forEach(node => {
+            this.parseNode(node);
+          });
+        }        
         break;
       case 'ExpressionStatement':
         if (node.expression && node.expression.right) {
@@ -199,17 +228,34 @@ class JSParser {
           node.expression.callee
         ) {
           this.parseNode(node.expression);
+        } else {
+          for (const key in node.expression) {
+            if (typeof node.expression[key] === 'object') {
+              this.parseNode(node.expression[key]);
+            }
+          }
         }
 
+        break;
+      case 'NewExpression':
+        node.arguments.filter(node => node.type).forEach(node => {
+          this.parseNode(node);
+        });
         break;
       case 'CallExpression':
         node.arguments.filter(node => node.type).forEach(node => {
           this.parseNode(node);
         });
-
-        translationMethod = node.callee.name;
-        translationNode = node;
-
+        
+        if (node.callee.object) {
+          this.parseNode(node.callee.object);
+        } else if (node.callee.property) {
+          translationMethod = node.callee.property.name;
+          translationNode = node;
+        } else {
+          translationMethod = node.callee.name;
+          translationNode = node;
+        }
         break;
       case 'ObjectExpression':
         if (node.properties) {
@@ -236,6 +282,7 @@ class JSParser {
         if (node.id) {
           this.parseNode(node.id);
         }
+        
         if (node.body && node.body.body) {
           node.body.body.forEach(node => {
             this.parseNode(node);
@@ -248,6 +295,16 @@ class JSParser {
           node.declarations.filter(node => node.init).forEach(node => {
             this.parseNode(node.init);
           });
+        }
+
+        break;
+      case 'IfStatement':
+        if (node.consequent) {
+          this.parseNode(node.consequent)
+        }
+
+        if (node.alternate && node.alternate.consequent) {
+          this.parseNode(node.alternate.consequent)
         }
 
         break;
