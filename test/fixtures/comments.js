@@ -26,7 +26,7 @@ var variable = __('Stored translation with comment', 'testdomain');
 
 var t = [
   /* translators: sprintf test translation in array */
-  sprintf(__('sprintf translation in array', 'testdomain')), // TODO
+  sprintf(__('sprintf translation in array', 'testdomain')),
 ];
 
 var t = {
@@ -36,7 +36,7 @@ var t = {
 
 var message = sprintf(
   /* translators: example inside sprintf */
-  __('translation inside sprintf', 'testdomain') // TODO
+  __('translation inside sprintf', 'testdomain')
 );
 
 // translators: This is comment 1
