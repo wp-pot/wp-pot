@@ -173,7 +173,6 @@ class JSParser {
   parseNode (node) {
     let translationMethod = '';
     let translationNode = null;
-// console.log(node.type,node);
     switch (node.type) {
       case 'TryStatement':
         if (node.block && node.block.body) {
@@ -182,14 +181,19 @@ class JSParser {
           });
         }
 
-        if (node.handler && node.handler.body)  {
+        if (node.handler && node.handler.body) {
           this.parseNode(node.handler.body);
         }
 
+        if (node.finalizer && node.finalizer.body) {
+          node.finalizer.body.forEach(node => {
+            this.parseNode(node);
+          });
+        }
         break;
       case 'ReturnStatement':
         if (node.argument) {
-          this.parseNode(node.argument)
+          this.parseNode(node.argument);
         }
 
         break;
@@ -212,7 +216,7 @@ class JSParser {
           node.body.forEach(node => {
             this.parseNode(node);
           });
-        }        
+        }
         break;
       case 'ExpressionStatement':
         if (node.expression && node.expression.right) {
@@ -246,7 +250,7 @@ class JSParser {
         node.arguments.filter(node => node.type).forEach(node => {
           this.parseNode(node);
         });
-        
+
         if (node.callee.object) {
           this.parseNode(node.callee.object);
         } else if (node.callee.property) {
@@ -282,7 +286,7 @@ class JSParser {
         if (node.id) {
           this.parseNode(node.id);
         }
-        
+
         if (node.body && node.body.body) {
           node.body.body.forEach(node => {
             this.parseNode(node);
@@ -300,11 +304,11 @@ class JSParser {
         break;
       case 'IfStatement':
         if (node.consequent) {
-          this.parseNode(node.consequent)
+          this.parseNode(node.consequent);
         }
 
         if (node.alternate && node.alternate.consequent) {
-          this.parseNode(node.alternate.consequent)
+          this.parseNode(node.alternate.consequent);
         }
 
         break;

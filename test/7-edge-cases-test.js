@@ -194,10 +194,10 @@ describe('JavaScript', () => {
       potContents = wpPot({
         parser: 'js',
         parserOptions: {
-          ecmaVersion: 6,
+          ecmaVersion: 6
         },
         src: fixturePath,
-        // writeFile: false,
+        writeFile: false,
         domain: 'testdomain'
       });
     });
@@ -326,7 +326,7 @@ describe('JavaScript', () => {
       const potContents = wpPot({
         parser: 'js',
         parserOptions: {
-          ecmaVersion: 6,
+          ecmaVersion: 6
         },
         src: fixturePath,
         writeFile: false,
@@ -339,7 +339,7 @@ describe('JavaScript', () => {
       const potContents = wpPot({
         parser: 'js',
         parserOptions: {
-          ecmaVersion: 6,
+          ecmaVersion: 6
         },
         src: fixturePath,
         writeFile: false,
@@ -352,7 +352,7 @@ describe('JavaScript', () => {
       const potContents = wpPot({
         parser: 'js',
         parserOptions: {
-          ecmaVersion: 6,
+          ecmaVersion: 6
         },
         src: fixturePath,
         writeFile: false,
@@ -365,7 +365,7 @@ describe('JavaScript', () => {
       const potContents = wpPot({
         parser: 'js',
         parserOptions: {
-          ecmaVersion: 6,
+          ecmaVersion: 6
         },
         src: fixturePath,
         writeFile: false,
@@ -378,7 +378,7 @@ describe('JavaScript', () => {
       const potContents = wpPot({
         parser: 'js',
         parserOptions: {
-          ecmaVersion: 6,
+          ecmaVersion: 6
         },
         src: fixturePath,
         writeFile: false,
