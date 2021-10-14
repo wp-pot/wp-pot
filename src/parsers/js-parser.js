@@ -393,9 +393,9 @@ class JSParser {
                 }
               },
               callee: {
-                name: '',
+                name: ''
               },
-              arguments: [{value:headerValue}]
+              arguments: [{ value: headerValue }]
             };
 
             _this.addTranslation(translationCall);

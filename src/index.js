@@ -104,9 +104,9 @@ function setDefaultOptions (options) {
 
   options.functionCalls = functionCalls;
 
-  const ext = path.extname(options.src instanceof Array ? options.src[0] : options.src).slice(1)
+  const ext = path.extname(options.src instanceof Array ? options.src[0] : options.src).slice(1);
   if (typeof parsers[ext] !== 'undefined') {
-    options.parser = ext
+    options.parser = ext;
   }
 
   return options;
