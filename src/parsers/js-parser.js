@@ -222,6 +222,12 @@ class JSParser {
         }
 
         break;
+      case 'ForStatement':
+        if (node.body) {
+          this.parseNode(node.body);
+        }
+
+        break;
       case 'TryStatement':
         if (node.block && node.block.body) {
           node.block.body.forEach(node => {

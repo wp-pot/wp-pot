@@ -57,3 +57,7 @@ class Foo {
     this.prop = esc_html_e('Translation is in class key', 'testdomain');
   }
 }
+
+for (var i = 0, l = 0; i < l; i++) {
+  var foo = esc_html_e('Translation in for loop key', 'testdomain');
+}

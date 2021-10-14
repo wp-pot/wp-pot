@@ -306,6 +306,10 @@ describe('JavaScript', () => {
     it('should include text in class', () => {
       assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':57', 'Translation is in class key', false, false));
     });
+
+    it('should include text in class', () => {
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':62', 'Translation in for loop key', false, false));
+    });
   });
 
   describe('Edge cases domain tests', () => {
