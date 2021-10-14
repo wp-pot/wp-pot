@@ -214,23 +214,6 @@ class JSParser {
     let translationNode = null;
 
     switch (node.type) {
-      case 'TryStatement':
-        if (node.block && node.block.body) {
-          node.block.body.forEach(node => {
-            this.parseNode(node);
-          });
-        }
-
-        if (node.handler && node.handler.body) {
-          this.parseNode(node.handler.body);
-        }
-
-        if (node.finalizer && node.finalizer.body) {
-          node.finalizer.body.forEach(node => {
-            this.parseNode(node);
-          });
-        }
-        break;
       case 'BinaryExpression':
         if (node.right) {
           this.parseNode(node.right);
@@ -250,6 +233,21 @@ class JSParser {
           node.body.forEach(node => {
             this.parseNode(node);
           });
+        }
+        break;
+      case 'CallExpression':
+        node.arguments.filter(node => node.type).forEach(node => {
+          this.parseNode(node);
+        });
+
+        if (node.callee.object) {
+          this.parseNode(node.callee.object);
+        } else if (node.callee.property) {
+          translationMethod = node.callee.property.name;
+          translationNode = node;
+        } else {
+          translationMethod = node.callee.name;
+          translationNode = node;
         }
         break;
       case 'ExpressionStatement':
@@ -275,35 +273,6 @@ class JSParser {
         }
 
         break;
-      case 'CallExpression':
-        node.arguments.filter(node => node.type).forEach(node => {
-          this.parseNode(node);
-        });
-
-        if (node.callee.object) {
-          this.parseNode(node.callee.object);
-        } else if (node.callee.property) {
-          translationMethod = node.callee.property.name;
-          translationNode = node;
-        } else {
-          translationMethod = node.callee.name;
-          translationNode = node;
-        }
-        break;
-      case 'Property':
-        if (typeof node.key === 'object' && node.key) {
-          this.parseNode(node.key);
-        }
-
-        if (typeof node.value === 'object' && node.value) {
-          this.parseNode(node.value);
-        }
-
-        break;
-      case 'Identifier':
-        translationNode = node;
-        translationMethod = node.name;
-        break;
       case 'FunctionExpression':
       case 'FunctionDeclaration':
       case 'ClassDeclaration':
@@ -318,6 +287,10 @@ class JSParser {
         }
 
         break;
+      case 'Identifier':
+        translationNode = node;
+        translationMethod = node.name;
+        break;
       case 'IfStatement':
         if (node.consequent) {
           this.parseNode(node.consequent);
@@ -327,6 +300,33 @@ class JSParser {
           this.parseNode(node.alternate.consequent);
         }
 
+        break;
+      case 'Property':
+        if (typeof node.key === 'object' && node.key) {
+          this.parseNode(node.key);
+        }
+
+        if (typeof node.value === 'object' && node.value) {
+          this.parseNode(node.value);
+        }
+
+        break;
+      case 'TryStatement':
+        if (node.block && node.block.body) {
+          node.block.body.forEach(node => {
+            this.parseNode(node);
+          });
+        }
+
+        if (node.handler && node.handler.body) {
+          this.parseNode(node.handler.body);
+        }
+
+        if (node.finalizer && node.finalizer.body) {
+          node.finalizer.body.forEach(node => {
+            this.parseNode(node);
+          });
+        }
         break;
       default:
         for (const key in node) {
