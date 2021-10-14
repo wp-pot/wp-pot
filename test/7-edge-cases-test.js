@@ -302,20 +302,9 @@ describe('JavaScript', () => {
     it('should include text in array keys', () => {
       assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':51', 'Translation is in an array key', false, false));
     });
-  });
 
-  describe('Namespace edge cases', () => {
-    // https://github.com/wp-pot/wp-pot/issues/3
-    const fixturePath = 'test/fixtures/mixed-namespaces.php';
-    it('should not die when using multiple namespaces in a file', () => {
-      const potContents = wpPot({
-        src: fixturePath,
-        writeFile: false,
-        domain: 'testdomain'
-      });
-
-      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'Return string', false, false));
-      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':7', 'Return string', false, false));
+    it('should include text in class', () => {
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':57', 'Translation is in class key', false, false));
     });
   });
 

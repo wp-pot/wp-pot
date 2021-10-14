@@ -212,7 +212,16 @@ class JSParser {
   parseNode (node) {
     let translationMethod = '';
     let translationNode = null;
+
     switch (node.type) {
+      case 'ClassDeclaration':
+        if (node.body && node.body.body) {
+          node.body.body.forEach(node => {
+            this.parseNode(node);
+          });
+        }
+
+        break;
       case 'TryStatement':
         if (node.block && node.block.body) {
           node.block.body.forEach(node => {

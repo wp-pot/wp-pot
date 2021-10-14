@@ -51,3 +51,9 @@ echo ( bool_flag ) ? '' : esc_html__( 'Text in false ternary statements', 'testd
 var name = __( 'Translation is in an array key', 'testdomain' )
 obj[name] = 'Value';
 __( '', 'testdomain' );
+
+class Foo {
+  constructor() {
+    this.prop = esc_html_e('Translation is in class key', 'testdomain');
+  }
+}
