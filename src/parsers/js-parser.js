@@ -214,58 +214,6 @@ class JSParser {
     let translationNode = null;
 
     switch (node.type) {
-      // es6
-      case 'TemplateLiteral':
-        if (node.expressions) {
-          node.expressions.forEach(node => {
-            this.parseNode(node);
-          });
-        }
-
-        break;
-      // es6
-      case 'ClassDeclaration':
-        if (node.body && node.body.body) {
-          node.body.body.forEach(node => {
-            this.parseNode(node);
-          });
-        }
-
-        break;
-      case 'SwitchStatement':
-        if (node.cases) {
-          node.cases.forEach(node => {
-            this.parseNode(node);
-          });
-        }
-
-        break;
-      case 'SwitchCase':
-        if (node.consequent) {
-          node.consequent.forEach(node => {
-            this.parseNode(node);
-          });
-        }
-
-        break;
-      case 'DoWhileStatement':
-        if (node.body) {
-          this.parseNode(node.body);
-        }
-
-        break;
-      case 'WhileStatement':
-        if (node.body) {
-          this.parseNode(node.body);
-        }
-
-        break;
-      case 'ForStatement':
-        if (node.body) {
-          this.parseNode(node.body);
-        }
-
-        break;
       case 'TryStatement':
         if (node.block && node.block.body) {
           node.block.body.forEach(node => {
@@ -282,12 +230,6 @@ class JSParser {
             this.parseNode(node);
           });
         }
-        break;
-      case 'ReturnStatement':
-        if (node.argument) {
-          this.parseNode(node.argument);
-        }
-
         break;
       case 'BinaryExpression':
         if (node.right) {
@@ -333,11 +275,6 @@ class JSParser {
         }
 
         break;
-      case 'NewExpression':
-        node.arguments.filter(node => node.type).forEach(node => {
-          this.parseNode(node);
-        });
-        break;
       case 'CallExpression':
         node.arguments.filter(node => node.type).forEach(node => {
           this.parseNode(node);
@@ -363,28 +300,13 @@ class JSParser {
         }
 
         break;
-      case 'ObjectExpression':
-        if (node.properties) {
-          node.properties.forEach(node => {
-            this.parseNode(node);
-          });
-        }
-
-        break;
-      case 'ArrayExpression':
-        if (node.elements) {
-          node.elements.forEach(node => {
-            this.parseNode(node);
-          });
-        }
-
-        break;
       case 'Identifier':
         translationNode = node;
         translationMethod = node.name;
         break;
       case 'FunctionExpression':
       case 'FunctionDeclaration':
+      case 'ClassDeclaration':
         if (node.id) {
           this.parseNode(node.id);
         }
@@ -392,14 +314,6 @@ class JSParser {
         if (node.body && node.body.body) {
           node.body.body.forEach(node => {
             this.parseNode(node);
-          });
-        }
-
-        break;
-      case 'VariableDeclaration':
-        if (node.declarations) {
-          node.declarations.filter(node => node.init).forEach(node => {
-            this.parseNode(node.init);
           });
         }
 
@@ -420,6 +334,10 @@ class JSParser {
             this.parseNode(node.value);
           } else if (typeof node[key] === 'object' && node[key] && typeof node[key].type === 'string') {
             this.parseNode(node[key]);
+          } else if (node[key] instanceof Array) {
+            node[key].forEach(node => {
+              this.parseNode(node);
+            });
           }
         }
 
