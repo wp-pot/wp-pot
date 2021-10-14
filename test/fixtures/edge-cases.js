@@ -61,3 +61,12 @@ class Foo {
 for (var i = 0, l = 0; i < l; i++) {
   var foo = esc_html_e('Translation in for loop key', 'testdomain');
 }
+
+while (true) {
+  const foo = esc_html_e('Translation in while loop key', 'testdomain');
+}
+
+do {
+  const foo = esc_html_e('Translation in do while loop key', 'testdomain');
+}
+while (true);

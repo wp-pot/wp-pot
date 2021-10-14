@@ -307,8 +307,16 @@ describe('JavaScript', () => {
       assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':57', 'Translation is in class key', false, false));
     });
 
-    it('should include text in class', () => {
+    it('should include text in for loop', () => {
       assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':62', 'Translation in for loop key', false, false));
+    });
+
+    it('should include text in while loop', () => {
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':66', 'Translation in while loop key', false, false));
+    });
+
+    it('should include text in due while loop', () => {
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':70', 'Translation in do while loop key', false, false));
     });
   });
 

@@ -222,6 +222,18 @@ class JSParser {
         }
 
         break;
+      case 'DoWhileStatement':
+        if (node.body) {
+          this.parseNode(node.body);
+        }
+
+        break;
+      case 'WhileStatement':
+        if (node.body) {
+          this.parseNode(node.body);
+        }
+
+        break;
       case 'ForStatement':
         if (node.body) {
           this.parseNode(node.body);
