@@ -318,6 +318,14 @@ describe('JavaScript', () => {
     it('should include text in due while loop', () => {
       assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':70', 'Translation in do while loop key', false, false));
     });
+
+    it('should include text in switch case', () => {
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':77', 'Translation in do switch case key', false, false));
+    });
+
+    it('should include text in switch default', () => {
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':80', 'Translation in do switch default key', false, false));
+    });
   });
 
   describe('Edge cases domain tests', () => {

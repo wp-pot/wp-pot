@@ -70,3 +70,13 @@ do {
   const foo = esc_html_e('Translation in do while loop key', 'testdomain');
 }
 while (true);
+
+
+switch (true) {
+  case true:
+    const switchA = esc_html_e('Translation in do switch case key', 'testdomain');
+  break;
+  default:
+    const switchB = esc_html_e('Translation in do switch default key', 'testdomain');
+    break;
+}

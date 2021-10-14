@@ -222,6 +222,22 @@ class JSParser {
         }
 
         break;
+      case 'SwitchStatement':
+        if (node.cases) {
+          node.cases.forEach(node => {
+            this.parseNode(node);
+          });
+        }
+
+        break;
+      case 'SwitchCase':
+        if (node.consequent) {
+          node.consequent.forEach(node => {
+            this.parseNode(node);
+          });
+        }
+
+        break;
       case 'DoWhileStatement':
         if (node.body) {
           this.parseNode(node.body);
