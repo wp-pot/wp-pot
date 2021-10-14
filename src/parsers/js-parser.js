@@ -69,13 +69,17 @@ class JSParser {
       translationObject.comment.push(`${this.options.commentKeyword.trim()} ${comment}`);
     }
 
-    if (objectHas(this.options.functionCalls.pluralPosition, node.callee.name)) {
-      translationObject.msgid_plural = node.arguments[1].value;
-    }
+    if (node.arguments instanceof Array) {
+      if (objectHas(this.options.functionCalls.pluralPosition, node.callee.name) && node.arguments.length > 1) {
+        translationObject.msgid_plural = node.arguments[1].value;
+      }
 
-    if (objectHas(this.options.functionCalls.contextPosition, node.callee.name)) {
-      const contextKey = this.getContextPos(node.callee.name);
-      translationObject.msgctxt = node.arguments[contextKey].value;
+      if (objectHas(this.options.functionCalls.contextPosition, node.callee.name)) {
+        const contextKey = this.getContextPos(node.callee.name);
+        if (node.arguments.length > contextKey - 1) {
+          translationObject.msgctxt = node.arguments[contextKey].value;
+        }
+      }
     }
 
     return translationObject;
@@ -359,6 +363,49 @@ class JSParser {
   }
 
   /**
+   * Parse theme or plugin meta data from file header
+   *
+   * @param {Array} headers
+   * @param {string} filecontent
+   * @param {string} filename
+   */
+  parseFileHeader (headers, filecontent, filename) {
+    const _this = this;
+    const lines = filecontent.match(/[^\r\n]+/g);
+
+    if (lines) {
+      lines.splice(30);
+
+      lines.forEach(function (lineContent, line) {
+        headers.forEach(function (header, index) {
+          const regex = new RegExp(header + ':(.*)', 'i');
+          const match = regex.exec(lineContent);
+
+          if (match) {
+            headers.splice(index, 1);
+            const headerValue = match[1].replace(/\s*(?:\*\/|\?>).*/, '').trim();
+
+            const translationCall = {
+              filename,
+              loc: {
+                start: {
+                  line: line + 1
+                }
+              },
+              callee: {
+                name: '',
+              },
+              arguments: [{value:headerValue}]
+            };
+
+            _this.addTranslation(translationCall);
+          }
+        });
+      });
+    }
+  }
+
+  /**
    * Parse PHP file
    *
    * @param {string} filecontent
@@ -380,6 +427,14 @@ class JSParser {
         filePath
       )
       .replace(/\\/g, '/');
+
+    if (this.options.metadataFile === this.filename) {
+      this.parseFileHeader(['Plugin Name', 'Theme Name', 'Description', 'Author', 'Author URI', 'Plugin URI', 'Theme URI'], filecontent, this.filename);
+    }
+
+    if (!this.options.ignoreTemplateNameHeader) {
+      this.parseFileHeader(['Template Name'], filecontent, this.filename);
+    }
 
     // Skip file if no translation functions is found
     const validFunctionsInFile = new RegExp(
