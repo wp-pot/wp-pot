@@ -319,7 +319,7 @@ describe('JavaScript', () => {
     });
   });
 
-  describe.skip('Edge cases domain tests', () => {
+  describe('Edge cases domain tests', () => {
     const fixturePath = 'test/fixtures/edge-cases.js';
 
     it('should handle strings with domain set as variable', () => {
@@ -332,6 +332,7 @@ describe('JavaScript', () => {
         writeFile: false,
         domain: 'test'
       });
+
       assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':16', 'Domain is a variable', false, false));
     });
 
@@ -343,12 +344,12 @@ describe('JavaScript', () => {
         },
         src: fixturePath,
         writeFile: false,
-        domain: '$this->test'
+        domain: 'this.test'
       });
       assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':17', 'Domain is a object variable', false, false));
     });
 
-    it('should handle strings with domain set as a static class variable', () => {
+    it('should handle strings with domain set as a another object variable', () => {
       const potContents = wpPot({
         parser: 'js',
         parserOptions: {
@@ -356,9 +357,9 @@ describe('JavaScript', () => {
         },
         src: fixturePath,
         writeFile: false,
-        domain: '$this::test'
+        domain: 'another.test'
       });
-      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':18', 'Domain is a static class variable', false, false));
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':18', 'Domain is a another object variable', false, false));
     });
 
     it('should handle strings with domain set as a constant', () => {

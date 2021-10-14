@@ -15,7 +15,7 @@ _n('Singular string', 'Plural string', 1+1, 'testdomain');
 _n('Singular string', 'Plural string', 1 + 1, 'testdomain');
 _e( 'Domain is a variable', test );
 _e( 'Domain is a object variable', this.test );
-// _e( 'Domain is a static class variable', this::test );
+_e( 'Domain is a another object variable', another.test );
 _e( 'Domain is a constant', TEST );
 _e( 'Missing domain' );
 someFunction('this', 'is', 'a', 'random', 'function' );

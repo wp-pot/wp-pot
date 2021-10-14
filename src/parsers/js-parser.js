@@ -140,6 +140,41 @@ class JSParser {
   }
 
   /**
+   * Try to find domain for translation node
+   *
+   * @param {object} translationNode
+   *
+   * @return {string}
+   */
+  getDomain (translationNode) {
+    if (!translationNode.arguments.length) {
+      return '';
+    }
+
+    const node = translationNode.arguments[translationNode.arguments.length - 1];
+    if (!node) {
+      return '';
+    }
+
+    switch (node.type) {
+      case 'Identifier':
+        return node.name;
+      case 'MemberExpression':
+        if (node.object && node.object.type === 'ThisExpression' && node.property && node.property.type === 'Identifier') {
+          return `this.${node.property.name}`;
+        }
+
+        if (node.object && node.object.type === 'Identifier' && node.property && node.property.type === 'Identifier') {
+          return `${node.object.name}.${node.property.name}`;
+        }
+
+        return '';
+      default:
+        return node.value || '';
+    }
+  }
+
+  /**
    * Parse comment AST
    *
    * @param  {object} commentAst
@@ -336,7 +371,7 @@ class JSParser {
       return;
     }
 
-    if (!this.options.domain || this.options.domain === translationNode.arguments[translationNode.arguments.length - 1].value) {
+    if (!this.options.domain || this.options.domain === this.getDomain(translationNode)) {
       this.addTranslation(translationNode);
     }
   }
