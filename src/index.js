@@ -8,6 +8,7 @@ const pathSort = require('path-sort');
 const PHParser = require('./parsers/php-parser');
 const JSParser = require('./parsers/js-parser');
 const PotMaker = require('./pot-maker');
+const path = require('path');
 
 const parsers = {
   php: PHParser,
@@ -102,6 +103,11 @@ function setDefaultOptions (options) {
   });
 
   options.functionCalls = functionCalls;
+
+  const ext = path.extname(options.src instanceof Array ? options.src[0] : options.src).slice(1)
+  if (typeof parsers[ext] !== 'undefined') {
+    options.parser = ext
+  }
 
   return options;
 }
