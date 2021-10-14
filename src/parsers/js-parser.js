@@ -214,6 +214,16 @@ class JSParser {
     let translationNode = null;
 
     switch (node.type) {
+      // es6
+      case 'TemplateLiteral':
+        if (node.expressions) {
+          node.expressions.forEach(node => {
+            this.parseNode(node);
+          });
+        }
+
+        break;
+      // es6
       case 'ClassDeclaration':
         if (node.body && node.body.body) {
           node.body.body.forEach(node => {
@@ -343,6 +353,16 @@ class JSParser {
           translationNode = node;
         }
         break;
+      case 'Property':
+        if (typeof node.key === 'object' && node.key) {
+          this.parseNode(node.key);
+        }
+
+        if (typeof node.value === 'object' && node.value) {
+          this.parseNode(node.value);
+        }
+
+        break;
       case 'ObjectExpression':
         if (node.properties) {
           node.properties.forEach(node => {
@@ -396,8 +416,10 @@ class JSParser {
         break;
       default:
         for (const key in node) {
-          if (typeof node[key] === 'object' && node.value) {
+          if (typeof node[key] === 'object' && node[key] && node.value) {
             this.parseNode(node.value);
+          } else if (typeof node[key] === 'object' && node[key] && typeof node[key].type === 'string') {
+            this.parseNode(node[key]);
           }
         }
 

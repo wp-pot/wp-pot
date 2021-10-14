@@ -326,6 +326,14 @@ describe('JavaScript', () => {
     it('should include text in switch default', () => {
       assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':80', 'Translation in do switch default key', false, false));
     });
+
+    it('should include text in template string', () => {
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':84', 'Translation in template string key', false, false));
+    });
+
+    it('should include text in object property key', () => {
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':88', 'Translation in object property key', false, false));
+    });
   });
 
   describe('Edge cases domain tests', () => {

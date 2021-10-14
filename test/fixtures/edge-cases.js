@@ -80,3 +80,10 @@ switch (true) {
     const switchB = esc_html_e('Translation in do switch default key', 'testdomain');
     break;
 }
+
+var message = `Hello ${esc_html_e('Translation in template string key', 'testdomain')}`
+
+let objp = {
+  foo: "bar",
+  [ esc_html_e('Translation in object property key', 'testdomain')]: 42, 
+}
