@@ -258,6 +258,8 @@ class JSParser {
           } else {
             this.parseNode(node.callee.object);
           }
+        } else if (node.callee.body) {
+          this.parseNode(node.callee)
         } else if (node.callee.property) {
           translationMethod = node.callee.property.name;
           translationNode = node;
@@ -280,6 +282,10 @@ class JSParser {
           node.expression.callee
         ) {
           this.parseNode(node.expression);
+        } else if (node.expression.body && node.expression.body.body) {
+          node.expression.body.body.forEach(node => {
+            this.parseNode(node);
+          })
         } else {
           for (const key in node.expression) {
             if (typeof node.expression[key] === 'object') {

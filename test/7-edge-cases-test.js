@@ -336,6 +336,27 @@ describe('JavaScript', () => {
     });
   });
 
+  describe.only('Namespace edge cases', () => {
+    const fixturePath = 'test/fixtures/mixed-namespaces.js';
+    it('should not die when using multiple namespaces in a file', () => {
+      const potContents = wpPot({
+        parser: 'js',
+        parserOptions: {
+          ecmaVersion: 6,
+        },
+        src: fixturePath,
+        writeFile: false,
+        domain: 'testdomain'
+      });
+
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'Return string', false, false));
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':6', 'Return string', false, false));
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':10', 'Return string', false, false));
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':14', 'Return string', false, false));
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':19', 'Return string', false, false));
+    });
+  });
+
   describe('Edge cases domain tests', () => {
     const fixturePath = 'test/fixtures/edge-cases.js';
 
