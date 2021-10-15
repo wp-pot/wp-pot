@@ -53,8 +53,7 @@ describe('PHP', () => {
 
 describe('JavaScript', () => {
   describe('Custom method tests', () => {
-    it.skip('Test custom method from this', () => {
-      // TODO: custom method
+    it('Test custom method from this', () => {
       const fixturePath = 'test/fixtures/custom-method.js';
 
       const potContents = wpPot({
@@ -66,13 +65,12 @@ describe('JavaScript', () => {
         ]
       });
 
-      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':1', 'Hello', false, false));
-      assert(!testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'World', false, false));
-      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':9', 'Custom translate function in method call', false, false));
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'Hello', false, false));
+      assert(!testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':4', 'World', false, false));
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':12', 'Custom translate function in method call', false, false));
     });
 
-    it.skip('Test custom method from custom class', () => {
-      // TODO: custom method
+    it('Test custom method from custom class', () => {
       const fixturePath = 'test/fixtures/custom-method.js';
 
       const potContents = wpPot({
@@ -84,8 +82,8 @@ describe('JavaScript', () => {
         ]
       });
 
-      assert(!testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':1', 'Hello', false, false));
-      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':2', 'World', false, false));
+      assert(!testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':3', 'Hello', false, false));
+      assert(testHelper.verifyLanguageBlock(potContents, false, fixturePath + ':4', 'World', false, false));
     });
 
     it('Test function calls in other methods', () => {

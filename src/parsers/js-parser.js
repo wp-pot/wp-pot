@@ -241,7 +241,23 @@ class JSParser {
         });
 
         if (node.callee.object) {
-          this.parseNode(node.callee.object);
+          if (node.callee.type === 'MemberExpression') {
+            let customMethod = '';
+            if (node.callee.object && node.callee.object.type === 'ThisExpression' && node.callee.property && node.callee.property.type === 'Identifier') {
+              customMethod = `this.${node.callee.property.name}`;
+            } else if (node.callee.object && node.callee.object.type === 'Identifier' && node.callee.property && node.callee.property.type === 'Identifier') {
+              customMethod = `${node.callee.object.name}.${node.callee.property.name}`;
+            }
+
+            if (this.options.functionCalls.valid.indexOf(customMethod) !== -1) {
+              translationMethod = customMethod;
+              translationNode = node;
+            } else if (!customMethod) {
+              this.parseNode(node.callee.object);
+            }
+          } else {
+            this.parseNode(node.callee.object);
+          }
         } else if (node.callee.property) {
           translationMethod = node.callee.property.name;
           translationNode = node;
