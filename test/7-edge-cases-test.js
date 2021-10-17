@@ -336,13 +336,13 @@ describe('JavaScript', () => {
     });
   });
 
-  describe.only('Namespace edge cases', () => {
+  describe('Namespace edge cases', () => {
     const fixturePath = 'test/fixtures/mixed-namespaces.js';
     it('should not die when using multiple namespaces in a file', () => {
       const potContents = wpPot({
         parser: 'js',
         parserOptions: {
-          ecmaVersion: 6,
+          ecmaVersion: 6
         },
         src: fixturePath,
         writeFile: false,
