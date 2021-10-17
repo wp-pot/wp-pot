@@ -418,7 +418,7 @@ class JSParser {
 
       lines.forEach(function (lineContent, line) {
         headers.forEach(function (header, index) {
-          const regex = new RegExp(header + ':(.*)', 'i');
+          const regex = new RegExp('\\*[\\s+\t/*#@](?:\\s+|)' + header + ':(.*)', 'i');
           const match = regex.exec(lineContent);
 
           if (match) {
