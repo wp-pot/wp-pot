@@ -75,7 +75,7 @@ function verifyLanguageBlock (potContents, comment, fileinfo, msgid, plural, con
  * @param fixturePath
  * @param invert
  */
-function testValidFunctions (potContents, fixturePath, invert) {
+function testValidFunctions (potContents, fixturePath, invert, parser = null) {
   let test = assert;
 
   if (invert) {
@@ -84,20 +84,31 @@ function testValidFunctions (potContents, fixturePath, invert) {
     };
   }
 
-  test(verifyLanguageBlock(potContents, false, fixturePath + ':2', 'Return string', false, false));
-  test(verifyLanguageBlock(potContents, false, fixturePath + ':3', 'Print string', false, false));
-  test(verifyLanguageBlock(potContents, false, fixturePath + ':4', 'Escape for attribute and return string', false, false));
-  test(verifyLanguageBlock(potContents, false, fixturePath + ':5', 'Escape for attribute and print string', false, false));
-  test(verifyLanguageBlock(potContents, false, fixturePath + ':6', 'Escape for html and return string', false, false));
-  test(verifyLanguageBlock(potContents, false, fixturePath + ':7', 'Escape for html and print string', false, false));
-  test(verifyLanguageBlock(potContents, false, fixturePath + ':8', 'Return string with context', false, 'Some context'));
-  test(verifyLanguageBlock(potContents, false, fixturePath + ':9', 'Print string with context', false, 'Some context'));
-  test(verifyLanguageBlock(potContents, false, fixturePath + ':10', 'Escape string with context for attribute', false, 'Some context'));
-  test(verifyLanguageBlock(potContents, false, fixturePath + ':11', 'Escape string with context for html', false, 'Some context'));
-  test(verifyLanguageBlock(potContents, false, fixturePath + ':12', 'Singular string', 'Plural string', false));
-  test(verifyLanguageBlock(potContents, false, fixturePath + ':13', 'Singular string with noop', 'Plural string with noop', false));
-  test(verifyLanguageBlock(potContents, false, fixturePath + ':14', 'Singular string with context', 'Plural string with context', 'Some context'));
-  test(verifyLanguageBlock(potContents, false, fixturePath + ':15', 'Singular string with noop and context', 'Plural string with noop and context', 'Some context'));
+  let startLine = 0;
+
+  switch (parser) {
+    case 'js':
+      startLine = 0;
+      break;
+    default: // php
+      startLine = 1;
+      break;
+  }
+
+  test(verifyLanguageBlock(potContents, false, fixturePath + ':' + (startLine + 1), 'Return string', false, false));
+  test(verifyLanguageBlock(potContents, false, fixturePath + ':' + (startLine + 2), 'Print string', false, false));
+  test(verifyLanguageBlock(potContents, false, fixturePath + ':' + (startLine + 3), 'Escape for attribute and return string', false, false));
+  test(verifyLanguageBlock(potContents, false, fixturePath + ':' + (startLine + 4), 'Escape for attribute and print string', false, false));
+  test(verifyLanguageBlock(potContents, false, fixturePath + ':' + (startLine + 5), 'Escape for html and return string', false, false));
+  test(verifyLanguageBlock(potContents, false, fixturePath + ':' + (startLine + 6), 'Escape for html and print string', false, false));
+  test(verifyLanguageBlock(potContents, false, fixturePath + ':' + (startLine + 7), 'Return string with context', false, 'Some context'));
+  test(verifyLanguageBlock(potContents, false, fixturePath + ':' + (startLine + 8), 'Print string with context', false, 'Some context'));
+  test(verifyLanguageBlock(potContents, false, fixturePath + ':' + (startLine + 9), 'Escape string with context for attribute', false, 'Some context'));
+  test(verifyLanguageBlock(potContents, false, fixturePath + ':' + (startLine + 10), 'Escape string with context for html', false, 'Some context'));
+  test(verifyLanguageBlock(potContents, false, fixturePath + ':' + (startLine + 11), 'Singular string', 'Plural string', false));
+  test(verifyLanguageBlock(potContents, false, fixturePath + ':' + (startLine + 12), 'Singular string with noop', 'Plural string with noop', false));
+  test(verifyLanguageBlock(potContents, false, fixturePath + ':' + (startLine + 13), 'Singular string with context', 'Plural string with context', 'Some context'));
+  test(verifyLanguageBlock(potContents, false, fixturePath + ':' + (startLine + 14), 'Singular string with noop and context', 'Plural string with noop and context', 'Some context'));
 }
 
 module.exports = {

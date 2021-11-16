@@ -16,3 +16,6 @@ indent_size = 4
 [*.{md,txt}]
 trim_trailing_whitespace = false
 insert_final_newline = false
+
+[*.{js,jsx,ts,tsx,vue}]
+quote_type = single
