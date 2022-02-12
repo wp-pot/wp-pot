@@ -6,7 +6,8 @@ const wpPot = require('../');
 const testHelper = require('./test-helper');
 
 function defaultCopyrightText (name) {
-  return `# Copyright (C) 2021 ${name}
+  const year = new Date().getFullYear();
+  return `# Copyright (C) ${year} ${name}
 # This file is distributed under the same license as the ${name} package.`;
 }
 
