@@ -2,24 +2,26 @@
 
 ## Information
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wp-pot/wp-pot/Node%20CI/master)](https://github.com/wp-pot/wp-pot/actions) [![npm version](https://badge.fury.io/js/wp-pot.svg)](https://www.npmjs.com/package/wp-pot) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wp-pot/wp-pot/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wp-pot/wp-pot/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/wp-pot/wp-pot/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/wp-pot/wp-pot/?branch=master) [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/wp-pot/wp-pot.svg)](http://isitmaintained.com/project/wp-pot/wp-pot "Average time to resolve an issue") [![Percentage of issues still open](http://isitmaintained.com/badge/open/wp-pot/wp-pot.svg)](http://isitmaintained.com/project/wp-pot/wp-pot "Percentage of issues still open")
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/wp-pot/wp-pot/Node%20CI/master)](https://github.com/wp-pot/wp-pot/actions) [![npm version](https://badge.fury.io/js/wp-pot.svg)](https://www.npmjs.com/package/wp-pot) [![Average time to resolve an issue](https://isitmaintained.com/badge/resolution/wp-pot/wp-pot.svg)](https://isitmaintained.com/project/wp-pot/wp-pot "Average time to resolve an issue") [![Percentage of issues still open](https://isitmaintained.com/badge/open/wp-pot/wp-pot.svg)](https://isitmaintained.com/project/wp-pot/wp-pot "Percentage of issues still open")
 
 | Package     | wp-pot                                               |
 | ----------- | ---------------------------------------------------- |
 | Description | Generate pot files for WordPress plugins and themes. |
 
 ## Like my work and want to say thanks?
-Do it here:
-<a href="https://www.buymeacoffee.com/rasmus" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+
+Do it here:  
+[![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/rasmus)
 
 ## Install
 
+```sh
+npm install --save-dev wp-pot
 ```
-$ npm install --save-dev wp-pot
-```
-
 
 ## Example usage
+
+### PHP File Parsing
 
 ```js
 const wpPot = require('wp-pot');
@@ -32,6 +34,17 @@ wpPot({
 });
 ```
 
+### JS File Parsing (only js, no jsx for now)
+
+```js
+wpPot({
+  parser: 'js',
+  parserOptions: {
+    ecmaVersion: 6,
+  },
+  src: 'test/fixtures/edge-cases.js'
+});
+```
 
 ## Options
 
@@ -81,6 +94,14 @@ wpPot({
   Description: Package name.
   Type: `string`
   Default: `domain` or `unnamed project` if domain is undefined.
+- `parser`
+  Description: PHP or JS parser
+  Type: `string`
+  Default: `php`
+- `parserOptions`
+  Description: Options for the JS parser Espree. See [here](https://github.com/eslint/espree#options).
+  Type: `object`
+  Default: `{ comment: true, loc: true }`
 - `relativeTo`
   Description: Path to folder that file comments should be relative to.
   Type: `string`
@@ -94,7 +115,7 @@ wpPot({
   Type: `Object`
   Default: `{}`
 - `team`
-  Description: Name and email address of the translation team (ex: `Team <team@example.com> `).
+  Description: Name and email address of the translation team (ex: `Team <team@example.com>`).
   Type: `string`
   Default: undefined
 - `writeFile`
@@ -106,12 +127,11 @@ wpPot({
   Type: `boolean`
   Default: `false`
 
-
 ## Related
+
 - [php-parser](https://github.com/glayzzle/php-parser) - NodeJS PHP Parser used in this project
 - [gulp-wp-pot](https://github.com/wp-pot/gulp-wp-pot) - Run wp-pot via gulp
 - [wp-pot-cli](https://github.com/wp-pot/wp-pot-cli) - Run wp-pot via cli command
-
 
 ## License
 
