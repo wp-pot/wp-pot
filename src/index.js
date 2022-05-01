@@ -20,7 +20,7 @@ function setDefaultHeaders (headers, options) {
     'Project-Id-Version': options.package,
     'MIME-Version': '1.0',
     'Content-Type': 'text/plain; charset=UTF-8',
-    'Content-Transfer-Econdig': '8bit',
+    'Content-Transfer-Encoding': '8bit',
     'X-Poedit-Basepath': '..',
     'X-Poedit-SourceCharset': 'UTF-8',
     'X-Poedit-SearchPath-0': '.',
