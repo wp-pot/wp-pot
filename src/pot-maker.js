@@ -136,14 +136,29 @@ class PotMaker {
   generatePot (translations) {
     const copyrightText = typeof this.options.copyrightText === 'function' ? this.options.copyrightText(this.options) : this.options.copyrightText;
 
+    let starting_headers = {
+      'Project-Id-Version': this.options.package,
+      'MIME-Version': '1.0',
+      'Content-Type': 'text/plain; charset=UTF-8',
+      'Content-Transfer-Encoding': '8bit',
+    };
+    if (this.options.headers && !PotMaker.isEmptyObject(this.options.headers)) {
+      for (const key of Object.keys(starting_headers)) {
+        if (typeof this.options.headers[key] !== 'undefined') {
+          starting_headers[key] = this.options.headers[key];
+          delete this.options.headers[key];
+        }
+      }
+    }
+
     let contents = (
       `${copyrightText}
 msgid ""
 msgstr ""
-"Project-Id-Version: ${this.options.package}\\n"
-"MIME-Version: 1.0\\n"
-"Content-Type: text/plain; charset=UTF-8\\n"
-"Content-Transfer-Encoding: 8bit\\n"\n`);
+"Project-Id-Version: ${starting_headers['Project-Id-Version']}\\n"
+"MIME-Version: ${starting_headers['MIME-Version']}\\n"
+"Content-Type: ${starting_headers['Content-Type']}\\n"
+"Content-Transfer-Encoding: ${starting_headers['Content-Transfer-Encoding']}\\n"\n`);
 
     if (this.options.headers && !PotMaker.isEmptyObject(this.options.headers)) {
       this.options.headers = this.sortObject(this.options.headers);
