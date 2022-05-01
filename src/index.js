@@ -157,6 +157,19 @@ function setHeaders (options) {
     options.headers['Report-Msgid-Bugs-To'] = options.bugReport;
   }
 
+  if (!options.noCreationDate) {
+    let d = new Date();
+    let nowString = [
+      `${d.getUTCFullYear()}`,
+      `-${String(d.getUTCMonth()+1).padStart(2, '0')}`,
+      `-${String(d.getUTCDate()).padStart(2, '0')}`,
+      ` ${String(d.getUTCHours()).padStart(2, '0')}`,
+      `:${String(d.getUTCMinutes()).padStart(2, '0')}`,
+      `+0000`
+    ].join('');
+    options.headers['POT-Creation-Date'] = nowString;
+  }
+
   if (options.lastTranslator) {
     options.headers['Last-Translator'] = options.lastTranslator;
   }
