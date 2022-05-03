@@ -51,6 +51,7 @@ function setDefaultOptions (options) {
 # This file is distributed under the same license as the ${options.package} package.`;
     },
     defaultHeaders: true,
+    includePOTCreationDate: true,
     noFilePaths: false,
     writeFile: true,
     gettextFunctions: [
@@ -157,7 +158,7 @@ function setHeaders (options) {
     options.headers['Report-Msgid-Bugs-To'] = options.bugReport;
   }
 
-  if (!options.noCreationDate) {
+  if (options.includePOTCreationDate) {
     const d = new Date();
     const nowString = [
       `${d.getUTCFullYear()}`,
