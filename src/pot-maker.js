@@ -136,16 +136,16 @@ class PotMaker {
   generatePot (translations) {
     const copyrightText = typeof this.options.copyrightText === 'function' ? this.options.copyrightText(this.options) : this.options.copyrightText;
 
-    let starting_headers = {
+    const startingHeaders = {
       'Project-Id-Version': this.options.package,
       'MIME-Version': '1.0',
       'Content-Type': 'text/plain; charset=UTF-8',
-      'Content-Transfer-Encoding': '8bit',
+      'Content-Transfer-Encoding': '8bit'
     };
     if (this.options.headers && !PotMaker.isEmptyObject(this.options.headers)) {
-      for (const key of Object.keys(starting_headers)) {
+      for (const key of Object.keys(startingHeaders)) {
         if (typeof this.options.headers[key] !== 'undefined') {
-          starting_headers[key] = this.options.headers[key];
+          startingHeaders[key] = this.options.headers[key];
           delete this.options.headers[key];
         }
       }
@@ -155,10 +155,10 @@ class PotMaker {
       `${copyrightText}
 msgid ""
 msgstr ""
-"Project-Id-Version: ${starting_headers['Project-Id-Version']}\\n"
-"MIME-Version: ${starting_headers['MIME-Version']}\\n"
-"Content-Type: ${starting_headers['Content-Type']}\\n"
-"Content-Transfer-Encoding: ${starting_headers['Content-Transfer-Encoding']}\\n"\n`);
+"Project-Id-Version: ${startingHeaders['Project-Id-Version']}\\n"
+"MIME-Version: ${startingHeaders['MIME-Version']}\\n"
+"Content-Type: ${startingHeaders['Content-Type']}\\n"
+"Content-Transfer-Encoding: ${startingHeaders['Content-Transfer-Encoding']}\\n"\n`);
 
     if (this.options.headers && !PotMaker.isEmptyObject(this.options.headers)) {
       this.options.headers = this.sortObject(this.options.headers);
