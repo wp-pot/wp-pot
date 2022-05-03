@@ -78,6 +78,10 @@ wpPot({
   Description: Gettext functions used for finding translations.
   Type: `object`
   Default: WordPress translation functions.
+- `includePOTCreationDate`
+  Description: Auto-populate the `POT-Creation-Date` header.
+  Type: `bool`
+  Default: true
 - `lastTranslator`
   Description: Name and email address of the last translator (ex: `John Doe <me@example.com>`).
   Type: `string`
