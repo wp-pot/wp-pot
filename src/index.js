@@ -51,6 +51,7 @@ function setDefaultOptions (options) {
 # This file is distributed under the same license as the ${options.package} package.`;
     },
     defaultHeaders: true,
+    includePOTCreationDate: true,
     noFilePaths: false,
     writeFile: true,
     gettextFunctions: [
@@ -155,6 +156,19 @@ function setHeaders (options) {
 
   if (options.bugReport) {
     options.headers['Report-Msgid-Bugs-To'] = options.bugReport;
+  }
+
+  if (options.includePOTCreationDate) {
+    const d = new Date();
+    const nowString = [
+      `${d.getUTCFullYear()}`,
+      `-${String(d.getUTCMonth() + 1).padStart(2, '0')}`,
+      `-${String(d.getUTCDate()).padStart(2, '0')}`,
+      ` ${String(d.getUTCHours()).padStart(2, '0')}`,
+      `:${String(d.getUTCMinutes()).padStart(2, '0')}`,
+      '+0000'
+    ].join('');
+    options.headers['POT-Creation-Date'] = nowString;
   }
 
   if (options.lastTranslator) {
