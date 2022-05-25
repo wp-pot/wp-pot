@@ -89,7 +89,8 @@ class PotMaker {
     if (translations) {
       for (const translationElement of Object.keys(translations)) {
         if (translations[translationElement].comment) {
-          for (const comment of translations[translationElement].comment) {
+          // Set removes duplicates
+          for (const comment of [...new Set(translations[translationElement].comment)]) {
             output.push(`#. ${comment}`);
           }
         }
