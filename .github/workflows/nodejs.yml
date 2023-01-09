@@ -23,7 +23,7 @@ jobs:
       uses: actions/setup-node@v3.6.0
       with:
         node-version: ${{ matrix.node-version }}
-    - uses: actions/cache@v3.2.2
+    - uses: actions/cache@v3.2.3
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
