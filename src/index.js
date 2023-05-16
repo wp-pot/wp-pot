@@ -105,12 +105,11 @@ function setDefaultOptions (options) {
 
   options.functionCalls = functionCalls;
 
-  const ext = path.extname(options.src instanceof Array ? options.src[0] : options.src).slice(1);
-  if (typeof parsers[ext] !== 'undefined') {
-    options.parser = ext;
-  }
-
   return options;
+}
+
+function getFileExtension(file) {
+  return path.extname(file).slice(1);
 }
 
 /**
@@ -211,10 +210,13 @@ function wpPot (options) {
   // Find and sort file paths
   const files = pathSort(matched.sync(options.src, options.globOpts));
 
-  const Parser = parsers[options.parser];
-
   // Parse files
   for (const file of files) {
+    const ext = getFileExtension(file);
+    if (typeof parsers[ext] === 'undefined') {
+      continue;
+    }
+    const Parser = parsers[ext];
     const filecontent = fs.readFileSync(file).toString();
     const translationParser = new Parser(options);
     translations = translationParser.parseFile(filecontent, file, translations);
