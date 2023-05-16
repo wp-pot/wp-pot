@@ -70,8 +70,7 @@ function setDefaultOptions (options) {
       { name: 'esc_html_e' },
       { name: 'esc_html_x', context: 2 }
     ],
-    ignoreTemplateNameHeader: false,
-    parser: 'php'
+    ignoreTemplateNameHeader: false
   };
 
   options = Object.assign({}, defaultOptions, options);
@@ -212,7 +211,11 @@ function wpPot (options) {
 
   // Parse files
   for (const file of files) {
-    const ext = getFileExtension(file);
+    let ext = options.parser;
+    if (typeof ext === 'undefined') {
+      ext = getFileExtension(file);
+    }
+    ext = ext.toLowerCase();
     if (typeof parsers[ext] === 'undefined') {
       continue;
     }
